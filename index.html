@@ -471,36 +471,12 @@ section{scroll-margin-top:78px}
     <div class="sec__head reveal">
       <div>
         <p class="eyebrow">Akcija tedna</p>
-        <h2>Poletje na Kikladih, po ceni mestnega vikenda.</h2>
+        <h2>Ta trenutek najbolj izstopa.</h2>
       </div>
-      <p>Ena akcija, ki jo izpostavimo vsak teden — ker je preprosto predobra, da bi jo spregledali.</p>
+      <p>Samodejno izberemo destinacijo z največjim odstopanjem od povprečne cene — osveženo dnevno.</p>
     </div>
 
-    <article class="pass reveal">
-      <div class="pass__media">
-        <img src="img/santorini.jpg" alt="Bele hiše z modrimi kupolami nad kaldero na Santoriniju">
-        <span class="tag">− 61 % · zadnji sedeži</span>
-      </div>
-      <div class="pass__body">
-        <span class="pass__notch t"></span><span class="pass__notch b"></span>
-        <div class="pass__route">
-          <span class="code">LJU</span>
-          <span class="line"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L11 19v-5.5z"/></svg></span>
-          <span class="code">JTR</span>
-        </div>
-        <h3>Santorini</h3>
-        <div class="pass__meta">
-          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Grčija, Kikladi</span>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>junij – september</span>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/><circle cx="12" cy="12" r="10"/></svg>Aegean · direktni let</span>
-        </div>
-        <p class="pass__desc">Bele kupole, sončni zahodi barve terakote in kaldera, kakršne ne pozabiš. Vključena ročna prtljaga in preverjen ponudnik.</p>
-        <div class="pass__foot">
-          <div class="price"><small>Povratna karta že od</small><b>89 <i>€</i></b></div>
-          <a href="#deal/santorini" class="btn btn--lg">Poglej akcijo</a>
-        </div>
-      </div>
-    </article>
+    <div id="featured" class="reveal"></div>
   </div>
 </section>
 
@@ -644,8 +620,9 @@ section{scroll-margin-top:78px}
   </div>
 </footer>
 
+<script src="deals.js"></script>
 <script>
-const DEALS=[
+const COPY=[
  {city:"Barcelona",code:"BCN",country:"Španija",fromCity:"Ljubljana",fromCode:"LJU",airline:"Vueling",price:39,period:"apr.–maj.",months:[4,5],region:"europa",img:"barcelona",teaser:"Gaudí, tapas in mestna plaža na dosegu vikenda.",badge:"−52 %",badgeType:"acc",
   long:"Metropola Antonija Gaudíja, kjer se srednjeveške uličice Gotske četrti stapljajo z valovitimi fasadami Eixampla in s peščenimi mestnimi plažami. Popoldan za tapase, večer za sprehod po La Rambli.",
   hl:["Sagrada Família in Park Güell","Plaža Barceloneta sredi mesta","Bar hopping po četrti El Born"]},
@@ -691,6 +668,12 @@ const DEALS=[
 ];
 const INCLUDED=["Povratni let","Ročna prtljaga","Preverjen ponudnik","Brez skritih stroškov"];
 
+// --- žive akcije: cene iz deals.js združi s statičnim opisom (COPY) ---
+const byImg={}; COPY.forEach(function(c){byImg[c.img]=c;});
+const LIVE=(window.__BOOKIRAJ_DEALS__&&window.__BOOKIRAJ_DEALS__.deals)||[];
+const UPDATED=(window.__BOOKIRAJ_DEALS__&&window.__BOOKIRAJ_DEALS__.updated)||null;
+const DEALS=LIVE.map(function(l){var c=byImg[l.img]||{};return Object.assign({},c,{fromPrice:l.fromPrice,avg:l.avg,terms:l.terms,discount:Math.max(0,Math.round((l.avg-l.fromPrice)/l.avg*100))});}).filter(function(d){return d.city;});
+
 const state={region:"vse",origin:"vsi",month:"vsi",q:"",sort:"reco"};
 const grid=document.getElementById('grid');
 const countEl=document.getElementById('count');
@@ -701,12 +684,12 @@ const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 
 function priceHTML(p){return '<b>'+p+' <i>€</i></b>';}
 function cardHTML(d){
-  const badge=d.badge?'<span class="badge '+(d.badgeType==='hot'?'hot':d.badgeType==='cool'?'cool':'')+'">'+d.badge+'</span>':'';
+  const badge=d.discount>=15?'<span class="badge">−'+d.discount+' %</span>':'';
   return '<a class="card" href="#deal/'+d.img+'">'
     +'<div class="card__media">'
       +'<img loading="lazy" decoding="async" src="img/'+d.img+'.jpg" alt="'+d.city+', '+d.country+'">'
       +badge
-      +'<div class="card__price"><small>že od</small>'+priceHTML(d.price)+'</div>'
+      +'<div class="card__price"><small>že od</small>'+priceHTML(d.fromPrice)+'</div>'
     +'</div>'
     +'<div class="card__body">'
       +'<div class="card__route"><span>'+d.fromCode+' <span class="arrow">→</span> '+d.code+'</span><span>'+d.period+'</span></div>'
@@ -724,48 +707,42 @@ function render(){
     (state.month==='vsi'||d.months.includes(+state.month))&&
     (state.q===''||(d.city+' '+d.country).toLowerCase().includes(state.q))
   );
-  if(state.sort==='asc')list.sort((a,b)=>a.price-b.price);
-  else if(state.sort==='desc')list.sort((a,b)=>b.price-a.price);
+  if(state.sort==='asc')list.sort((a,b)=>a.fromPrice-b.fromPrice);
+  else if(state.sort==='desc')list.sort((a,b)=>b.fromPrice-a.fromPrice);
   if(!list.length){
     grid.innerHTML='<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><p>Za te filtre trenutno ni akcij.<br>Poskusi z drugo regijo ali mesecem.</p></div>';
   }else{
     grid.innerHTML=list.map(cardHTML).join('');
   }
-  countEl.textContent=list.length+(list.length===1?' akcija':(list.length===2?' akciji':(list.length<5&&list.length>0?' akcije':' akcij')))+' · osveženo danes';
+  countEl.textContent=list.length+(list.length===1?' akcija':(list.length===2?' akciji':(list.length<5&&list.length>0?' akcije':' akcij')))+' · osveženo '+fmtUpdated(UPDATED);
 }
 
 // ---- detail sub-page ----
 const CHK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
 const MON=["jan.","feb.","mar.","apr.","maj","jun.","jul.","avg.","sep.","okt.","nov.","dec."];
-// Affiliate: ko dobiš Skyscanner/Travelpayouts ID, ga vpiši sem (npr. '&associateid=...&utm_medium=affiliate...') — velja za VSE povezave.
-const AFFILIATE='';
-function pad2(n){return (n<10?'0':'')+n;}
-function yymmdd(y,m,d){return String(y%100)+pad2(m)+pad2(d);}
-function skyUrl(from,to,seg){return 'https://www.skyscanner.net/transport/flights/'+from.toLowerCase()+'/'+to.toLowerCase()+'/'+seg+'?adultsv2=1&cabinclass=economy&market=si&currency=eur&locale=en-gb'+AFFILIATE;}
-function addDays(y,m,d,n){const dt=new Date(Date.UTC(y,m-1,d));dt.setUTCDate(dt.getUTCDate()+n);return [dt.getUTCFullYear(),dt.getUTCMonth()+1,dt.getUTCDate()];}
-function fmtRange(y1,m1,d1,y2,m2,d2){const a=(y1===y2)?(d1+'. '+MON[m1-1]):(d1+'. '+MON[m1-1]+' '+y1);return a+' – '+d2+'. '+MON[m2-1]+' '+y2;}
-function terms(d){
-  const tripLen=d.region==='europa'?7:d.region==='amerika'?7:d.region==='azija'?10:11;
-  let mwy=d.months.map(function(m){return {m:m,y:m>=10?2026:2027};});
-  mwy.sort(function(a,b){return a.y-b.y||a.m-b.m;});
-  mwy=mwy.slice(0,3);
-  const days=[8,19], bump=[0,10,15,20,25,30], rows=[];
-  for(const o of mwy){for(const dd of days){
-    if(rows.length>=6)break;
-    const r=addDays(o.y,o.m,dd,tripLen);
-    rows.push({label:fmtRange(o.y,o.m,dd,r[0],r[1],r[2]),sub:d.airline+' · povratna',
-      price:d.price+bump[rows.length],
-      url:skyUrl(d.fromCode,d.code,yymmdd(o.y,o.m,dd)+'/'+yymmdd(r[0],r[1],r[2])+'/')});
-  }}
-  return rows;
-}
+function fmtISO(s){var p=String(s).split('-');return [+p[0],+p[1],+p[2]];}
+function fmtRangeISO(dep,ret){var a=fmtISO(dep);if(!ret)return a[2]+'. '+MON[a[1]-1]+' '+a[0];var b=fmtISO(ret);var left=(a[0]===b[0])?(a[2]+'. '+MON[a[1]-1]):(a[2]+'. '+MON[a[1]-1]+' '+a[0]);return left+' – '+b[2]+'. '+MON[b[1]-1]+' '+b[0];}
+function fmtUpdated(iso){if(!iso)return 'danes';var d=new Date(iso);return d.getDate()+'. '+MON[d.getMonth()]+' '+d.getFullYear();}
+function termSub(t){return (t.airline?t.airline+' · ':'')+(t.transfers>0?(t.transfers+(t.transfers===1?' prestop':(t.transfers===2?' prestopa':' prestopi'))):'direktno');}
+function featuredHTML(d){var t=d.terms&&d.terms[0];return '<article class="pass">'
+  +'<div class="pass__media"><img src="img/'+d.img+'.jpg" alt="'+d.city+'"><span class="tag">− '+d.discount+' % pod povprečjem</span></div>'
+  +'<div class="pass__body"><span class="pass__notch t"></span><span class="pass__notch b"></span>'
+  +'<div class="pass__route"><span class="code">'+d.fromCode+'</span><span class="line"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L11 19v-5.5z"/></svg></span><span class="code">'+d.code+'</span></div>'
+  +'<h3>'+d.city+'</h3>'
+  +'<div class="pass__meta"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>'+d.country+'</span>'
+  +'<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>'+(t?fmtRangeISO(t.depart,t.ret):d.period)+'</span>'
+  +'<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>povprečno '+d.avg+' €</span></div>'
+  +'<p class="pass__desc">'+d.long+'</p>'
+  +'<div class="pass__foot"><div class="price"><small>Povratna karta že od</small><b>'+d.fromPrice+' <i>€</i></b></div><a href="#deal/'+d.img+'" class="btn btn--lg">Poglej akcijo</a></div>'
+  +'</div></article>';}
+function renderFeatured(){var el=document.getElementById('featured');var sec=document.getElementById('tedna');if(!el)return;if(!DEALS.length){if(sec)sec.hidden=true;return;}var best=DEALS.slice().sort(function(a,b){return b.discount-a.discount;})[0];el.innerHTML=featuredHTML(best);}
 function detailHTML(d){
-  const routeUrl=skyUrl(d.fromCode,d.code,'');
+  const cheapest=(d.terms&&d.terms[0])||null;
   const related=DEALS.filter(x=>x.img!==d.img&&x.region===d.region)
     .concat(DEALS.filter(x=>x.img!==d.img&&x.region!==d.region)).slice(0,3);
-  const termRows=terms(d).map(t=>
+  const termRows=(d.terms||[]).map(t=>
     '<li><a href="'+t.url+'" target="_blank" rel="noopener">'
-    +'<span class="term__l"><span class="term__date">'+t.label+'</span><span class="term__sub">'+t.sub+'</span></span>'
+    +'<span class="term__l"><span class="term__date">'+fmtRangeISO(t.depart,t.ret)+'</span><span class="term__sub">'+termSub(t)+'</span></span>'
     +'<span class="term__r"><span class="term__price">od '+t.price+' €</span>'
     +'<svg class="term__go" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a></li>').join('');
   return ''
@@ -776,16 +753,16 @@ function detailHTML(d){
       +'<a class="detail__back" href="#akcije"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> Nazaj na vse akcije</a>'
       +'<p class="eyebrow">'+d.country+'</p>'
       +'<h1>'+d.city+'</h1>'
-      +'<div class="detail__route">'+d.fromCode+' <span class="arrow">→</span> '+d.code+' · '+d.airline+' · '+d.period+'</div>'
+      +'<div class="detail__route">'+d.fromCode+' <span class="arrow">→</span> '+d.code+' · povprečno '+d.avg+' € · '+d.discount+' % pod povprečjem</div>'
     +'</div>'
   +'</div>'
   +'<div class="container detail__body">'
     +'<div class="detail__main">'
       +'<p class="detail__lead">'+d.long+'</p>'
       +'<h3>Izberi termin</h3>'
-      +'<p class="terms__hint">Klikni na termin — Skyscanner se odpre z že vpisano progo in datumi ter pokaže žive cene.</p>'
+      +'<p class="terms__hint">Klik na termin te odpelje na nakupno stran z že izbrano progo in datumi.</p>'
       +'<ul class="terms">'+termRows+'</ul>'
-      +'<p class="terms__note">Prikazane cene so okvirne izhodiščne. Končno ceno in razpoložljivost potrdiš na Skyscannerju.</p>'
+      +'<p class="terms__note">Cene so najnižje najdene ob zadnjem osveževanju ('+fmtUpdated(UPDATED)+'). Končno ceno potrdiš pri ponudniku.</p>'
       +'<h3>Kaj te čaka</h3>'
       +'<ul class="detail__hl">'+d.hl.map(h=>'<li>'+CHK+'<span>'+h+'</span></li>').join('')+'</ul>'
       +'<h3>Kaj je vključeno</h3>'
@@ -793,15 +770,15 @@ function detailHTML(d){
     +'</div>'
     +'<aside class="detail__side">'
       +'<div class="bookcard">'
-        +'<div class="price"><small>Povratna karta že od</small>'+priceHTML(d.price)+'</div>'
+        +'<div class="price"><small>Povratna karta že od</small>'+priceHTML(d.fromPrice)+'</div>'
         +'<dl>'
           +'<dt>Proga</dt><dd>'+d.fromCode+' → '+d.code+'</dd>'
           +'<dt>Odhod</dt><dd>'+d.fromCity+'</dd>'
-          +'<dt>Prevoznik</dt><dd>'+d.airline+'</dd>'
-          +'<dt>Najboljši čas</dt><dd>'+d.period+'</dd>'
+          +'<dt>Povprečna cena</dt><dd>'+d.avg+' €</dd>'
+          +'<dt>Prihranek</dt><dd>−'+d.discount+' %</dd>'
         +'</dl>'
-        +'<a class="btn btn--lg" href="'+routeUrl+'" target="_blank" rel="noopener">Vsi termini na Skyscanner</a>'
-        +'<p class="note">Odpre iskanje za progo s prilagodljivimi datumi.</p>'
+        +(cheapest?'<a class="btn btn--lg" href="'+cheapest.url+'" target="_blank" rel="noopener">Rezerviraj od '+d.fromPrice+' €</a>':'')
+        +'<p class="note">Povezava odpre nakupno stran, kjer potrdiš ceno.</p>'
       +'</div>'
     +'</aside>'
   +'</div>'
@@ -852,12 +829,13 @@ document.getElementById('finder').addEventListener('submit',e=>{
   else{location.hash='#akcije';}
 });
 render();
+renderFeatured();
 
 // ticker
 (function(){
   const row=document.getElementById('ticker');
   row.innerHTML=DEALS.concat(DEALS).map(d=>
-    '<span class="ticker__item"><span class="r">'+d.fromCode+' → '+d.code+'</span><span class="dot"></span><span class="p">'+d.price+' €</span></span>'
+    '<span class="ticker__item"><span class="r">'+d.fromCode+' → '+d.code+'</span><span class="dot"></span><span class="p">'+d.fromPrice+' €</span></span>'
   ).join('');
 })();
 
