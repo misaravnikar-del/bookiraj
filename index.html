@@ -360,6 +360,25 @@ section{scroll-margin-top:78px}
 @media (max-width:820px){.detail__body{grid-template-columns:1fr;gap:32px}
   .bookcard{position:static}}
 
+/* ---------- CONTENT PAGES ---------- */
+.page{padding-block:clamp(2.6rem,6vh,4.5rem) clamp(4rem,8vh,6rem)}
+.page .detail__back{color:var(--muted);margin-bottom:22px}
+.page .detail__back:hover{color:var(--accent)}
+.page .eyebrow{margin-top:6px}
+.page__h{font-size:clamp(2.1rem,5vw,3.4rem);max-width:20ch;margin:.5rem 0 0}
+.page__body{margin-top:2rem;max-width:72ch}
+.page__p{color:var(--ink-2);font-size:1.08rem;line-height:1.7;margin-bottom:1.1rem}
+.steps{display:grid;gap:16px;margin:.5rem 0 2rem}
+.step{display:flex;gap:18px;padding:22px 24px;background:var(--surface);border:1px solid var(--line);border-radius:16px}
+.step__n{font-family:var(--font-mono);font-size:1.05rem;color:var(--accent);font-weight:600;flex:none;letter-spacing:.06em}
+.step h3{font-size:1.2rem;margin-bottom:5px}
+.step p{color:var(--muted);font-size:.96rem;line-height:1.6}
+.qa{display:grid;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--surface);margin-bottom:1.5rem}
+.qa__item{padding:20px 24px;border-top:1px solid var(--line)}
+.qa__item:first-child{border-top:none}
+.qa__item h3{font-size:1.08rem;margin-bottom:6px}
+.qa__item p{color:var(--ink-2);font-size:.96rem;line-height:1.6}
+
 /* ---------- FOOTER ---------- */
 .foot{background:var(--bg-2);border-top:1px solid var(--line);padding-block:56px 32px}
 .foot__grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:34px}
@@ -601,10 +620,10 @@ section{scroll-margin-top:78px}
         <li><a href="#akcije">Eksotika</a></li>
       </ul></div>
       <div><h4>Bookiraj</h4><ul>
-        <li><a href="#zakaj">Kako deluje</a></li>
+        <li><a href="#kako-deluje">Kako deluje</a></li>
+        <li><a href="#faq">Pogosta vprašanja</a></li>
+        <li><a href="#o-nas">O nas</a></li>
         <li><a href="#tedna">Akcija tedna</a></li>
-        <li><a href="#news">Obveščanje</a></li>
-        <li><a href="#akcije">Pogosta vprašanja</a></li>
       </ul></div>
       <div><h4>Pravno</h4><ul>
         <li><a href="#news">Zasebnost</a></li>
@@ -788,6 +807,36 @@ function detailHTML(d){
   +'</div></section>';
 }
 
+const PAGES={
+  'kako-deluje':{title:'Kako deluje',eyebrow:'Kako deluje',h:'Od iskanja do vzleta v treh korakih.',html:
+    '<div class="steps">'
+    +'<div class="step"><span class="step__n">01</span><div><h3>Spremljamo žive cene</h3><p>Vsak dan preverimo prave cene letov iz Ljubljane, Trsta, Benetk, Zagreba in Dunaja prek iskalnika Aviasales/Travelpayouts.</p></div></div>'
+    +'<div class="step"><span class="step__n">02</span><div><h3>Objavimo le prave akcije</h3><p>Pokažemo samo termine, ki so cenejši od povprečne cene proge. Brez napihnjenih »od« cen — le resnični prihranki.</p></div></div>'
+    +'<div class="step"><span class="step__n">03</span><div><h3>Ti klikneš in rezerviraš</h3><p>Klik na termin te odpelje naravnost na nakupno stran z že izbrano progo in datumi. Rezervacijo dokončaš pri ponudniku.</p></div></div>'
+    +'</div>'
+    +'<p class="page__p">Bookiraj.si ne prodaja vozovnic — smo iskalec akcij, ki ti prihrani ure brskanja. Cene osvežujemo redno; datum zadnje osvežitve je viden pri seznamu akcij.</p>'},
+  'faq':{title:'Pogosta vprašanja',eyebrow:'Pomoč',h:'Pogosta vprašanja.',html:
+    '<div class="qa">'
+    +'<div class="qa__item"><h3>So cene resnične?</h3><p>Da. Prihajajo iz živega iskalnika letov. Prikazana je najnižja najdena cena ob zadnji osvežitvi; končno ceno in razpoložljivost potrdiš pri ponudniku.</p></div>'
+    +'<div class="qa__item"><h3>Kako pogosto se cene osvežujejo?</h3><p>Redno, s ciljem vsakodnevno. Datum zadnje osvežitve je vedno prikazan pri seznamu akcij.</p></div>'
+    +'<div class="qa__item"><h3>Zakaj kakšne destinacije ni?</h3><p>Objavimo le tiste, kjer trenutno obstajajo termini pod povprečno ceno proge. Če destinacije ni, zanjo trenutno ni prave akcije.</p></div>'
+    +'<div class="qa__item"><h3>Kje in kako rezerviram?</h3><p>Klik na termin te odpelje na nakupno stran, kjer dokončaš rezervacijo. Bookiraj.si sam ne prodaja vozovnic.</p></div>'
+    +'<div class="qa__item"><h3>Je uporaba brezplačna?</h3><p>Da, popolnoma. Če rezerviraš prek naše povezave, lahko prejmemo majhno provizijo od ponudnika — cena zate ostane povsem enaka.</p></div>'
+    +'<div class="qa__item"><h3>Od kod letim?</h3><p>Spremljamo odhode iz Ljubljane (LJU), Trsta (TRS), Benetk (VCE), Zagreba (ZAG) in Dunaja (VIE) — vse na uro ali dve vožnje.</p></div>'
+    +'</div>'},
+  'o-nas':{title:'O nas',eyebrow:'Naša zgodba',h:'Zakaj obstaja Bookiraj.si.',html:
+    '<p class="page__p">Bookiraj.si je nastal iz preproste ideje: da bi bilo potovanje po svetu dostopno vsakomur — brez ur iskanja in brez ugibanja, ali je cena res dobra.</p>'
+    +'<p class="page__p">Namesto brskanja po desetih iskalnikih ti vsak dan postrežemo le prave akcije — take, ki so dejansko cenejše od običajne cene proge. Kar vidiš, je resnično.</p>'
+    +'<p class="page__p">Odhajamo iz Slovenije in bližnjih letališč, ciljamo pa povsod — od evropskih vikendov do daljnih sanjskih destinacij. Manj brskanja, več potovanj.</p>'}
+};
+function pageHTML(slug){var p=PAGES[slug];return ''
+  +'<div class="page"><div class="container">'
+    +'<a class="detail__back" href="#top"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> Domov</a>'
+    +'<p class="eyebrow">'+p.eyebrow+'</p>'
+    +'<h1 class="page__h">'+p.h+'</h1>'
+    +'<div class="page__body">'+p.html+'</div>'
+  +'</div></div>';
+}
 function route(){
   const h=location.hash;
   if(h.indexOf('#deal/')===0){
@@ -799,6 +848,14 @@ function route(){
       window.scrollTo(0,0);
       return;
     }
+  }
+  const pslug=h.slice(1);
+  if(PAGES[pslug]){
+    detailEl.innerHTML=pageHTML(pslug);
+    homeEl.hidden=true; detailEl.hidden=false;
+    document.title=PAGES[pslug].title+' — Bookiraj.si';
+    window.scrollTo(0,0);
+    return;
   }
   detailEl.hidden=true; homeEl.hidden=false; document.title='Bookiraj.si';
   if(h.length>1&&h.indexOf('#deal/')!==0){
@@ -858,14 +915,21 @@ tb.addEventListener('click',()=>{
 const nav=document.querySelector('.nav');
 addEventListener('scroll',()=>{nav.classList.toggle('scrolled',scrollY>20);},{passive:true});
 
-// newsletter
+// newsletter — pošlje prijavo prek Web3Forms, če je vpisan ključ (brezplačen z web3forms.com);
+// dokler je ključ prazen, prikaže potrditev in shrani lokalno (graciozno).
+const NEWSLETTER_KEY='';
 document.addEventListener('submit',e=>{
   if(e.target.id!=='nform')return;
   e.preventDefault();
-  const v=document.getElementById('nemail').value.trim();
-  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){document.getElementById('nemail').focus();return;}
-  document.querySelector('.news').classList.add('done');
-  try{localStorage.setItem('bkr-sub',v);}catch(e){}
+  const inp=document.getElementById('nemail'); const v=inp.value.trim();
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){inp.focus();return;}
+  const done=()=>{document.querySelector('.news').classList.add('done');try{localStorage.setItem('bkr-sub',v);}catch(err){}};
+  if(NEWSLETTER_KEY){
+    fetch('https://api.web3forms.com/submit',{method:'POST',
+      headers:{'Content-Type':'application/json',Accept:'application/json'},
+      body:JSON.stringify({access_key:NEWSLETTER_KEY,subject:'Nova prijava na Bookiraj.si novice',from_name:'Bookiraj.si',email:v})})
+      .then(done).catch(done);
+  } else { done(); }
 });
 
 // router
