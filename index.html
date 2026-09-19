@@ -276,6 +276,8 @@ section{scroll-margin-top:78px}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
 @media (max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:560px){.grid{grid-template-columns:1fr}}
+.more{display:flex;justify-content:center;margin-top:40px}
+.more .btn{gap:9px}
 
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
   overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow);color:inherit;
@@ -516,7 +518,7 @@ section{scroll-margin-top:78px}
       Bookiraj<span class="tld">.si</span>
     </a>
     <nav class="nav__links" id="navLinks" aria-label="Glavni meni">
-      <a href="#akcije">Letalske karte</a>
+      <a href="#letalske-karte">Letalske karte</a>
       <a href="#pocitnice">Počitniški termini</a>
       <a href="#planerji">Planerji</a>
       <a href="#parking">Parking</a>
@@ -538,7 +540,7 @@ section{scroll-margin-top:78px}
     <h1><em>Bookiraj si</em> naslednje potovanje po <em>najnižji ceni</em>.</h1>
     <p class="hero__sub">Vsak dan preverimo na tisoče cen in izberemo le tiste akcije, ob katerih se splača spakirati kovček. Brez šuma — le lepe destinacije po nizkih cenah.</p>
 
-    <a href="#akcije" class="hero__cta btn btn--lg">
+    <a href="#letalske-karte" class="hero__cta btn btn--lg">
       <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
       Poišči akcije
     </a>
@@ -578,60 +580,16 @@ section{scroll-margin-top:78px}
         <p class="eyebrow">Trenutne akcije</p>
         <h2>Destinacije, ki jih ravnokar splača ujeti.</h2>
       </div>
-      <p>En iskalnik — izberi celino, državo, mesto, odhodno letališče in obdobje potovanja. Cene so okvirne najnižje povratne cene na osebo.</p>
+      <p>Izbor najboljših akcij ta trenutek. Za iskanje po celini, državi, mestu, letališču in obdobju odpri vse destinacije.</p>
     </div>
 
-    <form class="finderbar reveal" id="finder" aria-label="Iskalnik akcij">
-      <div class="fb__field">
-        <label for="fCont">Celina</label>
-        <select id="fCont">
-          <option value="vse">Vse celine</option>
-          <option value="evropa">Evropa</option>
-          <option value="azija">Azija</option>
-          <option value="afrika">Afrika</option>
-          <option value="sev-amerika">Severna Amerika</option>
-          <option value="juz-amerika">Južna Amerika</option>
-          <option value="oceanija">Oceanija</option>
-          <option value="eksotika">Eksotika</option>
-        </select>
-      </div>
-      <div class="fb__field fb__combo" id="wCountry">
-        <label for="fCountry">Država</label>
-        <input id="fCountry" type="text" autocomplete="off" placeholder="Vse države" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="fCountryList">
-        <svg class="fb__caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-        <div class="combo__list" id="fCountryList" role="listbox" hidden></div>
-      </div>
-      <div class="fb__field fb__combo" id="wCity">
-        <label for="fCity">Mesto</label>
-        <input id="fCity" type="text" autocomplete="off" placeholder="Vsa mesta" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="fCityList">
-        <svg class="fb__caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-        <div class="combo__list" id="fCityList" role="listbox" hidden></div>
-      </div>
-      <div class="fb__field">
-        <label for="fOrigin">Odhod iz</label>
-        <select id="fOrigin"><option value="vsi">Vsa letališča</option></select>
-      </div>
-      <div class="fb__field fb__combo" id="wDate">
-        <label for="fDate">Datum od–do</label>
-        <button type="button" class="fb__ctrl" id="fDate" aria-haspopup="dialog" aria-expanded="false">Kadarkoli</button>
-        <svg class="fb__caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-        <div class="cal" id="fCal" role="dialog" aria-label="Izberi obdobje" hidden></div>
-      </div>
-      <button type="submit" class="btn finderbar__go">
-        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-        Poišči
-      </button>
-    </form>
+    <div class="grid" id="gridPreview"></div>
 
-    <div class="results reveal">
-      <p class="count" id="count"></p>
-      <select class="sortsel" id="sort" aria-label="Razvrsti">
-        <option value="reco">Priporočeno</option>
-        <option value="asc">Cena: naraščajoče</option>
-        <option value="desc">Cena: padajoče</option>
-      </select>
+    <div class="more reveal">
+      <a href="#letalske-karte" class="btn btn--lg">Oglej si več destinacij
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
     </div>
-    <div class="grid" id="grid"></div>
   </div>
 </section>
 
@@ -712,6 +670,71 @@ section{scroll-margin-top:78px}
 <!-- ===================== DETAIL (sub-page) ===================== -->
 <main id="detail" hidden></main>
 
+<!-- ===================== LETALSKE KARTE (samostojna stran) ===================== -->
+<section class="sec" id="karte" hidden>
+  <div class="container">
+    <div class="sec__head reveal">
+      <div>
+        <p class="eyebrow">Letalske karte</p>
+        <h2>Vse trenutne akcije na enem mestu.</h2>
+      </div>
+      <p>En iskalnik — izberi celino, državo, mesto, odhodno letališče in obdobje potovanja. Cene so okvirne najnižje povratne cene na osebo.</p>
+    </div>
+
+    <form class="finderbar" id="finder" aria-label="Iskalnik akcij">
+      <div class="fb__field">
+        <label for="fCont">Celina</label>
+        <select id="fCont">
+          <option value="vse">Vse celine</option>
+          <option value="evropa">Evropa</option>
+          <option value="azija">Azija</option>
+          <option value="afrika">Afrika</option>
+          <option value="sev-amerika">Severna Amerika</option>
+          <option value="juz-amerika">Južna Amerika</option>
+          <option value="oceanija">Oceanija</option>
+          <option value="eksotika">Eksotika</option>
+        </select>
+      </div>
+      <div class="fb__field fb__combo" id="wCountry">
+        <label for="fCountry">Država</label>
+        <input id="fCountry" type="text" autocomplete="off" placeholder="Vse države" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="fCountryList">
+        <svg class="fb__caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        <div class="combo__list" id="fCountryList" role="listbox" hidden></div>
+      </div>
+      <div class="fb__field fb__combo" id="wCity">
+        <label for="fCity">Mesto</label>
+        <input id="fCity" type="text" autocomplete="off" placeholder="Vsa mesta" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="fCityList">
+        <svg class="fb__caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        <div class="combo__list" id="fCityList" role="listbox" hidden></div>
+      </div>
+      <div class="fb__field">
+        <label for="fOrigin">Odhod iz</label>
+        <select id="fOrigin"><option value="vsi">Vsa letališča</option></select>
+      </div>
+      <div class="fb__field fb__combo" id="wDate">
+        <label for="fDate">Datum od–do</label>
+        <button type="button" class="fb__ctrl" id="fDate" aria-haspopup="dialog" aria-expanded="false">Kadarkoli</button>
+        <svg class="fb__caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        <div class="cal" id="fCal" role="dialog" aria-label="Izberi obdobje" hidden></div>
+      </div>
+      <button type="submit" class="btn finderbar__go">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        Poišči
+      </button>
+    </form>
+
+    <div class="results">
+      <p class="count" id="count"></p>
+      <select class="sortsel" id="sort" aria-label="Razvrsti">
+        <option value="reco">Priporočeno</option>
+        <option value="asc">Cena: naraščajoče</option>
+        <option value="desc">Cena: padajoče</option>
+      </select>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
 <!-- ===================== FOOTER ===================== -->
 <footer class="foot">
   <div class="container">
@@ -729,10 +752,10 @@ section{scroll-margin-top:78px}
         </div>
       </div>
       <div><h4>Destinacije</h4><ul>
-        <li><a href="#akcije">Evropski vikendi</a></li>
-        <li><a href="#akcije">Sredozemlje</a></li>
-        <li><a href="#akcije">Daljna potovanja</a></li>
-        <li><a href="#akcije">Eksotika</a></li>
+        <li><a href="#letalske-karte">Evropski vikendi</a></li>
+        <li><a href="#letalske-karte">Sredozemlje</a></li>
+        <li><a href="#letalske-karte">Daljna potovanja</a></li>
+        <li><a href="#letalske-karte">Eksotika</a></li>
       </ul></div>
       <div><h4>Bookiraj</h4><ul>
         <li><a href="#kako-deluje">Kako deluje</a></li>
@@ -815,6 +838,8 @@ const grid=document.getElementById('grid');
 const countEl=document.getElementById('count');
 const homeEl=document.getElementById('home');
 const detailEl=document.getElementById('detail');
+const karteEl=document.getElementById('karte');
+function showView(v){homeEl.hidden=(v!=='home');detailEl.hidden=(v!=='detail');karteEl.hidden=(v!=='karte');}
 const bySlug=s=>DEALS.find(d=>d.img===s);
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 
@@ -883,6 +908,7 @@ function featuredHTML(d){var t=d.terms&&d.terms[0];return '<article class="pass"
   +'<div class="pass__foot"><div class="price"><small>Povratna karta že od</small><b>'+d.fromPrice+' <i>€</i></b></div><a href="#deal/'+d.img+'" class="btn btn--lg">Poglej akcijo</a></div>'
   +'</div></article>';}
 function renderFeatured(){var el=document.getElementById('featured');var sec=document.getElementById('tedna');if(!el)return;if(!DEALS.length){if(sec)sec.hidden=true;return;}var best=DEALS.slice().sort(function(a,b){return b.discount-a.discount;})[0];el.innerHTML=featuredHTML(best);}
+function renderPreview(){var el=document.getElementById('gridPreview');if(!el)return;var list=DEALS.slice().sort(function(a,b){return b.discount-a.discount;}).slice(0,6);el.innerHTML=list.map(cardHTML).join('');var m=document.querySelector('#akcije .more');if(m)m.hidden=DEALS.length<=6;}
 function renderDiscover(){var el=document.getElementById('discoverList');if(!el)return;var list=(window.__BOOKIRAJ_DEALS__&&window.__BOOKIRAJ_DEALS__.discover)||[];var sec=document.getElementById('radar');if(!list.length){if(sec)sec.hidden=true;return;}el.innerHTML='<div class="radar">'+list.map(function(d){return '<a class="radar__row" href="'+d.url+'" target="_blank" rel="noopener"><span class="radar__route">'+d.fromCode+'<span class="arrow">→</span>'+d.code+'</span><span class="radar__city">'+d.city+(d.country?'<small>'+d.country+'</small>':'')+'</span><span class="radar__when">'+fmtRangeISO(d.depart,d.ret)+'</span><span class="radar__price">'+d.price+' €</span></a>';}).join('')+'</div>';}
 function detailHTML(d){
   const cheapest=(d.terms&&d.terms[0])||null;
@@ -898,7 +924,7 @@ function detailHTML(d){
     +'<img src="img/'+d.img+'.jpg" alt="'+d.city+', '+d.country+'">'
     +'<div class="detail__scrim"></div>'
     +'<div class="container detail__heroin">'
-      +'<a class="detail__back" href="#akcije"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> Nazaj na vse akcije</a>'
+      +'<a class="detail__back" href="#letalske-karte"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> Nazaj na vse akcije</a>'
       +'<p class="eyebrow">'+d.country+'</p>'
       +'<h1>'+d.city+'</h1>'
       +'<div class="detail__route">'+d.fromCode+' <span class="arrow">→</span> '+d.code+' · povprečno '+d.avg+' € · '+d.discount+' % pod povprečjem</div>'
@@ -1097,7 +1123,7 @@ function route(){
     const d=bySlug(h.slice(6));
     if(d){
       detailEl.innerHTML=detailHTML(d);
-      homeEl.hidden=true; detailEl.hidden=false;
+      showView('detail');
       document.title=d.city+' — Bookiraj.si';
       window.scrollTo(0,0);
       return;
@@ -1106,32 +1132,38 @@ function route(){
   const pslug=h.slice(1);
   if(pslug==='pocitnice'){
     detailEl.innerHTML=pocitniceHTML(0);
-    homeEl.hidden=true; detailEl.hidden=false;
+    showView('detail');
     document.title='Počitniški termini — Bookiraj.si'; window.scrollTo(0,0); return;
   }
   if(pslug==='planerji'){
     detailEl.innerHTML=planerjiHTML();
-    homeEl.hidden=true; detailEl.hidden=false;
+    showView('detail');
     document.title='Planerji — Bookiraj.si'; window.scrollTo(0,0); return;
   }
   if(pslug.indexOf('parking/')===0){
     detailEl.innerHTML=parkingProvidersHTML(pslug.slice(8).toUpperCase());
-    homeEl.hidden=true; detailEl.hidden=false;
+    showView('detail');
     document.title='Parkiranje — Bookiraj.si'; window.scrollTo(0,0); return;
   }
   if(pslug==='parking'){
     detailEl.innerHTML=parkingHTML();
-    homeEl.hidden=true; detailEl.hidden=false;
+    showView('detail');
     document.title='Parking — Bookiraj.si'; window.scrollTo(0,0); return;
   }
   if(PAGES[pslug]){
     detailEl.innerHTML=pageHTML(pslug);
-    homeEl.hidden=true; detailEl.hidden=false;
+    showView('detail');
     document.title=PAGES[pslug].title+' — Bookiraj.si';
     window.scrollTo(0,0);
     return;
   }
-  detailEl.hidden=true; homeEl.hidden=false; document.title='Bookiraj.si';
+  if(pslug==='letalske-karte'){
+    showView('karte');
+    document.title='Letalske karte — Bookiraj.si';
+    window.scrollTo(0,0);
+    return;
+  }
+  showView('home'); document.title='Bookiraj.si';
   if(h.length>1&&h.indexOf('#deal/')!==0){
     const el=document.getElementById(h.slice(1));
     if(el) el.scrollIntoView({behavior:'smooth'});
@@ -1273,6 +1305,7 @@ document.getElementById('finder').addEventListener('submit',function(e){e.preven
 setDateLabel();
 render();
 renderFeatured();
+renderPreview();
 renderDiscover();
 
 // ticker
