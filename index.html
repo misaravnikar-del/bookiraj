@@ -232,6 +232,23 @@ section{scroll-margin-top:78px}
 .search input{border:none;background:transparent;outline:none;width:100%;font-size:.92rem}
 .sortsel{background:var(--surface);border:1px solid var(--line);border-radius:999px;
   padding:9px 16px;font-size:.88rem;font-weight:600;color:var(--ink-2);cursor:pointer}
+.origins{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:-8px 0 22px}
+.origins__lbl{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);margin-right:2px}
+.ochip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);
+  background:var(--surface);color:var(--ink-2);padding:7px 14px;border-radius:999px;
+  font-size:.84rem;font-weight:600;cursor:pointer;transition:all .2s ease}
+.ochip:hover{border-color:var(--accent);color:var(--ink)}
+.ochip__tick{display:inline-flex;overflow:hidden;max-width:0;opacity:0;margin-right:-6px;
+  transition:all .2s ease}
+.ochip__tick svg{width:15px;height:15px}
+.ochip.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.ochip.on .ochip__tick{max-width:18px;opacity:1;margin-right:0}
+.ochip__c{font-family:var(--font-mono);font-size:.72rem;opacity:.62}
+.ochip.on .ochip__c{opacity:.8}
+.ochip--clear{background:transparent;border-color:transparent;color:var(--muted);
+  font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.ochip--clear:hover{color:var(--accent);border-color:transparent}
 .count{color:var(--muted);font-family:var(--font-mono);font-size:.82rem;margin-bottom:18px}
 
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
@@ -512,25 +529,16 @@ section{scroll-margin-top:78px}
         </select>
       </div>
       <div class="finder__field">
-        <label for="fRegion">Kam</label>
-        <select id="fRegion">
+        <label for="fCont">Celina</label>
+        <select id="fCont">
           <option value="vse">Kamorkoli</option>
-          <option value="europa">Evropa</option>
-          <option value="azija">Azija &amp; Vzhod</option>
-          <option value="amerika">Amerika</option>
+          <option value="evropa">Evropa</option>
+          <option value="azija">Azija</option>
+          <option value="afrika">Afrika</option>
+          <option value="sev-amerika">Severna Amerika</option>
+          <option value="juz-amerika">Južna Amerika</option>
+          <option value="oceanija">Oceanija</option>
           <option value="eksotika">Eksotika</option>
-        </select>
-      </div>
-      <div class="finder__field">
-        <label for="fMonth">Kdaj</label>
-        <select id="fMonth">
-          <option value="vsi">Kadarkoli</option>
-          <option value="1">Januar</option><option value="2">Februar</option>
-          <option value="3">Marec</option><option value="4">April</option>
-          <option value="5">Maj</option><option value="6">Junij</option>
-          <option value="7">Julij</option><option value="8">Avgust</option>
-          <option value="9">September</option><option value="10">Oktober</option>
-          <option value="11">November</option><option value="12">December</option>
         </select>
       </div>
       <button type="submit" class="btn finder__go">
@@ -574,20 +582,23 @@ section{scroll-margin-top:78px}
         <p class="eyebrow">Trenutne akcije</p>
         <h2>Destinacije, ki jih ravnokar splača ujeti.</h2>
       </div>
-      <p>Filtriraj po regiji, odhodnem letališču ali mesecu — cene so okvirne najnižje povratne cene na osebo.</p>
+      <p>Izberi celino, obkljukaj eno ali več odhodnih letališč ali poišči točno državo oz. mesto — cene so okvirne najnižje povratne cene na osebo.</p>
     </div>
 
     <div class="toolbar reveal">
-      <div class="chips" id="chips" role="group" aria-label="Filter po regiji">
-        <button class="chip" data-region="vse" aria-pressed="true">Vse</button>
-        <button class="chip" data-region="europa" aria-pressed="false">Evropa</button>
-        <button class="chip" data-region="azija" aria-pressed="false">Azija &amp; Vzhod</button>
-        <button class="chip" data-region="amerika" aria-pressed="false">Amerika</button>
-        <button class="chip" data-region="eksotika" aria-pressed="false">Eksotika</button>
+      <div class="chips" id="chips" role="group" aria-label="Filter po celini">
+        <button class="chip" data-cont="vse" aria-pressed="true">Vse</button>
+        <button class="chip" data-cont="evropa" aria-pressed="false">Evropa</button>
+        <button class="chip" data-cont="azija" aria-pressed="false">Azija</button>
+        <button class="chip" data-cont="afrika" aria-pressed="false">Afrika</button>
+        <button class="chip" data-cont="sev-amerika" aria-pressed="false">Severna Amerika</button>
+        <button class="chip" data-cont="juz-amerika" aria-pressed="false">Južna Amerika</button>
+        <button class="chip" data-cont="oceanija" aria-pressed="false">Oceanija</button>
+        <button class="chip" data-cont="eksotika" aria-pressed="false">Eksotika</button>
       </div>
       <label class="search" aria-label="Iskanje destinacije">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-        <input id="search" type="search" placeholder="Kam bi rad/a?" autocomplete="off">
+        <input id="search" type="search" placeholder="Država ali mesto…" autocomplete="off">
       </label>
       <select class="sortsel" id="sort" aria-label="Razvrsti">
         <option value="reco">Priporočeno</option>
@@ -595,6 +606,8 @@ section{scroll-margin-top:78px}
         <option value="desc">Cena: padajoče</option>
       </select>
     </div>
+
+    <div class="origins reveal" id="origins" role="group" aria-label="Odhodna letališča"></div>
 
     <p class="count" id="count"></p>
     <div class="grid" id="grid"></div>
@@ -772,9 +785,11 @@ const INCLUDED=["Povratni let","Ročna prtljaga","Preverjen ponudnik","Brez skri
 const byImg={}; COPY.forEach(function(c){byImg[c.img]=c;});
 const LIVE=(window.__BOOKIRAJ_DEALS__&&window.__BOOKIRAJ_DEALS__.deals)||[];
 const UPDATED=(window.__BOOKIRAJ_DEALS__&&window.__BOOKIRAJ_DEALS__.updated)||null;
-const DEALS=LIVE.map(function(l){var c=byImg[l.img]||{};return Object.assign({},c,{fromPrice:l.fromPrice,avg:l.avg,terms:l.terms,discount:Math.max(0,Math.round((l.avg-l.fromPrice)/l.avg*100))});}).filter(function(d){return d.city;});
+const GEO={barcelona:{continent:'evropa'},rome:{continent:'evropa'},lisbon:{continent:'evropa'},santorini:{continent:'evropa'},istanbul:{continent:'evropa'},amsterdam:{continent:'evropa'},london:{continent:'evropa'},iceland:{continent:'evropa'},dubai:{continent:'azija'},bangkok:{continent:'azija'},maldives:{continent:'azija',exotic:true},bali:{continent:'azija',exotic:true},marrakesh:{continent:'afrika',exotic:true},newyork:{continent:'sev-amerika'}};
+const AP_NAME={LJU:'Ljubljana',TRS:'Trst',VCE:'Benetke',ZAG:'Zagreb',VIE:'Dunaj',MXP:'Milano',TSF:'Treviso',MUC:'Minhen',BUD:'Budimpešta'};
+const DEALS=LIVE.map(function(l){var c=byImg[l.img]||{};return Object.assign({},c,GEO[l.img]||{},{fromPrice:l.fromPrice,avg:l.avg,terms:l.terms,discount:Math.max(0,Math.round((l.avg-l.fromPrice)/l.avg*100))});}).filter(function(d){return d.city;});
 
-const state={region:"vse",origin:"vsi",month:"vsi",q:"",sort:"reco"};
+const state={continent:"vse",origins:[],q:"",sort:"reco"};
 const grid=document.getElementById('grid');
 const countEl=document.getElementById('count');
 const homeEl=document.getElementById('home');
@@ -802,15 +817,14 @@ function cardHTML(d){
 }
 function render(){
   let list=DEALS.filter(d=>
-    (state.region==='vse'||d.region===state.region)&&
-    (state.origin==='vsi'||d.fromCode===state.origin)&&
-    (state.month==='vsi'||d.months.includes(+state.month))&&
+    (state.continent==='vse'||(state.continent==='eksotika'?d.exotic:d.continent===state.continent))&&
+    (state.origins.length===0||state.origins.indexOf(d.fromCode)>=0)&&
     (state.q===''||(d.city+' '+d.country).toLowerCase().includes(state.q))
   );
   if(state.sort==='asc')list.sort((a,b)=>a.fromPrice-b.fromPrice);
   else if(state.sort==='desc')list.sort((a,b)=>b.fromPrice-a.fromPrice);
   if(!list.length){
-    grid.innerHTML='<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><p>Za te filtre trenutno ni akcij.<br>Poskusi z drugo regijo ali mesecem.</p></div>';
+    grid.innerHTML='<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><p>Za te filtre trenutno ni akcij.<br>Poskusi z drugo celino ali letališčem.</p></div>';
   }else{
     grid.innerHTML=list.map(cardHTML).join('');
   }
@@ -1093,27 +1107,49 @@ function route(){
   }
 }
 
-// chips
+// celina (chips) + odhodna letališča (obkljukaj več)
 const chips=document.getElementById('chips');
+function syncChips(){[...chips.children].forEach(c=>c.setAttribute('aria-pressed',c.dataset.cont===state.continent));}
 chips.addEventListener('click',e=>{
   const b=e.target.closest('.chip');if(!b)return;
-  state.region=b.dataset.region;
-  [...chips.children].forEach(c=>c.setAttribute('aria-pressed',c===b));
-  document.getElementById('fRegion').value=state.region;
+  state.continent=b.dataset.cont;
+  syncChips();
+  var fc=document.getElementById('fCont');if(fc)fc.value=state.continent;
+  render();
+});
+// zgradi gumbe za odhodna letališča iz dejanskih akcij (obkljukaš enega ali več)
+const originsEl=document.getElementById('origins');
+function buildOrigins(){
+  if(!originsEl)return;
+  var codes=[];DEALS.forEach(function(d){if(codes.indexOf(d.fromCode)<0)codes.push(d.fromCode);});
+  codes.sort(function(a,b){return (AP_NAME[a]||a).localeCompare(AP_NAME[b]||b,'sl');});
+  originsEl.innerHTML='<span class="origins__lbl">Odhod iz:</span>'+codes.map(function(c){
+    var on=state.origins.indexOf(c)>=0;
+    return '<button type="button" class="ochip'+(on?' on':'')+'" data-o="'+c+'" aria-pressed="'+on+'"><span class="ochip__tick" aria-hidden="true">'+CHK+'</span>'+(AP_NAME[c]||c)+' <span class="ochip__c">'+c+'</span></button>';
+  }).join('')+'<button type="button" class="ochip ochip--clear" id="oClear" hidden>Počisti izbor</button>';
+  var clr=document.getElementById('oClear');if(clr)clr.hidden=state.origins.length===0;
+}
+if(originsEl)originsEl.addEventListener('click',e=>{
+  var b=e.target.closest('.ochip');if(!b)return;
+  if(b.id==='oClear'){state.origins=[];buildOrigins();render();return;}
+  var c=b.dataset.o,i=state.origins.indexOf(c);
+  if(i>=0)state.origins.splice(i,1);else state.origins.push(c);
+  b.classList.toggle('on');b.setAttribute('aria-pressed',state.origins.indexOf(c)>=0);
+  var clr=document.getElementById('oClear');if(clr)clr.hidden=state.origins.length===0;
   render();
 });
 document.getElementById('search').addEventListener('input',e=>{state.q=e.target.value.trim().toLowerCase();render();});
 document.getElementById('sort').addEventListener('change',e=>{state.sort=e.target.value;render();});
 document.getElementById('finder').addEventListener('submit',e=>{
   e.preventDefault();
-  state.origin=document.getElementById('fOrigin').value;
-  state.region=document.getElementById('fRegion').value;
-  state.month=document.getElementById('fMonth').value;
-  [...chips.children].forEach(c=>c.setAttribute('aria-pressed',c.dataset.region===state.region));
-  render();
+  var o=document.getElementById('fOrigin').value;
+  state.origins=(o==='vsi')?[]:[o];
+  state.continent=document.getElementById('fCont').value;
+  syncChips();buildOrigins();render();
   if(location.hash==='#akcije'){document.getElementById('akcije').scrollIntoView({behavior:'smooth'});}
   else{location.hash='#akcije';}
 });
+buildOrigins();
 render();
 renderFeatured();
 renderDiscover();
