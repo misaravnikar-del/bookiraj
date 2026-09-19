@@ -1,13 +1,22 @@
-// Bookiraj.si — pobere prave cene z Aviasales/Travelpayouts Data API
-// in obdrži SAMO termine, cenejše od povprečja za posamezno progo.
-// Zažene GitHub Action (bere skrivnost TRAVELPAYOUTS_TOKEN); lokalno: TRAVELPAYOUTS_TOKEN=... node scripts/fetch-deals.mjs
+// Bookiraj.si — pobere PRAVE cene z Aviasales/Travelpayouts Data API.
+//  1) 14 kuriranih prog (slike/opisi) → kartice; obdrži termine pod povprečjem.
+//  2) ODKRIVANJE: za vseh 9 letališč potegne najcenejše lete v vse destinacije,
+//     filtrira po whitelistu držav (varno/obljudeno), po SEZONI destinacije in
+//     po MINIMALNI dolžini potovanja glede na oddaljenost → velik seznam akcij.
+// Zažene GitHub Action (skrivnost TRAVELPAYOUTS_TOKEN); lokalno: TRAVELPAYOUTS_TOKEN=... node scripts/fetch-deals.mjs
 import { writeFileSync } from 'node:fs';
 
 const TOKEN = process.env.TRAVELPAYOUTS_TOKEN;
 const MARKER = process.env.TP_MARKER || '779438';
 if (!TOKEN) { console.error('Manjka TRAVELPAYOUTS_TOKEN'); process.exit(1); }
 
-// Kurirane destinacije (slovenski meta + slike). code = kar iščemo na API; London = LON (vsa londonska letališča).
+const ORIGINS = [
+  {code:'LJU', city:'Ljubljana'}, {code:'TRS', city:'Trst'}, {code:'VCE', city:'Benetke'},
+  {code:'ZAG', city:'Zagreb'}, {code:'VIE', city:'Dunaj'}, {code:'MXP', city:'Milano'},
+  {code:'TSF', city:'Treviso'}, {code:'MUC', city:'Minhen'}, {code:'BUD', city:'Budimpešta'},
+];
+
+// ---- kurirane proge (slike) ----
 const ROUTES = [
   {city:'Barcelona',code:'BCN',country:'Španija',fromCity:'Ljubljana',fromCode:'LJU',region:'europa',img:'barcelona'},
   {city:'Rim',code:'FCO',country:'Italija',fromCity:'Trst',fromCode:'TRS',region:'europa',img:'rome'},
@@ -25,95 +34,178 @@ const ROUTES = [
   {city:'Marakeš',code:'RAK',country:'Maroko',fromCity:'Benetke',fromCode:'VCE',region:'eksotika',img:'marrakesh'},
 ];
 
-const sleep = ms => new Promise(r => setTimeout(r, ms));
+// ---- sezonski arhetipi: kateri MESECI so primerni ----
+const SEASON = {
+  eu:       {m:[1,2,3,4,5,6,7,8,9,10,11,12], note:'skozi vse leto'},
+  medcity:  {m:[3,4,5,6,7,8,9,10,11],         note:'pomlad–jesen'},
+  beach:    {m:[5,6,7,8,9,10],                note:'poletje'},
+  tropic:   {m:[11,12,1,2,3,4],               note:'suha doba (nov–apr)'},
+  desert:   {m:[10,11,12,1,2,3,4],            note:'okt–apr (poleti prevroče)'},
+  southern: {m:[10,11,12,1,2,3,4],            note:'njihovo poletje (okt–apr)'},
+  nordic:   {m:[1,2,3,4,5,6,7,8,9,10,11,12], note:'poletje za naravo, zima za sever. sij'},
+  temperate:{m:[3,4,5,6,9,10,11],             note:'pomlad in jesen'},
+  canada:   {m:[5,6,7,8,9,10],                note:'maj–okt'},
+  safari:   {m:[1,2,6,7,8,9,10],              note:'suha doba (safari)'},
+  andes:    {m:[5,6,7,8,9,10],                note:'suha doba (maj–okt)'},
+  equator:  {m:[1,2,3,4,5,6,7,8,9,10,11,12], note:'skozi vse leto'},
+};
 
-async function fetchRoute(origin, dest) {
+// ---- katalog dovoljenih držav (ISO2 → SL ime, celina, sezona, eksotika) ----
+// Kar ni tu, se izpusti (tako izločimo nevarne/neobljudene države).
+const C = (sl,cont,season,x)=>({sl,cont,season,x:!!x});
+const CATALOG = {
+  // Evropa
+  ES:C('Španija','evropa','medcity'), IT:C('Italija','evropa','medcity'), PT:C('Portugalska','evropa','medcity'),
+  GR:C('Grčija','evropa','medcity'), FR:C('Francija','evropa','eu'), GB:C('Anglija','evropa','eu'),
+  DE:C('Nemčija','evropa','eu'), NL:C('Nizozemska','evropa','eu'), BE:C('Belgija','evropa','eu'),
+  IE:C('Irska','evropa','eu'), AT:C('Avstrija','evropa','eu'), CH:C('Švica','evropa','eu'),
+  CZ:C('Češka','evropa','eu'), PL:C('Poljska','evropa','eu'), HU:C('Madžarska','evropa','eu'),
+  SK:C('Slovaška','evropa','eu'), RO:C('Romunija','evropa','eu'), BG:C('Bolgarija','evropa','eu'),
+  HR:C('Hrvaška','evropa','medcity'), RS:C('Srbija','evropa','eu'), BA:C('BiH','evropa','eu'),
+  ME:C('Črna gora','evropa','medcity'), MK:C('Sev. Makedonija','evropa','eu'), AL:C('Albanija','evropa','medcity'),
+  MT:C('Malta','evropa','beach'), CY:C('Ciper','evropa','beach'), TR:C('Turčija','evropa','medcity'),
+  EE:C('Estonija','evropa','eu'), LV:C('Latvija','evropa','eu'), LT:C('Litva','evropa','eu'),
+  LU:C('Luksemburg','evropa','eu'), DK:C('Danska','evropa','eu'), SE:C('Švedska','evropa','nordic'),
+  NO:C('Norveška','evropa','nordic'), FI:C('Finska','evropa','nordic'), IS:C('Islandija','evropa','nordic',1),
+  GE:C('Gruzija','azija','temperate',1), AM:C('Armenija','azija','temperate',1),
+  // Bližnji vzhod / Zaliv
+  AE:C('ZAE','azija','desert',1), QA:C('Katar','azija','desert',1), OM:C('Oman','azija','desert',1),
+  SA:C('Savdska Arabija','azija','desert',1), JO:C('Jordanija','azija','desert',1), IL:C('Izrael','azija','desert',1),
+  // Azija
+  TH:C('Tajska','azija','tropic',1), VN:C('Vietnam','azija','tropic',1), ID:C('Indonezija','azija','tropic',1),
+  MY:C('Malezija','azija','tropic',1), SG:C('Singapur','azija','tropic',1), LK:C('Šrilanka','azija','tropic',1),
+  IN:C('Indija','azija','tropic',1), MV:C('Maldivi','azija','tropic',1), PH:C('Filipini','azija','tropic',1),
+  KH:C('Kambodža','azija','tropic',1), NP:C('Nepal','azija','temperate',1), JP:C('Japonska','azija','temperate',1),
+  KR:C('Južna Koreja','azija','temperate',1), CN:C('Kitajska','azija','temperate',1),
+  // Afrika
+  MA:C('Maroko','afrika','desert',1), EG:C('Egipt','afrika','desert',1), TN:C('Tunizija','afrika','beach',1),
+  KE:C('Kenija','afrika','safari',1), TZ:C('Tanzanija','afrika','tropic',1), ZA:C('Južna Afrika','afrika','southern',1),
+  NA:C('Namibija','afrika','southern',1), MU:C('Mauritius','afrika','tropic',1), SC:C('Sejšeli','afrika','tropic',1),
+  CV:C('Zelenortski otoki','afrika','equator',1), SN:C('Senegal','afrika','tropic',1),
+  // Severna Amerika
+  US:C('ZDA','sev-amerika','eu'), CA:C('Kanada','sev-amerika','canada'), MX:C('Mehika','sev-amerika','tropic',1),
+  CU:C('Kuba','sev-amerika','tropic',1), DO:C('Dominikanska rep.','sev-amerika','tropic',1),
+  JM:C('Jamajka','sev-amerika','tropic',1), CR:C('Kostarika','sev-amerika','equator',1), PA:C('Panama','sev-amerika','equator',1),
+  // Južna Amerika
+  BR:C('Brazilija','juz-amerika','southern',1), AR:C('Argentina','juz-amerika','southern',1),
+  CL:C('Čile','juz-amerika','southern',1), PE:C('Peru','juz-amerika','andes',1), CO:C('Kolumbija','juz-amerika','equator',1),
+  EC:C('Ekvador','juz-amerika','equator',1),
+  // Oceanija
+  AU:C('Avstralija','oceanija','southern',1), NZ:C('Nova Zelandija','oceanija','southern',1),
+};
+
+// ---- SL imena za pogosta mesta (ostala ostanejo v izvirniku) ----
+const CITY_SL = {
+  Vienna:'Dunaj', Venice:'Benetke', Rome:'Rim', Milan:'Milano', Florence:'Firence', Naples:'Neapelj',
+  Munich:'Minhen', Prague:'Praga', Warsaw:'Varšava', Brussels:'Bruselj', Lisbon:'Lizbona', Athens:'Atene',
+  Copenhagen:'Kopenhagen', Bucharest:'Bukarešta', Cologne:'Köln', Geneva:'Ženeva', Zurich:'Zürich',
+  Istanbul:'Istanbul', Moscow:'Moskva', 'Saint Petersburg':'Sankt Peterburg', Cairo:'Kairo', Marrakesh:'Marakeš',
+  Belgrade:'Beograd', Sarajevo:'Sarajevo', Skopje:'Skopje', Tirana:'Tirana', Bucharest2:'', Krakow:'Krakov',
+  Seville:'Sevilja', Lyon:'Lyon', Nice:'Nica', Marseille:'Marseille', Hamburg:'Hamburg', Frankfurt:'Frankfurt',
+  Dublin:'Dublin', Edinburgh:'Edinburg', Manchester:'Manchester', Lisbon2:'', Malaga:'Malaga',
+  Valencia:'Valencia', Palma:'Palma de Mallorca', Ibiza:'Ibiza', Tenerife:'Tenerife', 'Las Palmas':'Las Palmas',
+  Faro:'Faro', Porto:'Porto', Thessaloniki:'Solun', Heraklion:'Heraklion', Rhodes:'Rodos', Corfu:'Krf',
+  Dubai:'Dubaj', Doha:'Doha', Bangkok:'Bangkok', Singapore:'Singapur', 'New York':'New York',
+  'Cape Town':'Cape Town', Zanzibar:'Zanzibar', 'Male':'Male', Bali:'Bali', Denpasar:'Denpasar',
+  Reykjavik:'Reykjavík', Helsinki:'Helsinki', Stockholm:'Stockholm', Oslo:'Oslo', Bergen:'Bergen',
+  Tbilisi:'Tbilisi', Yerevan:'Erevan', Amman:'Aman', 'Tel Aviv':'Tel Aviv', Casablanca:'Casablanca',
+  Toronto:'Toronto', Montreal:'Montreal', Havana:'Havana', 'Punta Cana':'Punta Cana', Cancun:'Cancún',
+  'Rio de Janeiro':'Rio de Janeiro', 'Sao Paulo':'São Paulo', 'Buenos Aires':'Buenos Aires', Lima:'Lima',
+  Bogota:'Bogota', Tokyo:'Tokio', Osaka:'Osaka', Seoul:'Seul', Beijing:'Peking', Shanghai:'Šanghaj',
+  'Hong Kong':'Hong Kong', 'Kuala Lumpur':'Kuala Lumpur', 'Ho Chi Minh City':'Ho Ši Minh', Hanoi:'Hanoj',
+  Colombo:'Kolombo', Mumbai:'Mumbaj', Delhi:'Delhi', Kathmandu:'Katmandu', Nairobi:'Nairobi',
+};
+
+const pad2 = n => String(n).padStart(2,'0');
+const ddmm = iso => { const p = iso.slice(0,10).split('-'); return p[2]+p[1]; };
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const pub = async u => { try { const r = await fetch(u); return r.ok ? await r.json() : null; } catch { return null; } };
+
+async function latest(o){
+  const url = `https://api.travelpayouts.com/aviasales/v3/get_latest_prices?origin=${o}&currency=eur&period_type=year&one_way=false&limit=1000&page=1&market=si`;
+  try { const r = await fetch(url, { headers:{ 'X-Access-Token':TOKEN } }); if(!r.ok) return []; const j = await r.json(); return j.data||[]; }
+  catch { return []; }
+}
+async function forDates(origin, dest){
   const url = `https://api.travelpayouts.com/aviasales/v3/prices_for_dates?origin=${origin}&destination=${dest}`
     + `&currency=eur&sorting=price&direct=false&limit=30&page=1&one_way=false&market=si`;
-  try {
-    const r = await fetch(url, { headers: { 'X-Access-Token': TOKEN } });
-    if (!r.ok) return [];
-    const j = await r.json();
-    return Array.isArray(j.data) ? j.data : [];
-  } catch { return []; }
+  try { const r = await fetch(url, { headers:{ 'X-Access-Token':TOKEN } }); if(!r.ok) return []; const j = await r.json(); return Array.isArray(j.data)?j.data:[]; }
+  catch { return []; }
 }
 
-const out = [];
-for (const rt of ROUTES) {
-  const data = await fetchRoute(rt.fromCode, rt.code);
-  await sleep(350);
-  if (!data.length) { console.log(`—  ${rt.fromCode}→${rt.code} ${rt.city}: ni podatkov`); continue; }
-
-  const prices = data.map(d => d.price).filter(p => p > 0);
-  const avg = prices.reduce((a, b) => a + b, 0) / prices.length;
-
-  const seen = new Set();
-  const below = data
-    .filter(d => d.price < avg)                 // SAMO pod povprečjem
-    .sort((a, b) => a.price - b.price)
-    .filter(d => { const k = d.departure_at.slice(0, 10); if (seen.has(k)) return false; seen.add(k); return true; })
-    .slice(0, 6)
-    .map(d => ({
-      depart: d.departure_at.slice(0, 10),
-      ret: d.return_at ? d.return_at.slice(0, 10) : null,
-      price: Math.round(d.price),
-      airline: d.airline || '',
-      transfers: d.transfers ?? 0,
-      url: 'https://www.aviasales.com' + d.link + '&marker=' + MARKER,
-    }));
-
-  if (!below.length) { console.log(`~  ${rt.fromCode}→${rt.code} ${rt.city}: ni terminov pod povprečjem (avg ${Math.round(avg)}€)`); continue; }
-
-  out.push({
-    city: rt.city, code: rt.code, country: rt.country,
-    fromCity: rt.fromCity, fromCode: rt.fromCode, region: rt.region, img: rt.img,
-    fromPrice: Math.min(...below.map(t => t.price)),
-    avg: Math.round(avg),
-    terms: below,
-  });
-  console.log(`✓  ${rt.fromCode}→${rt.code} ${rt.city}: povpr. ${Math.round(avg)}€ · ${below.length} pod povprečjem · od ${Math.min(...below.map(t => t.price))}€`);
-}
-
-out.sort((a, b) => a.fromPrice - b.fromPrice);
-
-// --- Samodejno odkrivanje: najcenejše destinacije iz vseh letališč (radar cen) ---
-const CURATED = new Set(ROUTES.map(r => r.code));
-const pub = async (u) => { try { const r = await fetch(u); return r.ok ? await r.json() : null; } catch { return null; } };
-const ddmm = (iso) => { const p = iso.slice(0, 10).split('-'); return p[2] + p[1]; };
+// imenski slovarji
 const cities = await pub('https://api.travelpayouts.com/data/en/cities.json');
 const countries = await pub('https://api.travelpayouts.com/data/en/countries.json');
-const CITY = {}, COUNTRY = {};
-if (cities) for (const c of cities) CITY[c.code] = { name: c.name, cc: c.country_code };
-if (countries) for (const c of countries) COUNTRY[c.code] = c.name;
+const CITY = {}, CC = {};
+if (cities) for (const c of cities) CITY[c.code] = { name:c.name, cc:c.country_code };
+if (countries) for (const c of countries) CC[c.code] = c.name;
+const cityName = code => { const n = (CITY[code]&&CITY[code].name)||code; return CITY_SL[n]||n; };
 
-const best = {};
-for (const o of ['LJU', 'TRS', 'VCE', 'ZAG', 'VIE', 'MXP', 'TSF', 'MUC', 'BUD']) {
-  const url = `https://api.travelpayouts.com/aviasales/v3/get_latest_prices?origin=${o}&currency=eur&period_type=year&one_way=false&limit=40&page=1&market=si`;
-  let data = [];
-  try { const r = await fetch(url, { headers: { 'X-Access-Token': TOKEN } }); if (r.ok) { const j = await r.json(); data = j.data || []; } } catch {}
-  await sleep(300);
+// =================== 1) KURIRANE (kartice) ===================
+const curated = [];
+for (const rt of ROUTES) {
+  const data = await forDates(rt.fromCode, rt.code); await sleep(250);
+  if (!data.length) { console.log(`—  ${rt.fromCode}→${rt.code} ${rt.city}: ni podatkov`); continue; }
+  const prices = data.map(d=>d.price).filter(p=>p>0);
+  const avg = prices.reduce((a,b)=>a+b,0)/prices.length;
+  const seen = new Set();
+  const below = data.filter(d=>d.price<avg).sort((a,b)=>a.price-b.price)
+    .filter(d=>{ const k=d.departure_at.slice(0,10); if(seen.has(k))return false; seen.add(k); return true; })
+    .slice(0,6).map(d=>({ depart:d.departure_at.slice(0,10), ret:d.return_at?d.return_at.slice(0,10):null,
+      price:Math.round(d.price), airline:d.airline||'', transfers:d.transfers??0,
+      url:'https://www.aviasales.com'+d.link+'&marker='+MARKER }));
+  if (!below.length) { console.log(`~  ${rt.city}: ni pod povprečjem`); continue; }
+  curated.push({ city:rt.city, code:rt.code, country:rt.country, fromCity:rt.fromCity, fromCode:rt.fromCode,
+    region:rt.region, img:rt.img, fromPrice:Math.min(...below.map(t=>t.price)), avg:Math.round(avg), terms:below });
+  console.log(`✓  ${rt.city}: povpr. ${Math.round(avg)}€ · od ${Math.min(...below.map(t=>t.price))}€`);
+}
+curated.sort((a,b)=>a.fromPrice-b.fromPrice);
+
+// =================== 2) ODKRIVANJE (velik seznam) ===================
+const CURATED_DEST = new Set(ROUTES.map(r=>r.code));
+const nightsBetween = (dep,ret) => Math.round((new Date(ret)-new Date(dep))/86400000);
+const minNights = dist => dist>7000 ? 6 : dist>5000 ? 5 : dist>3500 ? 4 : dist>2000 ? 3 : 2;
+
+const best = {}; // key origin|dest → najcenejši veljaven
+let scanned=0, kept=0;
+for (const o of ORIGINS) {
+  const data = await latest(o.code); await sleep(250);
   for (const it of data) {
+    scanned++;
     if (!it.value || !it.depart_date || !it.return_date) continue;
-    if (CURATED.has(it.destination)) continue;               // ne podvajaj kuriranih
-    if (!best[it.destination] || it.value < best[it.destination].value) best[it.destination] = { ...it, o };
+    const dest = it.destination;
+    if (CURATED_DEST.has(dest)) continue;              // ne podvajaj kartic
+    const ci = CITY[dest]; if (!ci) continue;
+    const cat = CATALOG[ci.cc]; if (!cat) continue;    // samo dovoljene države
+    const depMonth = +it.depart_date.slice(5,7);
+    if (!SEASON[cat.season].m.includes(depMonth)) continue;   // sezona
+    const nights = nightsBetween(it.depart_date, it.return_date);
+    if (nights < minNights(it.distance||0) || nights > 30) continue; // dolžina potovanja
+    const key = o.code+'|'+dest;
+    if (best[key] && best[key].price <= it.value) continue;
+    best[key] = {
+      fromCode:o.code, fromCity:o.city, code:dest, city:cityName(dest),
+      country:cat.sl, continent:cat.cont, exotic:cat.x,
+      price:Math.round(it.value), depart:it.depart_date.slice(0,10), ret:it.return_date.slice(0,10),
+      nights, transfers:it.number_of_changes??0, season:SEASON[cat.season].note,
+      url:'https://www.aviasales.com/search/'+it.origin+ddmm(it.depart_date)+dest+ddmm(it.return_date)+'1?marker='+MARKER,
+    };
+    kept++;
   }
 }
-let disc = Object.values(best);
-if (disc.length) {
-  const davg = disc.reduce((s, x) => s + x.value, 0) / disc.length;
-  disc = disc.filter(x => x.value < davg).sort((a, b) => a.value - b.value).slice(0, 24).map(x => {
-    const ci = CITY[x.destination] || {};
-    const sc = x.o + ddmm(x.depart_date) + x.destination + ddmm(x.return_date) + '1';
-    return {
-      fromCode: x.o, code: x.destination, city: ci.name || x.destination,
-      country: (ci.cc && COUNTRY[ci.cc]) || '', price: Math.round(x.value),
-      depart: x.depart_date.slice(0, 10), ret: x.return_date.slice(0, 10),
-      url: 'https://www.aviasales.com/search/' + sc + '?marker=' + MARKER,
-    };
-  });
-}
-console.log(`Radar cen: ${disc.length} odkritih destinacij pod povprečjem`);
+let all = Object.values(best);
+const fullByCont = {}; all.forEach(d=>{fullByCont[d.continent]=(fullByCont[d.continent]||0)+1;});
+console.log(`\nPregledano ${scanned} letov · ustreznih ${kept} · unikatnih ${all.length}`);
+console.log('Vseh ustreznih po celinah:', JSON.stringify(fullByCont));
+// uravnotežen izbor: najcenejši v vsaki celini (da pridejo zraven tudi eksotične)
+const CAPS = {evropa:120, azija:50, afrika:40, 'sev-amerika':35, 'juz-amerika':20, oceanija:12};
+const groups = {}; all.forEach(d=>{(groups[d.continent]=groups[d.continent]||[]).push(d);});
+let discover = [];
+for (const k in groups){ groups[k].sort((a,b)=>a.price-b.price); discover = discover.concat(groups[k].slice(0, CAPS[k]||30)); }
+discover.sort((a,b)=>a.price-b.price);
+const byCont = {}; discover.forEach(d=>{byCont[d.continent]=(byCont[d.continent]||0)+1;});
+console.log('V seznamu po celinah:', JSON.stringify(byCont));
 
-const payload = { updated: new Date().toISOString(), deals: out, discover: disc };
-writeFileSync(new URL('../deals.js', import.meta.url), 'window.__BOOKIRAJ_DEALS__ = ' + JSON.stringify(payload) + ';\n');
-console.log(`\nSkupaj destinacij z akcijami pod povprečjem: ${out.length}`);
+const payload = { updated:new Date().toISOString(), deals:curated, discover };
+writeFileSync(new URL('../deals.js', import.meta.url), 'window.__BOOKIRAJ_DEALS__ = '+JSON.stringify(payload)+';\n');
+console.log(`\nKurirane akcije: ${curated.length} · Odkrite akcije: ${discover.length}`);
