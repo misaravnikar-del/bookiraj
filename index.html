@@ -321,6 +321,21 @@ section{scroll-margin-top:78px}
 .detail__inc li{display:inline-flex;align-items:center;gap:8px;background:var(--surface-2);
   border:1px solid var(--line);border-radius:999px;padding:8px 15px;font-size:.9rem;color:var(--ink-2)}
 .detail__inc svg{width:15px;height:15px;color:var(--accent)}
+.terms{list-style:none;padding:0;margin:.5rem 0 0;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--surface)}
+.terms li+li{border-top:1px solid var(--line)}
+.terms a{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 18px;transition:background .2s}
+.terms a:hover{background:var(--surface-2)}
+.term__l{display:flex;flex-direction:column;gap:2px;min-width:0}
+.term__date{font-weight:600;font-size:1.02rem}
+.term__sub{color:var(--muted);font-size:.78rem;font-family:var(--font-mono)}
+.term__r{display:flex;align-items:center;gap:12px;flex:none}
+.term__price{font-family:var(--font-mono);font-weight:600;font-size:1.02rem;color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 12%,var(--surface));
+  border:1px solid color-mix(in srgb,var(--accent) 30%,var(--line));padding:6px 12px;border-radius:9px;white-space:nowrap}
+.term__go{color:var(--muted);transition:transform .2s,color .2s;flex:none}
+.terms a:hover .term__go{color:var(--accent);transform:translateX(3px)}
+.terms__hint{color:var(--muted);font-size:.92rem;margin:.2rem 0 0}
+.terms__note{color:var(--muted);font-size:.8rem;margin-top:10px;font-style:italic}
 .bookcard{position:sticky;top:90px;background:var(--surface);border:1px solid var(--line);
   border-radius:20px;padding:26px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:18px}
 .bookcard .price b{font-size:2.6rem}
@@ -710,11 +725,38 @@ function render(){
 
 // ---- detail sub-page ----
 const CHK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+const MON=["jan.","feb.","mar.","apr.","maj","jun.","jul.","avg.","sep.","okt.","nov.","dec."];
+// Affiliate: ko dobiš Skyscanner/Travelpayouts ID, ga vpiši sem (npr. '&associateid=...&utm_medium=affiliate...') — velja za VSE povezave.
+const AFFILIATE='';
+function pad2(n){return (n<10?'0':'')+n;}
+function yymmdd(y,m,d){return String(y%100)+pad2(m)+pad2(d);}
+function skyUrl(from,to,seg){return 'https://www.skyscanner.net/transport/flights/'+from.toLowerCase()+'/'+to.toLowerCase()+'/'+seg+'?adultsv2=1&cabinclass=economy&market=si&currency=eur&locale=en-gb'+AFFILIATE;}
+function addDays(y,m,d,n){const dt=new Date(Date.UTC(y,m-1,d));dt.setUTCDate(dt.getUTCDate()+n);return [dt.getUTCFullYear(),dt.getUTCMonth()+1,dt.getUTCDate()];}
+function fmtRange(y1,m1,d1,y2,m2,d2){const a=(y1===y2)?(d1+'. '+MON[m1-1]):(d1+'. '+MON[m1-1]+' '+y1);return a+' – '+d2+'. '+MON[m2-1]+' '+y2;}
+function terms(d){
+  const tripLen=d.region==='europa'?7:d.region==='amerika'?7:d.region==='azija'?10:11;
+  let mwy=d.months.map(function(m){return {m:m,y:m>=10?2026:2027};});
+  mwy.sort(function(a,b){return a.y-b.y||a.m-b.m;});
+  mwy=mwy.slice(0,3);
+  const days=[8,19], bump=[0,10,15,20,25,30], rows=[];
+  for(const o of mwy){for(const dd of days){
+    if(rows.length>=6)break;
+    const r=addDays(o.y,o.m,dd,tripLen);
+    rows.push({label:fmtRange(o.y,o.m,dd,r[0],r[1],r[2]),sub:d.airline+' · povratna',
+      price:d.price+bump[rows.length],
+      url:skyUrl(d.fromCode,d.code,yymmdd(o.y,o.m,dd)+'/'+yymmdd(r[0],r[1],r[2])+'/')});
+  }}
+  return rows;
+}
 function detailHTML(d){
-  const flights='https://www.skyscanner.net/transport/flights/'+d.fromCode.toLowerCase()+'/'+d.code.toLowerCase()+'/';
+  const routeUrl=skyUrl(d.fromCode,d.code,'');
   const related=DEALS.filter(x=>x.img!==d.img&&x.region===d.region)
     .concat(DEALS.filter(x=>x.img!==d.img&&x.region!==d.region)).slice(0,3);
-  const badge=d.badge?'<span class="badge '+(d.badgeType==='hot'?'hot':d.badgeType==='cool'?'cool':'')+'" style="position:static;display:inline-block">'+d.badge+'</span>':'';
+  const termRows=terms(d).map(t=>
+    '<li><a href="'+t.url+'" target="_blank" rel="noopener">'
+    +'<span class="term__l"><span class="term__date">'+t.label+'</span><span class="term__sub">'+t.sub+'</span></span>'
+    +'<span class="term__r"><span class="term__price">od '+t.price+' €</span>'
+    +'<svg class="term__go" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a></li>').join('');
   return ''
   +'<div class="detail__hero">'
     +'<img src="img/'+d.img+'.jpg" alt="'+d.city+', '+d.country+'">'
@@ -729,6 +771,10 @@ function detailHTML(d){
   +'<div class="container detail__body">'
     +'<div class="detail__main">'
       +'<p class="detail__lead">'+d.long+'</p>'
+      +'<h3>Izberi termin</h3>'
+      +'<p class="terms__hint">Klikni na termin — Skyscanner se odpre z že vpisano progo in datumi ter pokaže žive cene.</p>'
+      +'<ul class="terms">'+termRows+'</ul>'
+      +'<p class="terms__note">Prikazane cene so okvirne izhodiščne. Končno ceno in razpoložljivost potrdiš na Skyscannerju.</p>'
       +'<h3>Kaj te čaka</h3>'
       +'<ul class="detail__hl">'+d.hl.map(h=>'<li>'+CHK+'<span>'+h+'</span></li>').join('')+'</ul>'
       +'<h3>Kaj je vključeno</h3>'
@@ -743,8 +789,8 @@ function detailHTML(d){
           +'<dt>Prevoznik</dt><dd>'+d.airline+'</dd>'
           +'<dt>Najboljši čas</dt><dd>'+d.period+'</dd>'
         +'</dl>'
-        +'<a class="btn btn--lg" href="'+flights+'" target="_blank" rel="noopener">Poišči lete na Skyscanner</a>'
-        +'<p class="note">Cena je okvirna. Klik odpre žive cene za to progo na Skyscannerju.</p>'
+        +'<a class="btn btn--lg" href="'+routeUrl+'" target="_blank" rel="noopener">Vsi termini na Skyscanner</a>'
+        +'<p class="note">Odpre iskanje za progo s prilagodljivimi datumi.</p>'
       +'</div>'
     +'</aside>'
   +'</div>'
