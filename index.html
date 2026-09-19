@@ -1,0 +1,709 @@
+<meta charset="utf-8">
+<title>Bookiraj.si</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Hanken+Grotesk:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  /* light — "high-altitude daylight" */
+  --bg:#EBEFEE; --bg-2:#E2E8E6; --surface:#FFFFFF; --surface-2:#F4F7F6;
+  --ink:#10201F; --ink-2:#414F4D; --muted:#69766F; --line:#D3DBD8;
+  --accent:#B0702A; --accent-2:#C98A3C; --accent-ink:#2A1808;
+  --sky:#2C6C7C; --hot:#B8452C;
+  --hero-ink:#F6F2E9; --hero-dim:#D8D3C6;
+  --shadow:0 1px 2px rgba(16,32,31,.04),0 18px 40px -24px rgba(16,32,31,.30);
+  --shadow-lg:0 30px 70px -40px rgba(16,32,31,.55);
+  --radius:16px;
+  --font-display:"Fraunces",Georgia,"Times New Roman",serif;
+  --font-sans:"Hanken Grotesk",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --maxw:1220px;
+}
+:root:not([data-theme="light"]){}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1619; --bg-2:#091214; --surface:#122329; --surface-2:#0E1D21;
+    --ink:#EAF1EE; --ink-2:#BAC7C3; --muted:#8A9995; --line:#213137;
+    --accent:#DDA45A; --accent-2:#E7B36C; --accent-ink:#1B1103;
+    --sky:#6FBACA; --hot:#E07A56;
+    --shadow:0 1px 2px rgba(0,0,0,.30),0 22px 46px -26px rgba(0,0,0,.70);
+    --shadow-lg:0 34px 80px -42px rgba(0,0,0,.85);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1619; --bg-2:#091214; --surface:#122329; --surface-2:#0E1D21;
+  --ink:#EAF1EE; --ink-2:#BAC7C3; --muted:#8A9995; --line:#213137;
+  --accent:#DDA45A; --accent-2:#E7B36C; --accent-ink:#1B1103;
+  --sky:#6FBACA; --hot:#E07A56;
+  --shadow:0 1px 2px rgba(0,0,0,.30),0 22px 46px -26px rgba(0,0,0,.70);
+  --shadow-lg:0 34px 80px -42px rgba(0,0,0,.85);
+}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-sans);
+  font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;overflow-x:hidden;}
+h1,h2,h3{font-family:var(--font-display);font-weight:380;line-height:1.04;
+  letter-spacing:-.015em;text-wrap:balance;margin:0;}
+p{margin:0}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2.5px solid var(--accent);outline-offset:3px;border-radius:4px}
+.container{max-width:var(--maxw);margin-inline:auto;padding-inline:clamp(16px,4vw,44px)}
+.eyebrow{font-family:var(--font-mono);font-size:.72rem;font-weight:500;
+  letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0}
+.mono{font-family:var(--font-mono)}
+.tnum{font-variant-numeric:tabular-nums}
+section{scroll-margin-top:78px}
+
+/* reveal — visible at rest; .in adds a one-time rise animation */
+.js .reveal{opacity:1}
+.js .reveal.in{animation:rise .72s cubic-bezier(.2,.7,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.js .reveal.in{animation:none}}
+
+/* ---------- NAV ---------- */
+.nav{position:sticky;top:0;z-index:60;
+  background:color-mix(in srgb,var(--bg) 72%,transparent);
+  backdrop-filter:blur(16px) saturate(1.3);
+  border-bottom:1px solid transparent;transition:border-color .3s,background .3s}
+.nav.scrolled{border-bottom-color:var(--line);
+  background:color-mix(in srgb,var(--bg) 86%,transparent)}
+.nav__in{display:flex;align-items:center;gap:26px;height:70px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);
+  font-size:1.42rem;font-weight:460;letter-spacing:-.02em}
+.brand svg{width:26px;height:26px;color:var(--accent);flex:none}
+.brand .tld{color:var(--muted);font-family:var(--font-mono);font-size:.82rem;
+  font-weight:500;letter-spacing:.02em;align-self:flex-end;margin-bottom:.34em}
+.nav__links{display:flex;gap:28px;margin-left:auto;font-size:.94rem;font-weight:500}
+.nav__links a{color:var(--ink-2);position:relative;padding-block:6px}
+.nav__links a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1.5px;
+  background:var(--accent);transition:right .3s ease}
+.nav__links a:hover{color:var(--ink)}
+.nav__links a:hover::after{right:0}
+.nav__tools{display:flex;align-items:center;gap:10px;margin-left:22px}
+.icon-btn{width:40px;height:40px;display:grid;place-items:center;border-radius:50%;
+  border:1px solid var(--line);background:var(--surface);cursor:pointer;color:var(--ink-2);
+  transition:color .2s,border-color .2s,transform .2s}
+.icon-btn:hover{color:var(--accent);border-color:var(--accent);transform:translateY(-1px)}
+.icon-btn svg{width:18px;height:18px}
+.btn{display:inline-flex;align-items:center;gap:9px;border:none;cursor:pointer;
+  font-family:var(--font-sans);font-weight:600;font-size:.92rem;letter-spacing:.01em;
+  padding:11px 20px;border-radius:999px;background:var(--accent);color:var(--accent-ink);
+  transition:transform .2s ease,box-shadow .3s ease,filter .2s}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.04);
+  box-shadow:0 14px 30px -14px color-mix(in srgb,var(--accent) 80%,transparent)}
+.btn--ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn--ghost:hover{border-color:var(--accent);color:var(--accent);box-shadow:none}
+.btn--lg{padding:15px 30px;font-size:1rem}
+.nav .btn{margin-left:2px}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;min-height:clamp(580px,90vh,880px);display:flex;
+  align-items:flex-end;overflow:hidden;isolation:isolate}
+.hero__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;
+  animation:heroZoom 18s ease-out both}
+@keyframes heroZoom{from{transform:scale(1.08)}to{transform:scale(1)}}
+.hero__scrim{position:absolute;inset:0;z-index:-1;
+  background:
+   linear-gradient(180deg,rgba(6,14,16,.42) 0%,rgba(6,14,16,0) 26%,rgba(6,14,16,.18) 55%,rgba(6,14,16,.86) 100%),
+   radial-gradient(120% 90% at 12% 108%,rgba(6,14,16,.72),transparent 60%)}
+.hero__in{position:relative;color:var(--hero-ink);padding-block:56px 44px;width:100%}
+.hero h1{font-size:clamp(2.7rem,6.4vw,5.4rem);color:var(--hero-ink);max-width:15ch;
+  font-weight:360;margin:.5rem 0 0}
+.hero h1 em{font-style:italic;font-weight:340;color:var(--accent-2)}
+.hero__sub{margin-top:1.1rem;max-width:52ch;font-size:clamp(1.02rem,1.5vw,1.24rem);
+  color:var(--hero-dim);font-weight:400}
+.hero .eyebrow{color:var(--accent-2)}
+
+/* deal finder */
+.finder{margin-top:2rem;display:flex;flex-wrap:wrap;gap:2px;padding:8px;
+  background:rgba(9,18,20,.52);border:1px solid rgba(246,242,233,.16);
+  border-radius:16px;backdrop-filter:blur(14px);box-shadow:var(--shadow-lg);max-width:920px}
+.finder__field{flex:1 1 190px;display:flex;flex-direction:column;gap:3px;
+  padding:12px 16px;border-radius:11px;transition:background .2s;position:relative}
+.finder__field:hover{background:rgba(246,242,233,.06)}
+.finder__field+.finder__field::before{content:"";position:absolute;left:0;top:14px;bottom:14px;
+  width:1px;background:rgba(246,242,233,.14)}
+.finder__field label{font-family:var(--font-mono);font-size:.64rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--hero-dim)}
+.finder__field select{appearance:none;-webkit-appearance:none;background-color:transparent;
+  border:none;color:var(--hero-ink);font-family:var(--font-display);font-size:1.14rem;
+  font-weight:420;cursor:pointer;padding:2px 26px 2px 0;
+  background-image:linear-gradient(45deg,transparent 50%,var(--accent-2) 50%),linear-gradient(135deg,var(--accent-2) 50%,transparent 50%);
+  background-position:calc(100% - 12px) 55%,calc(100% - 8px) 55%;
+  background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+.finder__field select option{color:#111;background:#fff}
+.finder__go{flex:0 0 auto;align-self:stretch;margin:2px;padding-inline:26px;border-radius:11px}
+@media (max-width:640px){.finder__field+.finder__field::before{display:none}
+  .finder__go{width:100%;margin-top:6px}}
+
+.hero__stats{list-style:none;display:flex;flex-wrap:wrap;gap:10px 34px;margin:1.7rem 0 0;padding:0}
+.hero__stats li{display:flex;align-items:baseline;gap:9px;color:var(--hero-dim);font-size:.9rem}
+.hero__stats b{font-family:var(--font-mono);font-size:1.15rem;color:var(--hero-ink);font-weight:500}
+
+/* ---------- TICKER ---------- */
+.ticker{background:var(--ink);color:var(--hero-ink);border-block:1px solid var(--line);
+  overflow:hidden;position:relative}
+:root[data-theme="dark"] .ticker,:root:not([data-theme="light"]) .ticker{background:#060D0F}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ticker{background:#060D0F}}
+.ticker__row{display:flex;gap:0;width:max-content;animation:slide 46s linear infinite}
+.ticker:hover .ticker__row{animation-play-state:paused}
+@keyframes slide{to{transform:translateX(-50%)}}
+.ticker__item{display:flex;align-items:center;gap:14px;padding:14px 30px;
+  font-family:var(--font-mono);font-size:.86rem;white-space:nowrap;
+  border-right:1px solid rgba(246,242,233,.1)}
+.ticker__item .r{letter-spacing:.06em;color:var(--hero-dim)}
+.ticker__item .p{color:var(--accent-2);font-weight:500}
+.ticker__item .dot{width:5px;height:5px;border-radius:50%;background:var(--accent)}
+@media (prefers-reduced-motion:reduce){.ticker__row{animation:none;overflow-x:auto}}
+
+/* ---------- SECTION HEADS ---------- */
+.sec{padding-block:clamp(3.8rem,8vh,6.6rem)}
+.sec--alt{background:var(--bg-2)}
+.sec__head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;
+  margin-bottom:2.6rem;flex-wrap:wrap}
+.sec__head h2{font-size:clamp(1.95rem,3.6vw,3.1rem);max-width:20ch}
+.sec__head p{color:var(--muted);max-width:44ch;margin-top:.5rem}
+.sec__head .eyebrow{margin-bottom:.7rem}
+
+/* ---------- FEATURED (boarding pass) ---------- */
+.pass{display:grid;grid-template-columns:1.05fr .95fr;background:var(--surface);
+  border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:var(--shadow-lg);
+  position:relative}
+.pass__media{position:relative;min-height:360px;overflow:hidden}
+.pass__media img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.pass__media .tag{position:absolute;top:20px;left:20px;background:var(--hot);color:#fff;
+  font-family:var(--font-mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  padding:7px 13px;border-radius:8px;font-weight:500}
+.pass__body{padding:clamp(26px,3.4vw,48px);display:flex;flex-direction:column;gap:16px;
+  position:relative}
+/* perforation */
+.pass__body::before{content:"";position:absolute;left:-1px;top:0;bottom:0;width:2px;
+  background-image:linear-gradient(var(--line) 55%,transparent 0);background-size:2px 15px;
+  opacity:.9}
+.pass__notch{position:absolute;left:-11px;width:22px;height:22px;border-radius:50%;
+  background:var(--bg);border:1px solid var(--line)}
+.sec--alt .pass__notch{background:var(--bg-2)}
+.pass__notch.t{top:-11px}.pass__notch.b{bottom:-11px}
+.pass__route{display:flex;align-items:center;gap:14px;font-family:var(--font-mono);
+  font-size:1.05rem;color:var(--ink-2)}
+.pass__route .code{font-size:1.7rem;color:var(--ink);font-weight:500}
+.pass__route .line{flex:1;height:1px;background:repeating-linear-gradient(90deg,var(--line) 0 6px,transparent 6px 12px);position:relative}
+.pass__route .line svg{position:absolute;right:-2px;top:-8px;width:16px;height:16px;color:var(--accent)}
+.pass h3{font-size:clamp(2.2rem,4vw,3.4rem);font-weight:360}
+.pass__meta{display:flex;flex-wrap:wrap;gap:8px 22px;color:var(--muted);font-size:.92rem}
+.pass__meta span{display:inline-flex;align-items:center;gap:7px}
+.pass__meta svg{width:15px;height:15px;color:var(--accent)}
+.pass__desc{color:var(--ink-2);font-size:1.04rem}
+.pass__foot{margin-top:auto;display:flex;align-items:flex-end;justify-content:space-between;
+  gap:18px;flex-wrap:wrap;padding-top:14px}
+.price{display:flex;flex-direction:column;line-height:1.05}
+.price small{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted)}
+.price b{font-family:var(--font-display);font-size:clamp(2.4rem,4.4vw,3.2rem);font-weight:420;
+  color:var(--ink)}
+.price b i{font-style:normal;color:var(--accent);font-size:.62em}
+@media (max-width:780px){.pass{grid-template-columns:1fr}
+  .pass__media{min-height:240px;position:relative;height:240px}
+  .pass__body::before,.pass__notch{display:none}}
+
+/* ---------- TOOLBAR + GRID ---------- */
+.toolbar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:26px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--ink-2);
+  padding:9px 17px;border-radius:999px;font-size:.88rem;font-weight:600;cursor:pointer;
+  transition:all .2s ease}
+.chip:hover{border-color:var(--accent);color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.search{margin-left:auto;display:flex;align-items:center;gap:9px;background:var(--surface);
+  border:1px solid var(--line);border-radius:999px;padding:9px 16px;min-width:210px}
+.search svg{width:16px;height:16px;color:var(--muted);flex:none}
+.search input{border:none;background:transparent;outline:none;width:100%;font-size:.92rem}
+.sortsel{background:var(--surface);border:1px solid var(--line);border-radius:999px;
+  padding:9px 16px;font-size:.88rem;font-weight:600;color:var(--ink-2);cursor:pointer}
+.count{color:var(--muted);font-family:var(--font-mono);font-size:.82rem;margin-bottom:18px}
+
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+@media (max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.grid{grid-template-columns:1fr}}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow);
+  transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s,border-color .3s}
+.card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.card__media{position:relative;aspect-ratio:4/3;overflow:hidden}
+.card__media img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+.card:hover .card__media img{transform:scale(1.07)}
+.card__price{position:absolute;bottom:12px;right:12px;background:color-mix(in srgb,var(--surface) 90%,transparent);
+  backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:11px;padding:7px 12px;
+  font-family:var(--font-mono);font-weight:500;color:var(--ink);box-shadow:var(--shadow)}
+.card__price small{color:var(--muted);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;display:block;line-height:1}
+.card__price b{font-size:1.14rem;font-weight:600}.card__price b i{font-style:normal;color:var(--accent)}
+.badge{position:absolute;top:12px;left:12px;font-family:var(--font-mono);font-size:.66rem;
+  letter-spacing:.12em;text-transform:uppercase;padding:6px 11px;border-radius:8px;font-weight:500;
+  color:var(--accent-ink);background:var(--accent-2)}
+.badge.hot{background:var(--hot);color:#fff}
+.badge.cool{background:var(--sky);color:#fff}
+.card__body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:9px;flex:1}
+.card__route{display:flex;align-items:center;justify-content:space-between;
+  font-family:var(--font-mono);font-size:.76rem;color:var(--muted);letter-spacing:.04em}
+.card__route .arrow{color:var(--accent);margin-inline:4px}
+.card h3{font-size:1.42rem;font-weight:400}
+.card__sub{color:var(--muted);font-size:.86rem;margin-top:-2px}
+.card__teaser{color:var(--ink-2);font-size:.92rem;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card__cta{margin-top:auto;padding-top:14px;border-top:1px dashed var(--line);
+  display:flex;align-items:center;justify-content:space-between}
+.card__cta .go{color:var(--accent);font-weight:600;font-size:.9rem;display:inline-flex;
+  align-items:center;gap:7px;transition:gap .2s}
+.card:hover .card__cta .go{gap:12px}
+.card__cta .air{color:var(--muted);font-size:.78rem}
+.empty{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted)}
+.empty svg{width:40px;height:40px;color:var(--line);margin-bottom:12px}
+
+/* ---------- WHY ---------- */
+.why{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+@media (max-width:840px){.why{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:460px){.why{grid-template-columns:1fr}}
+.why__item{padding:26px 24px;border-radius:var(--radius);background:var(--surface);
+  border:1px solid var(--line)}
+.why__ic{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;
+  background:color-mix(in srgb,var(--accent) 16%,var(--surface));color:var(--accent);margin-bottom:16px}
+.why__ic svg{width:23px;height:23px}
+.why__item h3{font-size:1.22rem;margin-bottom:7px}
+.why__item p{color:var(--muted);font-size:.92rem}
+
+/* ---------- NEWSLETTER ---------- */
+.news{position:relative;border-radius:26px;overflow:hidden;isolation:isolate;
+  box-shadow:var(--shadow-lg)}
+.news__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.news__scrim{position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(100deg,rgba(6,14,16,.92) 0%,rgba(6,14,16,.66) 46%,rgba(6,14,16,.28) 100%)}
+.news__in{padding:clamp(34px,6vw,72px);color:var(--hero-ink);max-width:640px}
+.news .eyebrow{color:var(--accent-2)}
+.news h2{color:var(--hero-ink);font-size:clamp(2rem,4vw,3rem);margin:.6rem 0 .8rem}
+.news p{color:var(--hero-dim);margin-bottom:1.7rem}
+.nform{display:flex;gap:10px;flex-wrap:wrap}
+.nform input{flex:1 1 240px;padding:15px 20px;border-radius:12px;border:1px solid rgba(246,242,233,.24);
+  background:rgba(9,18,20,.5);color:var(--hero-ink);font-size:1rem;backdrop-filter:blur(6px)}
+.nform input::placeholder{color:rgba(216,211,198,.7)}
+.nform .btn{flex:0 0 auto}
+.nform__note{margin-top:14px;font-size:.8rem;color:var(--hero-dim);font-family:var(--font-mono);letter-spacing:.02em}
+.nsuccess{display:none;align-items:center;gap:14px;padding:20px 24px;border-radius:14px;
+  background:rgba(9,18,20,.5);border:1px solid rgba(246,242,233,.24);color:var(--hero-ink)}
+.nsuccess svg{width:34px;height:34px;color:var(--accent-2);flex:none}
+.news.done .nform,.news.done .nform__note{display:none}
+.news.done .nsuccess{display:flex}
+
+/* ---------- FOOTER ---------- */
+.foot{background:var(--bg-2);border-top:1px solid var(--line);padding-block:56px 32px}
+.foot__grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:34px}
+@media (max-width:760px){.foot__grid{grid-template-columns:1fr 1fr}}
+@media (max-width:440px){.foot__grid{grid-template-columns:1fr}}
+.foot__brand p{color:var(--muted);margin-top:14px;max-width:34ch;font-size:.92rem}
+.foot h4{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 16px}
+.foot ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:11px}
+.foot ul a{color:var(--ink-2);font-size:.92rem}.foot ul a:hover{color:var(--accent)}
+.foot__soc{display:flex;gap:10px;margin-top:18px}
+.foot__bar{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  margin-top:44px;padding-top:22px;border-top:1px solid var(--line);
+  color:var(--muted);font-size:.82rem;font-family:var(--font-mono)}
+
+@media (max-width:860px){.nav__links{display:none}}
+</style>
+
+<script>
+  (function(){try{var t=localStorage.getItem('bkr-theme');
+    if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}
+    document.documentElement.classList.add('js');})();
+</script>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav" id="top">
+  <div class="container nav__in">
+    <a class="brand" href="#top" aria-label="Bookiraj.si domov">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 13.5 3 12l1-2 4 .5 4.5-5c.6-.7 1.7-.9 2.5-.3.8.6.9 1.7.3 2.5l-3.2 4.4.7 4.2-1.6 1.3-1.5-4.1-3.4 3 .2 2.4-1.3.9-1.2-3.4L3.8 18l-.9-1.3 2.4-1z"/></svg>
+      Bookiraj<span class="tld">.si</span>
+    </a>
+    <nav class="nav__links" aria-label="Glavni meni">
+      <a href="#akcije">Letalske karte</a>
+      <a href="#tedna">Akcija tedna</a>
+      <a href="#zakaj">Zakaj Bookiraj</a>
+      <a href="#news">Obveščanje</a>
+    </nav>
+    <div class="nav__tools">
+      <button class="icon-btn" id="themeBtn" aria-label="Preklopi temo"></button>
+      <a href="#akcije" class="btn">Ujemi akcijo</a>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <img class="hero__bg" src="img/hero.jpg" alt="Pogled skozi okno letala nad oblaki ob zlatem sončnem zahodu" fetchpriority="high">
+  <div class="hero__scrim"></div>
+  <div class="container hero__in">
+    <p class="eyebrow">Ročno izbrane letalske akcije · odhodi iz Slovenije in soseščine</p>
+    <h1>Svet je <em>ceneje</em>, kot misliš.</h1>
+    <p class="hero__sub">Vsak dan preverimo na tisoče cen in izberemo le tiste akcije, ob katerih se splača spakirati kovček. Brez šuma — le lepe destinacije po nizkih cenah.</p>
+
+    <form class="finder" id="finder" aria-label="Poišči akcijo">
+      <div class="finder__field">
+        <label for="fOrigin">Odhod</label>
+        <select id="fOrigin">
+          <option value="vsi">Vsa letališča</option>
+          <option value="LJU">Ljubljana · LJU</option>
+          <option value="TRS">Trst · TRS</option>
+          <option value="VCE">Benetke · VCE</option>
+          <option value="ZAG">Zagreb · ZAG</option>
+          <option value="VIE">Dunaj · VIE</option>
+        </select>
+      </div>
+      <div class="finder__field">
+        <label for="fRegion">Kam</label>
+        <select id="fRegion">
+          <option value="vse">Kamorkoli</option>
+          <option value="europa">Evropa</option>
+          <option value="azija">Azija &amp; Vzhod</option>
+          <option value="amerika">Amerika</option>
+          <option value="eksotika">Eksotika</option>
+        </select>
+      </div>
+      <div class="finder__field">
+        <label for="fMonth">Kdaj</label>
+        <select id="fMonth">
+          <option value="vsi">Kadarkoli</option>
+          <option value="1">Januar</option><option value="2">Februar</option>
+          <option value="3">Marec</option><option value="4">April</option>
+          <option value="5">Maj</option><option value="6">Junij</option>
+          <option value="7">Julij</option><option value="8">Avgust</option>
+          <option value="9">September</option><option value="10">Oktober</option>
+          <option value="11">November</option><option value="12">December</option>
+        </select>
+      </div>
+      <button type="submit" class="btn finder__go">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        Poišči
+      </button>
+    </form>
+
+    <ul class="hero__stats">
+      <li><b class="tnum">340+</b> preverjenih akcij</li>
+      <li><b class="tnum">do 70 %</b> nižje cene</li>
+      <li><b class="tnum">6</b> letališč v dosegu</li>
+      <li><b class="tnum">42k</b> zadovoljnih popotnikov</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== TICKER ===================== -->
+<div class="ticker" aria-hidden="true"><div class="ticker__row" id="ticker"></div></div>
+
+<!-- ===================== FEATURED ===================== -->
+<section class="sec sec--alt" id="tedna">
+  <div class="container">
+    <div class="sec__head reveal">
+      <div>
+        <p class="eyebrow">Akcija tedna</p>
+        <h2>Poletje na Kikladih, po ceni mestnega vikenda.</h2>
+      </div>
+      <p>Ena akcija, ki jo izpostavimo vsak teden — ker je preprosto predobra, da bi jo spregledali.</p>
+    </div>
+
+    <article class="pass reveal">
+      <div class="pass__media">
+        <img src="img/santorini.jpg" alt="Bele hiše z modrimi kupolami nad kaldero na Santoriniju">
+        <span class="tag">− 61 % · zadnji sedeži</span>
+      </div>
+      <div class="pass__body">
+        <span class="pass__notch t"></span><span class="pass__notch b"></span>
+        <div class="pass__route">
+          <span class="code">LJU</span>
+          <span class="line"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L11 19v-5.5z"/></svg></span>
+          <span class="code">JTR</span>
+        </div>
+        <h3>Santorini</h3>
+        <div class="pass__meta">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Grčija, Kikladi</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>junij – september</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/><circle cx="12" cy="12" r="10"/></svg>Aegean · direktni let</span>
+        </div>
+        <p class="pass__desc">Bele kupole, sončni zahodi barve terakote in kaldera, kakršne ne pozabiš. Vključena ročna prtljaga in preverjen ponudnik.</p>
+        <div class="pass__foot">
+          <div class="price"><small>Povratna karta že od</small><b>89 <i>€</i></b></div>
+          <a href="#akcije" class="btn btn--lg">Rezerviraj akcijo</a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ===================== DEALS ===================== -->
+<section class="sec" id="akcije">
+  <div class="container">
+    <div class="sec__head reveal">
+      <div>
+        <p class="eyebrow">Trenutne akcije</p>
+        <h2>Destinacije, ki jih ravnokar splača ujeti.</h2>
+      </div>
+      <p>Filtriraj po regiji, odhodnem letališču ali mesecu — cene so okvirne najnižje povratne cene na osebo.</p>
+    </div>
+
+    <div class="toolbar reveal">
+      <div class="chips" id="chips" role="group" aria-label="Filter po regiji">
+        <button class="chip" data-region="vse" aria-pressed="true">Vse</button>
+        <button class="chip" data-region="europa" aria-pressed="false">Evropa</button>
+        <button class="chip" data-region="azija" aria-pressed="false">Azija &amp; Vzhod</button>
+        <button class="chip" data-region="amerika" aria-pressed="false">Amerika</button>
+        <button class="chip" data-region="eksotika" aria-pressed="false">Eksotika</button>
+      </div>
+      <label class="search" aria-label="Iskanje destinacije">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="search" type="search" placeholder="Kam bi rad/a?" autocomplete="off">
+      </label>
+      <select class="sortsel" id="sort" aria-label="Razvrsti">
+        <option value="reco">Priporočeno</option>
+        <option value="asc">Cena: naraščajoče</option>
+        <option value="desc">Cena: padajoče</option>
+      </select>
+    </div>
+
+    <p class="count" id="count"></p>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<!-- ===================== WHY ===================== -->
+<section class="sec sec--alt" id="zakaj">
+  <div class="container">
+    <div class="sec__head reveal">
+      <div>
+        <p class="eyebrow">Zakaj Bookiraj</p>
+        <h2>Manj brskanja. Več potovanj.</h2>
+      </div>
+      <p>Delamo eno stvar in jo delamo dobro: najdemo vam poceni karte, ki so resnično vredne vašega časa.</p>
+    </div>
+    <div class="why">
+      <div class="why__item reveal">
+        <div class="why__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg></div>
+        <h3>Ročno izbrano</h3>
+        <p>Vsako akcijo pregleda človek. Objavimo le tisto, kamor bi šli tudi sami.</p>
+      </div>
+      <div class="why__item reveal">
+        <div class="why__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.6 13.4 11 3.8H4v7l9.6 9.6a2 2 0 0 0 2.8 0l4.2-4.2a2 2 0 0 0 0-2.8z"/><circle cx="7.5" cy="7.5" r="1.3" fill="currentColor"/></svg></div>
+        <h3>Prave najnižje cene</h3>
+        <p>Sledimo cenam v realnem času in ujamemo padce, preden izginejo.</p>
+      </div>
+      <div class="why__item reveal">
+        <div class="why__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4.5 8-11a8 8 0 1 0-16 0c0 6.5 8 11 8 11z"/><circle cx="12" cy="11" r="3"/></svg></div>
+        <h3>Odhodi iz bližine</h3>
+        <p>Ljubljana, Trst, Benetke, Zagreb, Dunaj — vse na uro ali dve vožnje.</p>
+      </div>
+      <div class="why__item reveal">
+        <div class="why__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 9V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a2 2 0 0 0 0 6v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-6z"/><path d="M14 5v14" stroke-dasharray="2 2.5"/></svg></div>
+        <h3>Brez skritih stroškov</h3>
+        <p>Povemo, kaj je vključeno. Do ponudnika te pošljemo z jasno ceno.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== NEWSLETTER ===================== -->
+<section class="sec" id="news">
+  <div class="container">
+    <div class="news reveal">
+      <img class="news__bg" src="img/resort.jpg" alt="Bazen z neskončnim robom v luksuznem letovišču ob mraku">
+      <div class="news__scrim"></div>
+      <div class="news__in">
+        <p class="eyebrow">Nikoli več zamujena akcija</p>
+        <h2>Najboljše cene v tvoj predal.</h2>
+        <p>Enkrat na teden. Le prave akcije, brez neželene pošte. Prvi izveš, ko se pojavi karta, ki jo je vredno ujeti.</p>
+        <form class="nform" id="nform" novalidate>
+          <input id="nemail" type="email" required placeholder="tvoj@email.si" aria-label="E-poštni naslov">
+          <button type="submit" class="btn btn--lg">Prijavi me</button>
+        </form>
+        <p class="nform__note">Se lahko odjaviš z enim klikom. Spoštujemo tvojo zasebnost.</p>
+        <div class="nsuccess" role="status">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          <div><b>Dobrodošel na krovu!</b><br><span style="opacity:.8">Od zdaj boš prvi izvedel za najboljše akcije.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="foot">
+  <div class="container">
+    <div class="foot__grid">
+      <div class="foot__brand">
+        <a class="brand" href="#top" style="font-size:1.5rem">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 13.5 3 12l1-2 4 .5 4.5-5c.6-.7 1.7-.9 2.5-.3.8.6.9 1.7.3 2.5l-3.2 4.4.7 4.2-1.6 1.3-1.5-4.1-3.4 3 .2 2.4-1.3.9-1.2-3.4L3.8 18l-.9-1.3 2.4-1z"/></svg>
+          Bookiraj<span class="tld">.si</span>
+        </a>
+        <p>Prefinjen iskalec poceni letalskih kart za popotnike iz Slovenije in soseščine. Manj brskanja, več potovanj.</p>
+        <div class="foot__soc">
+          <a class="icon-btn" href="#news" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a class="icon-btn" href="#news" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-2 0-3.5 1.5-3.5 3.5V11H8v3h2.5v7h3v-7H16l.5-3h-3V9.8c0-.5.4-.8 1-.8z"/></svg></a>
+          <a class="icon-btn" href="#news" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 3c.3 2.2 1.6 3.7 3.8 3.9v2.7c-1.4.1-2.7-.3-3.8-1v5.9c0 3.3-2.4 5.6-5.5 5.6C7.5 20 5.4 17.9 5.4 15c0-2.7 2-4.9 4.9-4.9.3 0 .6 0 .9.1v2.9c-.3-.1-.6-.2-.9-.2-1.2 0-2 .9-2 2.1s.9 2.1 2.1 2.1c1.3 0 2.2-1 2.2-2.5V3z"/></svg></a>
+        </div>
+      </div>
+      <div><h4>Destinacije</h4><ul>
+        <li><a href="#akcije">Evropski vikendi</a></li>
+        <li><a href="#akcije">Sredozemlje</a></li>
+        <li><a href="#akcije">Daljna potovanja</a></li>
+        <li><a href="#akcije">Eksotika</a></li>
+      </ul></div>
+      <div><h4>Bookiraj</h4><ul>
+        <li><a href="#zakaj">Kako deluje</a></li>
+        <li><a href="#tedna">Akcija tedna</a></li>
+        <li><a href="#news">Obveščanje</a></li>
+        <li><a href="#akcije">Pogosta vprašanja</a></li>
+      </ul></div>
+      <div><h4>Pravno</h4><ul>
+        <li><a href="#news">Zasebnost</a></li>
+        <li><a href="#news">Pogoji uporabe</a></li>
+        <li><a href="#news">Piškotki</a></li>
+        <li><a href="#news">Kontakt</a></li>
+      </ul></div>
+    </div>
+    <div class="foot__bar">
+      <span>© 2026 Bookiraj.si — vse cene so okvirne in se lahko spremenijo.</span>
+      <span>Narejeno z ♥ za popotnike</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const DEALS=[
+ {city:"Barcelona",code:"BCN",country:"Španija",fromCity:"Ljubljana",fromCode:"LJU",airline:"Vueling",price:39,period:"apr.–maj.",months:[4,5],region:"europa",img:"barcelona",teaser:"Gaudí, tapas in mestna plaža na dosegu vikenda.",badge:"−52 %",badgeType:"acc"},
+ {city:"Rim",code:"FCO",country:"Italija",fromCity:"Trst",fromCode:"TRS",airline:"Ryanair",price:29,period:"mar.–jun.",months:[3,4,5,6],region:"europa",img:"rome",teaser:"Večno mesto, le uro leta od doma.",badge:"Najceneje",badgeType:"hot"},
+ {city:"Lizbona",code:"LIS",country:"Portugalska",fromCity:"Benetke",fromCode:"VCE",airline:"Ryanair",price:49,period:"maj.–jun.",months:[5,6],region:"europa",img:"lisbon",teaser:"Rumeni tramvaj, pastéis in atlantski sončni zahodi.",badge:"",badgeType:""},
+ {city:"Santorini",code:"JTR",country:"Grčija",fromCity:"Ljubljana",fromCode:"LJU",airline:"Aegean",price:89,period:"jun.–sep.",months:[6,7,8,9],region:"europa",img:"santorini",teaser:"Bele kupole nad globoko modro kaldero.",badge:"Poletje",badgeType:"acc"},
+ {city:"Istanbul",code:"IST",country:"Turčija",fromCity:"Zagreb",fromCode:"ZAG",airline:"Turkish Airlines",price:79,period:"vse leto",months:[1,2,3,4,5,6,7,8,9,10,11,12],region:"europa",img:"istanbul",teaser:"Kjer se Evropa in Azija stakneta ob Bosporju.",badge:"",badgeType:""},
+ {city:"Amsterdam",code:"AMS",country:"Nizozemska",fromCity:"Ljubljana",fromCode:"LJU",airline:"Transavia",price:59,period:"apr.–maj.",months:[4,5],region:"europa",img:"amsterdam",teaser:"Kanali, kolesa in svetovni muzeji.",badge:"",badgeType:""},
+ {city:"London",code:"LHR",country:"Anglija",fromCity:"Trst",fromCode:"TRS",airline:"easyJet",price:45,period:"vse leto",months:[1,2,3,4,5,6,7,8,9,10,11,12],region:"europa",img:"london",teaser:"Metropola, ki se je nikoli ne naveličaš.",badge:"",badgeType:""},
+ {city:"Reykjavík",code:"KEF",country:"Islandija",fromCity:"Benetke",fromCode:"VCE",airline:"easyJet",price:129,period:"sep.–mar.",months:[9,10,11,12,1,2,3],region:"europa",img:"iceland",teaser:"Slapovi, gejzirji in severni sij nad ledom.",badge:"Aurora",badgeType:"cool"},
+ {city:"Dubaj",code:"DXB",country:"ZAE",fromCity:"Zagreb",fromCode:"ZAG",airline:"Emirates",price:299,period:"nov.–mar.",months:[11,12,1,2,3],region:"azija",img:"dubai",teaser:"Puščavski luksuz in nebotičniki iz prihodnosti.",badge:"",badgeType:""},
+ {city:"Bangkok",code:"BKK",country:"Tajska",fromCity:"Benetke",fromCode:"VCE",airline:"Qatar Airways",price:449,period:"nov.–feb.",months:[11,12,1,2],region:"azija",img:"bangkok",teaser:"Zlati templji in neskončna ulična kuhinja.",badge:"",badgeType:""},
+ {city:"Maldivi",code:"MLE",country:"Maldivi",fromCity:"Dunaj",fromCode:"VIE",airline:"Qatar Airways",price:549,period:"jan.–apr.",months:[1,2,3,4],region:"eksotika",img:"maldives",teaser:"Vile na vodi nad turkizno laguno.",badge:"Sanje",badgeType:"acc"},
+ {city:"New York",code:"JFK",country:"ZDA",fromCity:"Benetke",fromCode:"VCE",airline:"United",price:359,period:"jan.–mar.",months:[1,2,3],region:"amerika",img:"newyork",teaser:"Mesto, ki nikoli ne spi.",badge:"",badgeType:""},
+ {city:"Bali",code:"DPS",country:"Indonezija",fromCity:"Dunaj",fromCode:"VIE",airline:"Emirates",price:579,period:"apr.–okt.",months:[4,5,6,7,8,9,10],region:"eksotika",img:"bali",teaser:"Riževe terase in tempeljski mir.",badge:"",badgeType:""},
+ {city:"Marakeš",code:"RAK",country:"Maroko",fromCity:"Benetke",fromCode:"VCE",airline:"Ryanair",price:89,period:"okt.–apr.",months:[10,11,12,1,2,3,4],region:"eksotika",img:"marrakesh",teaser:"Medina, začimbe in obzorje gorovja Atlas.",badge:"",badgeType:""}
+];
+
+const state={region:"vse",origin:"vsi",month:"vsi",q:"",sort:"reco"};
+const grid=document.getElementById('grid');
+const countEl=document.getElementById('count');
+
+function priceHTML(p){return '<b>'+p+' <i>€</i></b>';}
+function cardHTML(d){
+  const badge=d.badge?'<span class="badge '+(d.badgeType==='hot'?'hot':d.badgeType==='cool'?'cool':'')+'">'+d.badge+'</span>':'';
+  return '<article class="card">'
+    +'<div class="card__media">'
+      +'<img loading="lazy" decoding="async" src="img/'+d.img+'.jpg" alt="'+d.city+', '+d.country+'">'
+      +badge
+      +'<div class="card__price"><small>že od</small>'+priceHTML(d.price)+'</div>'
+    +'</div>'
+    +'<div class="card__body">'
+      +'<div class="card__route"><span>'+d.fromCode+' <span class="arrow">→</span> '+d.code+'</span><span>'+d.period+'</span></div>'
+      +'<h3>'+d.city+'</h3>'
+      +'<div class="card__sub">'+d.country+' · odhod iz '+d.fromCity+'</div>'
+      +'<p class="card__teaser">'+d.teaser+'</p>'
+      +'<div class="card__cta"><span class="go">Poglej akcijo <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span><span class="air">'+d.airline+'</span></div>'
+    +'</div>'
+  +'</article>';
+}
+function render(){
+  let list=DEALS.filter(d=>
+    (state.region==='vse'||d.region===state.region)&&
+    (state.origin==='vsi'||d.fromCode===state.origin)&&
+    (state.month==='vsi'||d.months.includes(+state.month))&&
+    (state.q===''||(d.city+' '+d.country).toLowerCase().includes(state.q))
+  );
+  if(state.sort==='asc')list.sort((a,b)=>a.price-b.price);
+  else if(state.sort==='desc')list.sort((a,b)=>b.price-a.price);
+  if(!list.length){
+    grid.innerHTML='<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><p>Za te filtre trenutno ni akcij.<br>Poskusi z drugo regijo ali mesecem.</p></div>';
+  }else{
+    grid.innerHTML=list.map(cardHTML).join('');
+  }
+  countEl.textContent=list.length+(list.length===1?' akcija':(list.length===2?' akciji':(list.length<5&&list.length>0?' akcije':' akcij')))+' · osveženo danes';
+}
+
+// chips
+const chips=document.getElementById('chips');
+chips.addEventListener('click',e=>{
+  const b=e.target.closest('.chip');if(!b)return;
+  state.region=b.dataset.region;
+  [...chips.children].forEach(c=>c.setAttribute('aria-pressed',c===b));
+  document.getElementById('fRegion').value=state.region;
+  render();
+});
+// search
+document.getElementById('search').addEventListener('input',e=>{state.q=e.target.value.trim().toLowerCase();render();});
+// sort
+document.getElementById('sort').addEventListener('change',e=>{state.sort=e.target.value;render();});
+// finder
+document.getElementById('finder').addEventListener('submit',e=>{
+  e.preventDefault();
+  state.origin=document.getElementById('fOrigin').value;
+  state.region=document.getElementById('fRegion').value;
+  state.month=document.getElementById('fMonth').value;
+  [...chips.children].forEach(c=>c.setAttribute('aria-pressed',c.dataset.region===state.region));
+  render();
+  document.getElementById('akcije').scrollIntoView({behavior:'smooth'});
+});
+render();
+
+// ticker
+(function(){
+  const row=document.getElementById('ticker');
+  const items=DEALS.concat(DEALS).map(d=>
+    '<span class="ticker__item"><span class="r">'+d.fromCode+' → '+d.code+'</span><span class="dot"></span><span class="p">'+d.price+' €</span></span>'
+  ).join('');
+  row.innerHTML=items;
+})();
+
+// theme toggle
+const sun='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg>';
+const moon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.5 6.5 0 0 0 9.8 9.8z"/></svg>';
+const tb=document.getElementById('themeBtn');
+function curTheme(){const s=document.documentElement.getAttribute('data-theme');
+  if(s)return s;return matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';}
+function paintBtn(){tb.innerHTML=curTheme()==='dark'?sun:moon;}
+paintBtn();
+tb.addEventListener('click',()=>{
+  const next=curTheme()==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',next);
+  try{localStorage.setItem('bkr-theme',next);}catch(e){}
+  paintBtn();
+});
+
+// nav scrolled
+const nav=document.querySelector('.nav');
+addEventListener('scroll',()=>{nav.classList.toggle('scrolled',scrollY>20);},{passive:true});
+
+// newsletter
+document.getElementById('nform').addEventListener('submit',e=>{
+  e.preventDefault();
+  const v=document.getElementById('nemail').value.trim();
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){document.getElementById('nemail').focus();return;}
+  document.querySelector('.news').classList.add('done');
+  try{localStorage.setItem('bkr-sub',v);}catch(e){}
+});
+
+// reveal
+(function(){
+  const els=document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver'in window)){els.forEach(el=>el.classList.add('in'));return;}
+  const io=new IntersectionObserver((ents)=>{
+    ents.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});
+  },{rootMargin:'0px 0px 120px 0px',threshold:0});
+  els.forEach(el=>io.observe(el));
+})();
+</script>
