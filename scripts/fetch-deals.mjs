@@ -75,6 +75,45 @@ for (const rt of ROUTES) {
 }
 
 out.sort((a, b) => a.fromPrice - b.fromPrice);
-const payload = { updated: new Date().toISOString(), deals: out };
+
+// --- Samodejno odkrivanje: najcenejše destinacije iz vseh letališč (radar cen) ---
+const CURATED = new Set(ROUTES.map(r => r.code));
+const pub = async (u) => { try { const r = await fetch(u); return r.ok ? await r.json() : null; } catch { return null; } };
+const ddmm = (iso) => { const p = iso.slice(0, 10).split('-'); return p[2] + p[1]; };
+const cities = await pub('https://api.travelpayouts.com/data/en/cities.json');
+const countries = await pub('https://api.travelpayouts.com/data/en/countries.json');
+const CITY = {}, COUNTRY = {};
+if (cities) for (const c of cities) CITY[c.code] = { name: c.name, cc: c.country_code };
+if (countries) for (const c of countries) COUNTRY[c.code] = c.name;
+
+const best = {};
+for (const o of ['LJU', 'TRS', 'VCE', 'ZAG', 'VIE']) {
+  const url = `https://api.travelpayouts.com/aviasales/v3/get_latest_prices?origin=${o}&currency=eur&period_type=year&one_way=false&limit=40&page=1&market=si`;
+  let data = [];
+  try { const r = await fetch(url, { headers: { 'X-Access-Token': TOKEN } }); if (r.ok) { const j = await r.json(); data = j.data || []; } } catch {}
+  await sleep(300);
+  for (const it of data) {
+    if (!it.value || !it.depart_date || !it.return_date) continue;
+    if (CURATED.has(it.destination)) continue;               // ne podvajaj kuriranih
+    if (!best[it.destination] || it.value < best[it.destination].value) best[it.destination] = { ...it, o };
+  }
+}
+let disc = Object.values(best);
+if (disc.length) {
+  const davg = disc.reduce((s, x) => s + x.value, 0) / disc.length;
+  disc = disc.filter(x => x.value < davg).sort((a, b) => a.value - b.value).slice(0, 24).map(x => {
+    const ci = CITY[x.destination] || {};
+    const sc = x.o + ddmm(x.depart_date) + x.destination + ddmm(x.return_date) + '1';
+    return {
+      fromCode: x.o, code: x.destination, city: ci.name || x.destination,
+      country: (ci.cc && COUNTRY[ci.cc]) || '', price: Math.round(x.value),
+      depart: x.depart_date.slice(0, 10), ret: x.return_date.slice(0, 10),
+      url: 'https://www.aviasales.com/search/' + sc + '?marker=' + MARKER,
+    };
+  });
+}
+console.log(`Radar cen: ${disc.length} odkritih destinacij pod povprečjem`);
+
+const payload = { updated: new Date().toISOString(), deals: out, discover: disc };
 writeFileSync(new URL('../deals.js', import.meta.url), 'window.__BOOKIRAJ_DEALS__ = ' + JSON.stringify(payload) + ';\n');
 console.log(`\nSkupaj destinacij z akcijami pod povprečjem: ${out.length}`);
