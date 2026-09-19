@@ -1237,6 +1237,7 @@ function paintCal(){
 function openCal(open){if(open){paintCal();fCal.hidden=false;fDateBtn.setAttribute('aria-expanded','true');}else{fCal.hidden=true;fDateBtn.setAttribute('aria-expanded','false');}}
 fDateBtn.addEventListener('click',function(){openCal(fCal.hidden);});
 fCal.addEventListener('click',function(e){
+  e.stopPropagation(); // klik v koledarju naj ne sproži zunanjega "zapri"
   var nav=e.target.closest('[data-nav]');
   if(nav){calView.setMonth(calView.getMonth()+(+nav.dataset.nav));paintCal();return;}
   var day=e.target.closest('.cal__day');
