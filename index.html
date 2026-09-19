@@ -127,27 +127,6 @@ section{scroll-margin-top:78px}
   color:#ECE7DB;font-weight:400;text-shadow:0 1px 18px rgba(6,14,16,.6)}
 .hero .eyebrow{color:var(--accent-2)}
 
-/* deal finder */
-.finder{margin-top:2rem;display:flex;flex-wrap:wrap;gap:2px;padding:8px;
-  background:rgba(9,18,20,.52);border:1px solid rgba(246,242,233,.16);
-  border-radius:16px;backdrop-filter:blur(14px);box-shadow:var(--shadow-lg);max-width:920px}
-.finder__field{flex:1 1 190px;display:flex;flex-direction:column;gap:3px;
-  padding:12px 16px;border-radius:11px;transition:background .2s;position:relative}
-.finder__field:hover{background:rgba(246,242,233,.06)}
-.finder__field+.finder__field::before{content:"";position:absolute;left:0;top:14px;bottom:14px;
-  width:1px;background:rgba(246,242,233,.14)}
-.finder__field label{font-family:var(--font-mono);font-size:.64rem;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--hero-dim)}
-.finder__field select{appearance:none;-webkit-appearance:none;background-color:transparent;
-  border:none;color:var(--hero-ink);font-family:var(--font-display);font-size:1.14rem;
-  font-weight:500;cursor:pointer;padding:2px 26px 2px 0;
-  background-image:linear-gradient(45deg,transparent 50%,var(--accent-2) 50%),linear-gradient(135deg,var(--accent-2) 50%,transparent 50%);
-  background-position:calc(100% - 12px) 55%,calc(100% - 8px) 55%;
-  background-size:5px 5px,5px 5px;background-repeat:no-repeat}
-.finder__field select option{color:#111;background:#fff}
-.finder__go{flex:0 0 auto;align-self:stretch;margin:2px;padding-inline:26px;border-radius:11px}
-@media (max-width:640px){.finder__field+.finder__field::before{display:none}
-  .finder__go{width:100%;margin-top:6px}}
 
 .hero__stats{list-style:none;display:flex;flex-wrap:wrap;gap:10px 34px;margin:1.7rem 0 0;padding:0}
 .hero__stats li{display:flex;align-items:baseline;gap:9px;color:var(--hero-dim);font-size:.9rem}
@@ -226,30 +205,73 @@ section{scroll-margin-top:78px}
   transition:all .2s ease}
 .chip:hover{border-color:var(--accent);color:var(--ink)}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.search{margin-left:auto;display:flex;align-items:center;gap:9px;background:var(--surface);
-  border:1px solid var(--line);border-radius:999px;padding:9px 16px;min-width:210px}
-.search svg{width:16px;height:16px;color:var(--muted);flex:none}
-.search input{border:none;background:transparent;outline:none;width:100%;font-size:.92rem}
+.hero__cta{margin-top:2.2rem;gap:9px}
+.results{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
 .sortsel{background:var(--surface);border:1px solid var(--line);border-radius:999px;
   padding:9px 16px;font-size:.88rem;font-weight:600;color:var(--ink-2);cursor:pointer}
-.origins{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:-8px 0 22px}
-.origins__lbl{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.08em;
-  text-transform:uppercase;color:var(--muted);margin-right:2px}
-.ochip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);
-  background:var(--surface);color:var(--ink-2);padding:7px 14px;border-radius:999px;
-  font-size:.84rem;font-weight:600;cursor:pointer;transition:all .2s ease}
-.ochip:hover{border-color:var(--accent);color:var(--ink)}
-.ochip__tick{display:inline-flex;overflow:hidden;max-width:0;opacity:0;margin-right:-6px;
-  transition:all .2s ease}
-.ochip__tick svg{width:15px;height:15px}
-.ochip.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
-.ochip.on .ochip__tick{max-width:18px;opacity:1;margin-right:0}
-.ochip__c{font-family:var(--font-mono);font-size:.72rem;opacity:.62}
-.ochip.on .ochip__c{opacity:.8}
-.ochip--clear{background:transparent;border-color:transparent;color:var(--muted);
-  font-weight:600;text-decoration:underline;text-underline-offset:3px}
-.ochip--clear:hover{color:var(--accent);border-color:transparent}
-.count{color:var(--muted);font-family:var(--font-mono);font-size:.82rem;margin-bottom:18px}
+
+/* ---- unified search bar ---- */
+.finderbar{display:flex;flex-wrap:wrap;gap:2px;padding:8px;background:var(--surface);
+  border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);margin-bottom:24px}
+.fb__field{flex:1 1 168px;display:flex;flex-direction:column;gap:4px;padding:11px 16px;
+  border-radius:12px;position:relative;min-width:0;transition:background .2s}
+.fb__field:hover{background:var(--surface-2)}
+.fb__field+.fb__field::before{content:"";position:absolute;left:0;top:13px;bottom:13px;width:1px;background:var(--line)}
+.fb__field label{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--muted)}
+.fb__field select,.fb__field input,.fb__ctrl{appearance:none;-webkit-appearance:none;border:none;
+  background:transparent;color:var(--ink);font-family:var(--font-display);font-size:1.1rem;
+  font-weight:500;cursor:pointer;padding:2px 22px 2px 0;outline:none;width:100%;
+  text-overflow:ellipsis;white-space:nowrap;overflow:hidden;text-align:left}
+.fb__field input::placeholder{color:var(--muted);opacity:1;font-style:italic}
+.fb__field select{background-image:linear-gradient(45deg,transparent 50%,var(--accent) 50%),linear-gradient(135deg,var(--accent) 50%,transparent 50%);
+  background-position:calc(100% - 11px) 55%,calc(100% - 7px) 55%;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+.fb__field select option{color:#111;background:#fff}
+.fb__caret{position:absolute;right:14px;bottom:15px;width:14px;height:14px;color:var(--accent);pointer-events:none}
+.finderbar__go{flex:0 0 auto;align-self:stretch;margin:2px;padding-inline:24px;border-radius:12px}
+
+/* combobox dropdown */
+.combo__list{position:absolute;top:calc(100% + 4px);left:6px;z-index:60;min-width:210px;
+  max-width:min(320px,80vw);max-height:264px;overflow:auto;background:var(--surface);
+  border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-lg);padding:6px}
+.combo__opt{padding:9px 12px;border-radius:9px;cursor:pointer;font-size:.95rem;color:var(--ink);
+  display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.combo__opt small{color:var(--muted);font-family:var(--font-mono);font-size:.72rem}
+.combo__opt:hover,.combo__opt.active{background:var(--surface-2)}
+.combo__opt[aria-selected="true"]{color:var(--accent);font-weight:600}
+.combo__empty{padding:11px 12px;color:var(--muted);font-size:.9rem}
+
+/* calendar */
+.cal{position:absolute;top:calc(100% + 4px);right:6px;z-index:60;width:min(300px,calc(100vw - 44px));
+  background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-lg);padding:14px}
+.cal__head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cal__title{font-family:var(--font-display);font-size:1.02rem;font-weight:600;text-transform:capitalize}
+.cal__nav{display:flex;gap:4px}
+.cal__nav button{width:30px;height:30px;border:1px solid var(--line);background:var(--surface);
+  border-radius:8px;cursor:pointer;color:var(--ink-2);display:grid;place-items:center}
+.cal__nav button:hover{border-color:var(--accent);color:var(--accent)}
+.cal__grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.cal__dow{font-family:var(--font-mono);font-size:.6rem;color:var(--muted);text-align:center;padding:4px 0;text-transform:uppercase}
+.cal__day{aspect-ratio:1;display:grid;place-items:center;border:none;background:transparent;
+  border-radius:8px;cursor:pointer;font-size:.86rem;color:var(--ink);font-family:inherit}
+.cal__day:hover{background:var(--surface-2)}
+.cal__day.void{visibility:hidden;pointer-events:none}
+.cal__day.disabled{color:var(--muted);opacity:.4;pointer-events:none}
+.cal__day.in{background:color-mix(in srgb,var(--accent) 16%,var(--surface));border-radius:0}
+.cal__day.edge{background:var(--accent);color:var(--on-accent)}
+.cal__foot{display:flex;align-items:center;justify-content:space-between;margin-top:12px;gap:10px}
+.cal__clear{background:transparent;border:none;color:var(--muted);cursor:pointer;font-weight:600;
+  text-decoration:underline;text-underline-offset:3px;font-size:.86rem}
+.cal__clear:hover{color:var(--accent)}
+.cal__done{padding:7px 16px;font-size:.86rem;border-radius:9px}
+@media (max-width:640px){
+  .fb__field+.fb__field::before{display:none}
+  .fb__field{flex:1 1 44%}
+  .finderbar__go{width:100%;margin-top:6px}
+  .cal{left:6px;right:auto}
+  .combo__list{max-width:calc(100vw - 40px)}
+}
+.count{color:var(--muted);font-family:var(--font-mono);font-size:.82rem}
 
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
 @media (max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
@@ -516,36 +538,10 @@ section{scroll-margin-top:78px}
     <h1><em>Bookiraj si</em> naslednje potovanje po <em>najnižji ceni</em>.</h1>
     <p class="hero__sub">Vsak dan preverimo na tisoče cen in izberemo le tiste akcije, ob katerih se splača spakirati kovček. Brez šuma — le lepe destinacije po nizkih cenah.</p>
 
-    <form class="finder" id="finder" aria-label="Poišči akcijo">
-      <div class="finder__field">
-        <label for="fOrigin">Odhod</label>
-        <select id="fOrigin">
-          <option value="vsi">Vsa letališča</option>
-          <option value="LJU">Ljubljana · LJU</option>
-          <option value="TRS">Trst · TRS</option>
-          <option value="VCE">Benetke · VCE</option>
-          <option value="ZAG">Zagreb · ZAG</option>
-          <option value="VIE">Dunaj · VIE</option>
-        </select>
-      </div>
-      <div class="finder__field">
-        <label for="fCont">Celina</label>
-        <select id="fCont">
-          <option value="vse">Kamorkoli</option>
-          <option value="evropa">Evropa</option>
-          <option value="azija">Azija</option>
-          <option value="afrika">Afrika</option>
-          <option value="sev-amerika">Severna Amerika</option>
-          <option value="juz-amerika">Južna Amerika</option>
-          <option value="oceanija">Oceanija</option>
-          <option value="eksotika">Eksotika</option>
-        </select>
-      </div>
-      <button type="submit" class="btn finder__go">
-        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-        Poišči
-      </button>
-    </form>
+    <a href="#akcije" class="hero__cta btn btn--lg">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      Poišči akcije
+    </a>
 
     <ul class="hero__stats">
       <li><b class="tnum">340+</b> preverjenih akcij</li>
@@ -582,34 +578,59 @@ section{scroll-margin-top:78px}
         <p class="eyebrow">Trenutne akcije</p>
         <h2>Destinacije, ki jih ravnokar splača ujeti.</h2>
       </div>
-      <p>Izberi celino, obkljukaj eno ali več odhodnih letališč ali poišči točno državo oz. mesto — cene so okvirne najnižje povratne cene na osebo.</p>
+      <p>En iskalnik — izberi celino, državo, mesto, odhodno letališče in obdobje potovanja. Cene so okvirne najnižje povratne cene na osebo.</p>
     </div>
 
-    <div class="toolbar reveal">
-      <div class="chips" id="chips" role="group" aria-label="Filter po celini">
-        <button class="chip" data-cont="vse" aria-pressed="true">Vse</button>
-        <button class="chip" data-cont="evropa" aria-pressed="false">Evropa</button>
-        <button class="chip" data-cont="azija" aria-pressed="false">Azija</button>
-        <button class="chip" data-cont="afrika" aria-pressed="false">Afrika</button>
-        <button class="chip" data-cont="sev-amerika" aria-pressed="false">Severna Amerika</button>
-        <button class="chip" data-cont="juz-amerika" aria-pressed="false">Južna Amerika</button>
-        <button class="chip" data-cont="oceanija" aria-pressed="false">Oceanija</button>
-        <button class="chip" data-cont="eksotika" aria-pressed="false">Eksotika</button>
+    <form class="finderbar reveal" id="finder" aria-label="Iskalnik akcij">
+      <div class="fb__field">
+        <label for="fCont">Celina</label>
+        <select id="fCont">
+          <option value="vse">Vse celine</option>
+          <option value="evropa">Evropa</option>
+          <option value="azija">Azija</option>
+          <option value="afrika">Afrika</option>
+          <option value="sev-amerika">Severna Amerika</option>
+          <option value="juz-amerika">Južna Amerika</option>
+          <option value="oceanija">Oceanija</option>
+          <option value="eksotika">Eksotika</option>
+        </select>
       </div>
-      <label class="search" aria-label="Iskanje destinacije">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-        <input id="search" type="search" placeholder="Država ali mesto…" autocomplete="off">
-      </label>
+      <div class="fb__field fb__combo" id="wCountry">
+        <label for="fCountry">Država</label>
+        <input id="fCountry" type="text" autocomplete="off" placeholder="Vse države" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="fCountryList">
+        <svg class="fb__caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        <div class="combo__list" id="fCountryList" role="listbox" hidden></div>
+      </div>
+      <div class="fb__field fb__combo" id="wCity">
+        <label for="fCity">Mesto</label>
+        <input id="fCity" type="text" autocomplete="off" placeholder="Vsa mesta" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="fCityList">
+        <svg class="fb__caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        <div class="combo__list" id="fCityList" role="listbox" hidden></div>
+      </div>
+      <div class="fb__field">
+        <label for="fOrigin">Odhod iz</label>
+        <select id="fOrigin"><option value="vsi">Vsa letališča</option></select>
+      </div>
+      <div class="fb__field fb__combo" id="wDate">
+        <label for="fDate">Datum od–do</label>
+        <button type="button" class="fb__ctrl" id="fDate" aria-haspopup="dialog" aria-expanded="false">Kadarkoli</button>
+        <svg class="fb__caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        <div class="cal" id="fCal" role="dialog" aria-label="Izberi obdobje" hidden></div>
+      </div>
+      <button type="submit" class="btn finderbar__go">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        Poišči
+      </button>
+    </form>
+
+    <div class="results reveal">
+      <p class="count" id="count"></p>
       <select class="sortsel" id="sort" aria-label="Razvrsti">
         <option value="reco">Priporočeno</option>
         <option value="asc">Cena: naraščajoče</option>
         <option value="desc">Cena: padajoče</option>
       </select>
     </div>
-
-    <div class="origins reveal" id="origins" role="group" aria-label="Odhodna letališča"></div>
-
-    <p class="count" id="count"></p>
     <div class="grid" id="grid"></div>
   </div>
 </section>
@@ -789,7 +810,7 @@ const GEO={barcelona:{continent:'evropa'},rome:{continent:'evropa'},lisbon:{cont
 const AP_NAME={LJU:'Ljubljana',TRS:'Trst',VCE:'Benetke',ZAG:'Zagreb',VIE:'Dunaj',MXP:'Milano',TSF:'Treviso',MUC:'Minhen',BUD:'Budimpešta'};
 const DEALS=LIVE.map(function(l){var c=byImg[l.img]||{};return Object.assign({},c,GEO[l.img]||{},{fromPrice:l.fromPrice,avg:l.avg,terms:l.terms,discount:Math.max(0,Math.round((l.avg-l.fromPrice)/l.avg*100))});}).filter(function(d){return d.city;});
 
-const state={continent:"vse",origins:[],q:"",sort:"reco"};
+const state={continent:"vse",country:"",city:"",origin:"vsi",from:"",to:"",sort:"reco"};
 const grid=document.getElementById('grid');
 const countEl=document.getElementById('count');
 const homeEl=document.getElementById('home');
@@ -815,11 +836,21 @@ function cardHTML(d){
     +'</div>'
   +'</a>';
 }
+function dateMatch(d){
+  if(!state.from&&!state.to)return true;
+  var ts=d.terms||[];if(!ts.length)return false;
+  return ts.some(function(t){var dep=t.depart;if(!dep)return false;
+    if(state.from&&dep<state.from)return false;
+    if(state.to&&dep>state.to)return false;
+    return true;});
+}
 function render(){
   let list=DEALS.filter(d=>
     (state.continent==='vse'||(state.continent==='eksotika'?d.exotic:d.continent===state.continent))&&
-    (state.origins.length===0||state.origins.indexOf(d.fromCode)>=0)&&
-    (state.q===''||(d.city+' '+d.country).toLowerCase().includes(state.q))
+    (!state.country||d.country===state.country)&&
+    (!state.city||d.city===state.city)&&
+    (state.origin==='vsi'||d.fromCode===state.origin)&&
+    dateMatch(d)
   );
   if(state.sort==='asc')list.sort((a,b)=>a.fromPrice-b.fromPrice);
   else if(state.sort==='desc')list.sort((a,b)=>b.fromPrice-a.fromPrice);
@@ -1107,49 +1138,138 @@ function route(){
   }
 }
 
-// celina (chips) + odhodna letališča (obkljukaj več)
-const chips=document.getElementById('chips');
-function syncChips(){[...chips.children].forEach(c=>c.setAttribute('aria-pressed',c.dataset.cont===state.continent));}
-chips.addEventListener('click',e=>{
-  const b=e.target.closest('.chip');if(!b)return;
-  state.continent=b.dataset.cont;
-  syncChips();
-  var fc=document.getElementById('fCont');if(fc)fc.value=state.continent;
-  render();
-});
-// zgradi gumbe za odhodna letališča iz dejanskih akcij (obkljukaš enega ali več)
-const originsEl=document.getElementById('origins');
-function buildOrigins(){
-  if(!originsEl)return;
+// ===================== EN ISKALNIK =====================
+const fCont=document.getElementById('fCont');
+const fOrigin=document.getElementById('fOrigin');
+const fCountry=document.getElementById('fCountry');
+const fCity=document.getElementById('fCity');
+const fCountryList=document.getElementById('fCountryList');
+const fCityList=document.getElementById('fCityList');
+const fDateBtn=document.getElementById('fDate');
+const fCal=document.getElementById('fCal');
+const MONTHS_FULL=['januar','februar','marec','april','maj','junij','julij','avgust','september','oktober','november','december'];
+
+// Odhod iz: samo letališča, ki dejansko imajo akcije
+(function(){
   var codes=[];DEALS.forEach(function(d){if(codes.indexOf(d.fromCode)<0)codes.push(d.fromCode);});
   codes.sort(function(a,b){return (AP_NAME[a]||a).localeCompare(AP_NAME[b]||b,'sl');});
-  originsEl.innerHTML='<span class="origins__lbl">Odhod iz:</span>'+codes.map(function(c){
-    var on=state.origins.indexOf(c)>=0;
-    return '<button type="button" class="ochip'+(on?' on':'')+'" data-o="'+c+'" aria-pressed="'+on+'"><span class="ochip__tick" aria-hidden="true">'+CHK+'</span>'+(AP_NAME[c]||c)+' <span class="ochip__c">'+c+'</span></button>';
-  }).join('')+'<button type="button" class="ochip ochip--clear" id="oClear" hidden>Počisti izbor</button>';
-  var clr=document.getElementById('oClear');if(clr)clr.hidden=state.origins.length===0;
+  fOrigin.innerHTML='<option value="vsi">Vsa letališča</option>'+codes.map(function(c){return '<option value="'+c+'">'+(AP_NAME[c]||c)+' · '+c+'</option>';}).join('');
+})();
+
+// nabor akcij, ki ustrezajo trenutni celini (in za mesta tudi državi)
+function scopeDeals(byCountry){
+  return DEALS.filter(function(d){
+    if(!(state.continent==='vse'||(state.continent==='eksotika'?d.exotic:d.continent===state.continent)))return false;
+    if(byCountry&&state.country&&d.country!==state.country)return false;
+    return true;
+  });
 }
-if(originsEl)originsEl.addEventListener('click',e=>{
-  var b=e.target.closest('.ochip');if(!b)return;
-  if(b.id==='oClear'){state.origins=[];buildOrigins();render();return;}
-  var c=b.dataset.o,i=state.origins.indexOf(c);
-  if(i>=0)state.origins.splice(i,1);else state.origins.push(c);
-  b.classList.toggle('on');b.setAttribute('aria-pressed',state.origins.indexOf(c)>=0);
-  var clr=document.getElementById('oClear');if(clr)clr.hidden=state.origins.length===0;
+function uniqSort(arr){var s=[];arr.forEach(function(x){if(x&&s.indexOf(x)<0)s.push(x);});return s.sort(function(a,b){return a.localeCompare(b,'sl');});}
+
+// ---- combobox (Država / Mesto) — vpišeš, ponudijo se opcije ----
+function comboOptions(kind){
+  if(kind==='country')return uniqSort(scopeDeals(false).map(function(d){return d.country;})).map(function(v){return {v:v,sub:''};});
+  var seen={},out=[];scopeDeals(true).forEach(function(d){if(!seen[d.city]){seen[d.city]=1;out.push({v:d.city,sub:d.country});}});
+  return out.sort(function(a,b){return a.v.localeCompare(b.v,'sl');});
+}
+function paintCombo(kind){
+  var input=kind==='country'?fCountry:fCity, listEl=kind==='country'?fCountryList:fCityList;
+  var q=input.value.trim().toLowerCase();
+  var cur=kind==='country'?state.country:state.city;
+  var opts=comboOptions(kind).filter(function(o){return !q||q===(cur||'').toLowerCase()||o.v.toLowerCase().indexOf(q)>=0;});
+  if(!opts.length){listEl.innerHTML='<div class="combo__empty">Ni zadetkov.</div>';return;}
+  listEl.innerHTML=(cur?'<div class="combo__opt" role="option" data-v="">Vse '+(kind==='country'?'države':'mesta')+'</div>':'')
+    +opts.map(function(o){return '<div class="combo__opt" role="option" data-v="'+esc(o.v)+'"'+(o.v===cur?' aria-selected="true"':'')+'>'+esc(o.v)+(o.sub?'<small>'+esc(o.sub)+'</small>':'')+'</div>';}).join('');
+}
+function openCombo(kind,open){
+  var input=kind==='country'?fCountry:fCity, listEl=kind==='country'?fCountryList:fCityList;
+  if(open){paintCombo(kind);listEl.hidden=false;input.setAttribute('aria-expanded','true');}
+  else{listEl.hidden=true;input.setAttribute('aria-expanded','false');}
+}
+function chooseCombo(kind,v){
+  if(kind==='country'){
+    state.country=v;fCountry.value=v||'';
+    if(state.city&&!DEALS.some(function(d){return d.city===state.city&&(!state.country||d.country===state.country);})){state.city='';fCity.value='';}
+  }else{state.city=v;fCity.value=v||'';}
+  openCombo(kind,false);render();
+}
+['country','city'].forEach(function(kind){
+  var input=kind==='country'?fCountry:fCity, listEl=kind==='country'?fCountryList:fCityList;
+  input.addEventListener('focus',function(){openCombo(kind,true);});
+  input.addEventListener('input',function(){
+    if(input.value.trim()===''){if(kind==='country'){state.country='';}else{state.city='';}render();}
+    openCombo(kind,true);
+  });
+  input.addEventListener('keydown',function(e){if(e.key==='Escape'){openCombo(kind,false);input.blur();}});
+  listEl.addEventListener('mousedown',function(e){var o=e.target.closest('.combo__opt');if(!o)return;e.preventDefault();chooseCombo(kind,o.dataset.v);});
+  input.addEventListener('blur',function(){setTimeout(function(){input.value=(kind==='country'?state.country:state.city)||'';openCombo(kind,false);},150);});
+});
+
+// ---- koledar (Datum od–do) ----
+var calView=new Date();calView.setDate(1);calView.setHours(0,0,0,0);
+function iso(y,m,d){return y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');}
+function shortDate(s){var p=s.split('-');return (+p[2])+'. '+MON[(+p[1])-1];}
+function setDateLabel(){
+  if(state.from&&state.to)fDateBtn.textContent=shortDate(state.from)+' – '+shortDate(state.to);
+  else if(state.from)fDateBtn.textContent='od '+shortDate(state.from);
+  else if(state.to)fDateBtn.textContent='do '+shortDate(state.to);
+  else fDateBtn.textContent='Kadarkoli';
+}
+function paintCal(){
+  var y=calView.getFullYear(),m=calView.getMonth();
+  var startDow=(new Date(y,m,1).getDay()+6)%7, days=new Date(y,m+1,0).getDate();
+  var today=new Date();today.setHours(0,0,0,0);
+  var dow=['pon','tor','sre','čet','pet','sob','ned'],cells='';
+  for(var i=0;i<startDow;i++)cells+='<button type="button" class="cal__day void" tabindex="-1"></button>';
+  for(var d=1;d<=days;d++){
+    var ds=iso(y,m,d),dt=new Date(y,m,d),cls='cal__day';
+    if(dt<today)cls+=' disabled';
+    if(state.from&&state.to&&ds>=state.from&&ds<=state.to)cls+=(ds===state.from||ds===state.to)?' edge':' in';
+    else if(ds===state.from||ds===state.to)cls+=' edge';
+    cells+='<button type="button" class="'+cls+'" data-d="'+ds+'">'+d+'</button>';
+  }
+  fCal.innerHTML='<div class="cal__head"><span class="cal__title">'+MONTHS_FULL[m]+' '+y+'</span>'
+    +'<span class="cal__nav"><button type="button" data-nav="-1" aria-label="Prejšnji mesec"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>'
+    +'<button type="button" data-nav="1" aria-label="Naslednji mesec"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button></span></div>'
+    +'<div class="cal__grid">'+dow.map(function(x){return '<div class="cal__dow">'+x+'</div>';}).join('')+cells+'</div>'
+    +'<div class="cal__foot"><button type="button" class="cal__clear">Počisti</button><button type="button" class="btn cal__done">Uporabi</button></div>';
+}
+function openCal(open){if(open){paintCal();fCal.hidden=false;fDateBtn.setAttribute('aria-expanded','true');}else{fCal.hidden=true;fDateBtn.setAttribute('aria-expanded','false');}}
+fDateBtn.addEventListener('click',function(){openCal(fCal.hidden);});
+fCal.addEventListener('click',function(e){
+  var nav=e.target.closest('[data-nav]');
+  if(nav){calView.setMonth(calView.getMonth()+(+nav.dataset.nav));paintCal();return;}
+  var day=e.target.closest('.cal__day');
+  if(day&&day.dataset.d){
+    var ds=day.dataset.d;
+    if(!state.from||(state.from&&state.to)){state.from=ds;state.to='';}
+    else if(ds<state.from){state.to=state.from;state.from=ds;}
+    else{state.to=ds;}
+    setDateLabel();paintCal();render();return;
+  }
+  if(e.target.closest('.cal__clear')){state.from='';state.to='';setDateLabel();paintCal();render();return;}
+  if(e.target.closest('.cal__done')){openCal(false);}
+});
+
+// zunanji klik zapre spustne sezname
+document.addEventListener('click',function(e){
+  if(!e.target.closest('#wDate'))openCal(false);
+  if(!e.target.closest('#wCountry')&&!fCountryList.hidden)openCombo('country',false);
+  if(!e.target.closest('#wCity')&&!fCityList.hidden)openCombo('city',false);
+});
+
+// spustni izbiri + razvrščanje
+fCont.addEventListener('change',function(){
+  state.continent=fCont.value;
+  if(state.country&&!scopeDeals(false).some(function(d){return d.country===state.country;})){state.country='';fCountry.value='';}
+  if(state.city&&!scopeDeals(true).some(function(d){return d.city===state.city;})){state.city='';fCity.value='';}
   render();
 });
-document.getElementById('search').addEventListener('input',e=>{state.q=e.target.value.trim().toLowerCase();render();});
-document.getElementById('sort').addEventListener('change',e=>{state.sort=e.target.value;render();});
-document.getElementById('finder').addEventListener('submit',e=>{
-  e.preventDefault();
-  var o=document.getElementById('fOrigin').value;
-  state.origins=(o==='vsi')?[]:[o];
-  state.continent=document.getElementById('fCont').value;
-  syncChips();buildOrigins();render();
-  if(location.hash==='#akcije'){document.getElementById('akcije').scrollIntoView({behavior:'smooth'});}
-  else{location.hash='#akcije';}
-});
-buildOrigins();
+fOrigin.addEventListener('change',function(){state.origin=fOrigin.value;render();});
+document.getElementById('sort').addEventListener('change',function(e){state.sort=e.target.value;render();});
+document.getElementById('finder').addEventListener('submit',function(e){e.preventDefault();grid.scrollIntoView({behavior:'smooth',block:'start'});});
+
+setDateLabel();
 render();
 renderFeatured();
 renderDiscover();
