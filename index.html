@@ -824,6 +824,8 @@ function fmtISO(s){var p=String(s).split('-');return [+p[0],+p[1],+p[2]];}
 function fmtRangeISO(dep,ret){var a=fmtISO(dep);if(!ret)return a[2]+'. '+MON[a[1]-1]+' '+a[0];var b=fmtISO(ret);var left=(a[0]===b[0])?(a[2]+'. '+MON[a[1]-1]):(a[2]+'. '+MON[a[1]-1]+' '+a[0]);return left+' – '+b[2]+'. '+MON[b[1]-1]+' '+b[0];}
 function fmtUpdated(iso){if(!iso)return 'danes';var d=new Date(iso);return d.getDate()+'. '+MON[d.getMonth()]+' '+d.getFullYear();}
 function termSub(t){return (t.airline?t.airline+' · ':'')+(t.transfers>0?(t.transfers+(t.transfers===1?' prestop':(t.transfers===2?' prestopa':' prestopi'))):'direktno');}
+function ymd(iso){var p=iso.split('-');return p[0].slice(2)+p[1]+p[2];}
+function skySearch(from,to,dep,ret){return 'https://www.skyscanner.net/transport/flights/'+from.toLowerCase()+'/'+to.toLowerCase()+'/'+(dep&&ret?ymd(dep)+'/'+ymd(ret)+'/':'')+'?adultsv2=1&cabinclass=economy&market=si&currency=eur&locale=en-gb';}
 function featuredHTML(d){var t=d.terms&&d.terms[0];return '<article class="pass">'
   +'<div class="pass__media"><img src="img/'+d.img+'.jpg" alt="'+d.city+'"><span class="tag">− '+d.discount+' % pod povprečjem</span></div>'
   +'<div class="pass__body"><span class="pass__notch t"></span><span class="pass__notch b"></span>'
@@ -879,7 +881,8 @@ function detailHTML(d){
           +'<dt>Prihranek</dt><dd>−'+d.discount+' %</dd>'
         +'</dl>'
         +(cheapest?'<a class="btn btn--lg" href="'+cheapest.url+'" target="_blank" rel="noopener">Rezerviraj od '+d.fromPrice+' €</a>':'')
-        +'<p class="note">Povezava odpre nakupno stran, kjer potrdiš ceno.</p>'
+        +'<a class="btn btn--lg btn--ghost" href="'+skySearch(d.fromCode,d.code,cheapest?cheapest.depart:null,cheapest?cheapest.ret:null)+'" target="_blank" rel="noopener">Poišči na Skyscanner</a>'
+        +'<p class="note">Aviasales = neposreden nakup · Skyscanner = primerjava vseh ponudnikov.</p>'
       +'</div>'
     +'</aside>'
   +'</div>'
