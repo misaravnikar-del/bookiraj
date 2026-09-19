@@ -240,6 +240,11 @@ section{scroll-margin-top:78px}
 .combo__opt small{color:var(--muted);font-family:var(--font-mono);font-size:.72rem}
 .combo__opt:hover,.combo__opt.active{background:var(--surface-2)}
 .combo__opt[aria-selected="true"]{color:var(--accent);font-weight:600}
+.combo__opt--check{justify-content:flex-start;align-items:center;gap:9px}
+.combo__opt--check .ck{width:19px;height:19px;flex:none;border:1.5px solid var(--line);border-radius:6px;display:grid;place-items:center;color:transparent;transition:all .15s}
+.combo__opt--check .ck svg{width:13px;height:13px}
+.combo__opt--check.on .ck{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.combo__opt--check small{margin-left:auto}
 .combo__empty{padding:11px 12px;color:var(--muted);font-size:.9rem}
 
 /* calendar */
@@ -273,8 +278,7 @@ section{scroll-margin-top:78px}
   .fb__field:nth-child(even){border-left:1px solid var(--line)}
   #wDate{flex-basis:100%}
   .finderbar__go{width:100%;margin:8px 2px 2px}
-  .combo__list{left:14px;right:14px;min-width:0;max-width:none}
-  .cal{left:14px;right:14px;width:auto}
+  .combo__list,.cal{position:fixed;left:12px;right:12px;width:auto;min-width:0;max-width:none}
 }
 .count{color:var(--muted);font-family:var(--font-mono);font-size:.82rem}
 
@@ -719,9 +723,11 @@ section{scroll-margin-top:78px}
         <svg class="fb__caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
         <div class="combo__list" id="fCityList" role="listbox" hidden></div>
       </div>
-      <div class="fb__field">
+      <div class="fb__field fb__combo" id="wOrigin">
         <label for="fOrigin">Odhod iz</label>
-        <select id="fOrigin"><option value="vsi">Vsa letališča</option></select>
+        <button type="button" class="fb__ctrl" id="fOrigin" aria-haspopup="listbox" aria-expanded="false">Vsa letališča</button>
+        <svg class="fb__caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        <div class="combo__list" id="fOriginList" role="listbox" aria-multiselectable="true" hidden></div>
       </div>
       <div class="fb__field fb__combo" id="wDate">
         <label for="fDate">Datum od–do</label>
@@ -845,7 +851,7 @@ const GEO={barcelona:{continent:'evropa'},rome:{continent:'evropa'},lisbon:{cont
 const AP_NAME={LJU:'Ljubljana',TRS:'Trst',VCE:'Benetke',ZAG:'Zagreb',VIE:'Dunaj',MXP:'Milano',TSF:'Treviso',MUC:'Minhen',BUD:'Budimpešta'};
 const DEALS=LIVE.map(function(l){var c=byImg[l.img]||{};return Object.assign({},c,GEO[l.img]||{},{fromPrice:l.fromPrice,avg:l.avg,terms:l.terms,discount:Math.max(0,Math.round((l.avg-l.fromPrice)/l.avg*100))});}).filter(function(d){return d.city;});
 
-const state={continent:"vse",country:"",city:"",origin:"vsi",from:"",to:"",sort:"reco"};
+const state={continent:"vse",country:"",city:"",origins:[],from:"",to:"",sort:"reco"};
 const grid=document.getElementById('grid');
 const countEl=document.getElementById('count');
 const homeEl=document.getElementById('home');
@@ -886,7 +892,7 @@ function render(){
     (state.continent==='vse'||(state.continent==='eksotika'?d.exotic:d.continent===state.continent))&&
     (!state.country||d.country===state.country)&&
     (!state.city||d.city===state.city)&&
-    (state.origin==='vsi'||d.fromCode===state.origin)&&
+    (state.origins.length===0||state.origins.indexOf(d.fromCode)>=0)&&
     dateMatch(d)
   );
   if(state.sort==='asc')list.sort((a,b)=>a.fromPrice-b.fromPrice);
@@ -1191,14 +1197,22 @@ const fCountryList=document.getElementById('fCountryList');
 const fCityList=document.getElementById('fCityList');
 const fDateBtn=document.getElementById('fDate');
 const fCal=document.getElementById('fCal');
+const fOriginList=document.getElementById('fOriginList');
 const MONTHS_FULL=['januar','februar','marec','april','maj','junij','julij','avgust','september','oktober','november','december'];
 
-// Odhod iz: samo letališča, ki dejansko imajo akcije
-(function(){
-  var codes=[];DEALS.forEach(function(d){if(codes.indexOf(d.fromCode)<0)codes.push(d.fromCode);});
-  codes.sort(function(a,b){return (AP_NAME[a]||a).localeCompare(AP_NAME[b]||b,'sl');});
-  fOrigin.innerHTML='<option value="vsi">Vsa letališča</option>'+codes.map(function(c){return '<option value="'+c+'">'+(AP_NAME[c]||c)+' · '+c+'</option>';}).join('');
-})();
+// na telefonu spustnike prikaži čez celo širino (fiksno) tik pod poljem
+function isMobileView(){return window.matchMedia('(max-width:640px)').matches;}
+function placePopover(listEl,anchor){if(isMobileView()){var r=anchor.getBoundingClientRect();listEl.style.top=(r.bottom+4)+'px';}else{listEl.style.top='';}}
+
+// Odhod iz: izbereš VEČ letališč hkrati (obkljukaš) — samo tista z akcijami
+var ORIGIN_CODES=[];DEALS.forEach(function(d){if(ORIGIN_CODES.indexOf(d.fromCode)<0)ORIGIN_CODES.push(d.fromCode);});
+ORIGIN_CODES.sort(function(a,b){return (AP_NAME[a]||a).localeCompare(AP_NAME[b]||b,'sl');});
+function originLabel(){var n=state.origins.length;if(!n)return 'Vsa letališča';if(n===1)return AP_NAME[state.origins[0]]||state.origins[0];var w=(n===2)?'letališči':(n<5?'letališča':'letališč');return n+' '+w;}
+function paintOrigins(){fOriginList.innerHTML=ORIGIN_CODES.map(function(c){var on=state.origins.indexOf(c)>=0;return '<div class="combo__opt combo__opt--check'+(on?' on':'')+'" role="option" aria-selected="'+on+'" data-o="'+c+'"><span class="ck" aria-hidden="true">'+CHK+'</span>'+(AP_NAME[c]||c)+' <small>'+c+'</small></div>';}).join('');}
+function openOrigins(open){if(open){paintOrigins();placePopover(fOriginList,fOrigin);fOriginList.hidden=false;fOrigin.setAttribute('aria-expanded','true');}else{fOriginList.hidden=true;fOrigin.setAttribute('aria-expanded','false');}}
+fOrigin.addEventListener('click',function(){openOrigins(fOriginList.hidden);});
+fOriginList.addEventListener('click',function(e){var o=e.target.closest('.combo__opt');if(!o)return;e.stopPropagation();var c=o.dataset.o,i=state.origins.indexOf(c);if(i>=0)state.origins.splice(i,1);else state.origins.push(c);fOrigin.textContent=originLabel();paintOrigins();render();});
+fOrigin.textContent=originLabel();
 
 // nabor akcij, ki ustrezajo trenutni celini (in za mesta tudi državi)
 function scopeDeals(byCountry){
@@ -1227,7 +1241,7 @@ function paintCombo(kind){
 }
 function openCombo(kind,open){
   var input=kind==='country'?fCountry:fCity, listEl=kind==='country'?fCountryList:fCityList;
-  if(open){paintCombo(kind);listEl.hidden=false;input.setAttribute('aria-expanded','true');}
+  if(open){paintCombo(kind);placePopover(listEl,input);listEl.hidden=false;input.setAttribute('aria-expanded','true');}
   else{listEl.hidden=true;input.setAttribute('aria-expanded','false');}
 }
 function chooseCombo(kind,v){
@@ -1278,7 +1292,7 @@ function paintCal(){
     +'<div class="cal__grid">'+dow.map(function(x){return '<div class="cal__dow">'+x+'</div>';}).join('')+cells+'</div>'
     +'<div class="cal__foot"><button type="button" class="cal__clear">Počisti</button><button type="button" class="btn cal__done">Uporabi</button></div>';
 }
-function openCal(open){if(open){paintCal();fCal.hidden=false;fDateBtn.setAttribute('aria-expanded','true');}else{fCal.hidden=true;fDateBtn.setAttribute('aria-expanded','false');}}
+function openCal(open){if(open){paintCal();placePopover(fCal,fDateBtn);fCal.hidden=false;fDateBtn.setAttribute('aria-expanded','true');}else{fCal.hidden=true;fDateBtn.setAttribute('aria-expanded','false');}}
 fDateBtn.addEventListener('click',function(){openCal(fCal.hidden);});
 fCal.addEventListener('click',function(e){
   e.stopPropagation(); // klik v koledarju naj ne sproži zunanjega "zapri"
@@ -1299,6 +1313,7 @@ fCal.addEventListener('click',function(e){
 // zunanji klik zapre spustne sezname
 document.addEventListener('click',function(e){
   if(!e.target.closest('#wDate'))openCal(false);
+  if(!e.target.closest('#wOrigin')&&!fOriginList.hidden)openOrigins(false);
   if(!e.target.closest('#wCountry')&&!fCountryList.hidden)openCombo('country',false);
   if(!e.target.closest('#wCity')&&!fCityList.hidden)openCombo('city',false);
 });
@@ -1310,7 +1325,6 @@ fCont.addEventListener('change',function(){
   if(state.city&&!scopeDeals(true).some(function(d){return d.city===state.city;})){state.city='';fCity.value='';}
   render();
 });
-fOrigin.addEventListener('change',function(){state.origin=fOrigin.value;render();});
 document.getElementById('sort').addEventListener('change',function(e){state.sort=e.target.value;render();});
 document.getElementById('finder').addEventListener('submit',function(e){e.preventDefault();grid.scrollIntoView({behavior:'smooth',block:'start'});});
 
