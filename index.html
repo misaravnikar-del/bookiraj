@@ -1,4 +1,5 @@
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bookiraj.si</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -266,10 +267,11 @@ section{scroll-margin-top:78px}
 .cal__done{padding:7px 16px;font-size:.86rem;border-radius:9px}
 @media (max-width:640px){
   .fb__field+.fb__field::before{display:none}
-  .fb__field{flex:1 1 44%}
-  .finderbar__go{width:100%;margin-top:6px}
-  .cal{left:6px;right:auto}
-  .combo__list{max-width:calc(100vw - 40px)}
+  .fb__field{flex:1 1 100%;border-top:1px solid var(--line);border-radius:0;padding:13px 14px}
+  .fb__field:first-child{border-top:none}
+  .finderbar__go{width:100%;margin:8px 2px 2px}
+  .combo__list{left:14px;right:14px;min-width:0;max-width:none}
+  .cal{left:14px;right:14px;width:auto}
 }
 .count{color:var(--muted);font-family:var(--font-mono);font-size:.82rem}
 
@@ -501,6 +503,10 @@ section{scroll-margin-top:78px}
   .nav__links a{padding:15px clamp(16px,4vw,44px);font-size:1rem;border-top:1px solid var(--line)}
   .nav__links a:first-child{border-top:none}
   .nav__links a::after{display:none}
+}
+@media (max-width:720px){
+  .sec__head{flex-direction:column;align-items:flex-start;gap:10px}
+  .sec__head p{max-width:none}
 }
 </style>
 
