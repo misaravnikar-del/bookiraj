@@ -85,7 +85,8 @@ section{scroll-margin-top:78px}
 .brand svg{width:26px;height:26px;color:var(--accent);flex:none}
 .brand .tld{color:var(--muted);font-family:var(--font-mono);font-size:.82rem;
   font-weight:500;letter-spacing:.02em;align-self:flex-end;margin-bottom:.4em}
-.nav__links{display:flex;gap:28px;margin-left:auto;font-size:.94rem;font-weight:500}
+.nav__links{display:flex;gap:20px;margin-left:auto;font-size:.88rem;font-weight:500}
+.nav__burger{display:none}
 .nav__links a{color:var(--ink-2);position:relative;padding-block:6px}
 .nav__links a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1.5px;
   background:var(--accent);transition:right .3s ease}
@@ -395,6 +396,25 @@ section{scroll-margin-top:78px}
   .radar__route{order:3;grid-column:1}.radar__when{order:4;grid-column:2;text-align:right}
 }
 
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+@media(max-width:900px){.plans{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.plans{grid-template-columns:1fr}}
+.plan{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+.plan__media{aspect-ratio:16/10;overflow:hidden;position:relative}
+.plan__media img{width:100%;height:100%;object-fit:cover}
+.plan__tag{position:absolute;top:12px;left:12px;background:color-mix(in srgb,var(--surface) 90%,transparent);
+  backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:8px;padding:5px 10px;
+  font-family:var(--font-mono);font-size:.68rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase}
+.plan__body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:9px;flex:1}
+.plan__meta{font-family:var(--font-mono);font-size:.74rem;color:var(--muted);letter-spacing:.04em}
+.plan__body h3{font-size:1.28rem;margin-top:-2px}
+.plan__body p{color:var(--ink-2);font-size:.92rem;flex:1}
+.plan__hl{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:6px}
+.plan__hl li{font-size:.74rem;color:var(--ink-2);background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:4px 10px}
+.plan__foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:6px;padding-top:14px;border-top:1px dashed var(--line)}
+.plan__price{font-family:var(--font-display);font-size:1.5rem;font-weight:600}
+.plan__price i{font-style:normal;color:var(--accent);font-size:.68em}
+
 /* ---------- FOOTER ---------- */
 .foot{background:var(--bg-2);border-top:1px solid var(--line);padding-block:56px 32px}
 .foot__grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:34px}
@@ -410,7 +430,16 @@ section{scroll-margin-top:78px}
   margin-top:44px;padding-top:22px;border-top:1px solid var(--line);
   color:var(--muted);font-size:.82rem;font-family:var(--font-mono)}
 
-@media (max-width:860px){.nav__links{display:none}}
+@media (max-width:1040px){
+  .nav__burger{display:grid}
+  .nav__links{position:fixed;top:70px;left:0;right:0;margin:0;padding:6px 0;gap:0;
+    flex-direction:column;align-items:stretch;background:var(--bg);border-bottom:1px solid var(--line);
+    box-shadow:var(--shadow-lg);display:none;max-height:calc(100vh - 70px);overflow:auto}
+  .nav__links.open{display:flex}
+  .nav__links a{padding:15px clamp(16px,4vw,44px);font-size:1rem;border-top:1px solid var(--line)}
+  .nav__links a:first-child{border-top:none}
+  .nav__links a::after{display:none}
+}
 </style>
 
 <script>
@@ -426,15 +455,18 @@ section{scroll-margin-top:78px}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 13.5 3 12l1-2 4 .5 4.5-5c.6-.7 1.7-.9 2.5-.3.8.6.9 1.7.3 2.5l-3.2 4.4.7 4.2-1.6 1.3-1.5-4.1-3.4 3 .2 2.4-1.3.9-1.2-3.4L3.8 18l-.9-1.3 2.4-1z"/></svg>
       Bookiraj<span class="tld">.si</span>
     </a>
-    <nav class="nav__links" aria-label="Glavni meni">
+    <nav class="nav__links" id="navLinks" aria-label="Glavni meni">
       <a href="#akcije">Letalske karte</a>
-      <a href="#tedna">Akcija tedna</a>
-      <a href="#zakaj">Zakaj Bookiraj</a>
-      <a href="#news">Obveščanje</a>
+      <a href="#pocitnice">Počitniški termini</a>
+      <a href="#planerji">Planerji</a>
+      <a href="#hoteli">Hoteli</a>
+      <a href="#rentacar">Rent a car</a>
+      <a href="#parking">Parking</a>
+      <a href="#o-nas">O nas</a>
     </nav>
     <div class="nav__tools">
       <button class="icon-btn" id="themeBtn" aria-label="Preklopi temo"></button>
-      <a href="#akcije" class="btn">Ujemi akcijo</a>
+      <button class="icon-btn nav__burger" id="navBurger" aria-label="Meni" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
     </div>
   </div>
 </header>
@@ -838,6 +870,60 @@ function detailHTML(d){
   +'</div></section>';
 }
 
+const BACK='<a class="detail__back" href="#top"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> Domov</a>';
+function fmtDMY(iso){var p=iso.split('-');return (+p[2])+'. '+MON[(+p[1])-1]+' '+p[0];}
+
+// --- Planerji (demo itinerariji) ---
+const ITINERARIES=[
+  {img:'barcelona',city:'Barcelona',days:3,price:9,desc:'Popoln vodič za mestni pobeg — Gaudí, tapas bari in skrite plaže, urejeno po dnevih.',hl:['Dan po dan','Zemljevid','Rezervacije']},
+  {img:'rome',city:'Rim',days:4,price:12,desc:'Večno mesto brez gneče: antika, Vatikan in najboljša pasta, s pametnim vrstnim redom ogledov.',hl:['Preskoči vrste','Kje jesti','Zemljevid']},
+  {img:'lisbon',city:'Lizbona',days:5,price:12,desc:'Lizbona, Sintra in Cascais — tramvaji, pastéis in atlantski sončni zahodi v petih dneh.',hl:['Izlet v Sintro','Dan po dan','Kje jesti']},
+  {img:'santorini',city:'Santorini',days:4,price:12,desc:'Sanjski otoški oddih — najlepši razgledi, plaže in sončni zahodi brez turističnih pasti.',hl:['Skrite plaže','Sončni zahodi','Zemljevid']},
+  {img:'dubai',city:'Dubaj',days:5,price:14,desc:'Nebotičniki, puščavski safari in bazarji — luksuz in avantura v petdnevnem načrtu.',hl:['Puščavski safari','Kje jesti','Nasveti']},
+  {img:'bali',city:'Bali',days:10,price:19,desc:'Deset dni Balija: Ubud, riževe terase, templji in najlepše plaže — celoten itinerar s tremi bazami.',hl:['3 baze','Dan po dan','Zemljevid']}
+];
+function planCard(p){return '<article class="plan">'
+  +'<div class="plan__media"><img loading="lazy" decoding="async" src="img/'+p.img+'.jpg" alt="'+p.city+'"><span class="plan__tag">PDF vodič</span></div>'
+  +'<div class="plan__body"><div class="plan__meta">'+p.days+' dni · '+p.city+'</div><h3>'+p.city+' v '+p.days+' dneh</h3>'
+  +'<p>'+p.desc+'</p><ul class="plan__hl">'+p.hl.map(function(h){return '<li>'+h+'</li>';}).join('')+'</ul>'
+  +'<div class="plan__foot"><span class="plan__price">'+p.price+' <i>€</i></span><a class="btn" href="#news">Kupi</a></div>'
+  +'</div></article>';}
+function planerjiHTML(){return '<div class="page"><div class="container">'+BACK
+  +'<p class="eyebrow">Planerji</p><h1 class="page__h">Gotovi itinerariji za tvoje potovanje.</h1>'
+  +'<p class="page__p" style="max-width:62ch">Prihrani ure načrtovanja — podroben vodič po dnevih, z zemljevidi in preverjenimi priporočili. Pripravljeno za takojšnjo uporabo.</p>'
+  +'<div class="plans" style="margin-top:2rem">'+ITINERARIES.map(planCard).join('')+'</div>'
+  +'<p class="terms__note" style="margin-top:1.6rem">Demo itinerariji. Nakup bo kmalu na voljo — prijavi se na obveščanje in te obvestimo, ko zaživi trgovina.</p>'
+  +'</div></div>';}
+
+// --- Počitniški termini (šolske počitnice 2026/27) ---
+const HOLIDAYS=[
+  {name:'Jesenske',start:'2026-10-26',end:'2026-11-02'},
+  {name:'Novoletne',start:'2026-12-24',end:'2027-01-03'},
+  {name:'Zimske',start:'2027-02-15',end:'2027-02-27'},
+  {name:'Prvomajske',start:'2027-04-26',end:'2027-05-03'},
+  {name:'Poletne',start:'2027-06-25',end:'2027-08-31'}
+];
+function holidayDeals(h){
+  return DEALS.map(function(d){
+    var t=(d.terms||[]).filter(function(x){return x.depart>=h.start&&x.depart<=h.end;});
+    return t.length?Object.assign({},d,{terms:t,fromPrice:Math.min.apply(null,t.map(function(x){return x.price;}))}):null;
+  }).filter(Boolean).sort(function(a,b){return a.fromPrice-b.fromPrice;});
+}
+function pocitniceHTML(hidx){
+  var h=HOLIDAYS[hidx]||HOLIDAYS[0];
+  var list=holidayDeals(h);
+  var chips=HOLIDAYS.map(function(x,i){return '<button class="chip" onclick="__selHoliday('+i+')"'+(i===hidx?' aria-pressed="true"':'')+'>'+x.name+' počitnice</button>';}).join('');
+  var grid=list.length?('<div class="grid">'+list.map(cardHTML).join('')+'</div>')
+    :'<p class="page__p" style="margin-top:1.5rem">Za ta termin trenutno ni akcij pod povprečjem. Poskusi drug počitniški termin — ponudba se dnevno spreminja.</p>';
+  return '<div class="page"><div class="container">'+BACK
+    +'<p class="eyebrow">Počitniški termini</p><h1 class="page__h">Karte za šolske počitnice.</h1>'
+    +'<p class="page__p" style="max-width:60ch">Izberi termin — pokažemo le akcije, ki letijo v izbranem obdobju šolskih počitnic.</p>'
+    +'<div class="chips" style="margin:1.5rem 0 1rem">'+chips+'</div>'
+    +'<p class="count" style="margin-bottom:20px">'+list.length+' '+(list.length===1?'akcija':(list.length===2?'akciji':(list.length>0&&list.length<5?'akcije':'akcij')))+' · '+h.name.toLowerCase()+' počitnice ('+fmtDMY(h.start)+' – '+fmtDMY(h.end)+')</p>'
+    +grid+'</div></div>';
+}
+window.__selHoliday=function(i){detailEl.innerHTML=pocitniceHTML(+i);};
+
 const PAGES={
   'kako-deluje':{title:'Kako deluje',eyebrow:'Kako deluje',h:'Od iskanja do vzleta v treh korakih.',html:
     '<div class="steps">'
@@ -858,7 +944,17 @@ const PAGES={
   'o-nas':{title:'O nas',eyebrow:'Naša zgodba',h:'Zakaj obstaja Bookiraj.si.',html:
     '<p class="page__p">Bookiraj.si je nastal iz preproste ideje: da bi bilo potovanje po svetu dostopno vsakomur — brez ur iskanja in brez ugibanja, ali je cena res dobra.</p>'
     +'<p class="page__p">Namesto brskanja po desetih iskalnikih ti vsak dan postrežemo le prave akcije — take, ki so dejansko cenejše od običajne cene proge. Kar vidiš, je resnično.</p>'
-    +'<p class="page__p">Odhajamo iz Slovenije in bližnjih letališč, ciljamo pa povsod — od evropskih vikendov do daljnih sanjskih destinacij. Manj brskanja, več potovanj.</p>'}
+    +'<p class="page__p">Odhajamo iz Slovenije in bližnjih letališč, ciljamo pa povsod — od evropskih vikendov do daljnih sanjskih destinacij. Manj brskanja, več potovanj.</p>'},
+  'hoteli':{title:'Hoteli',eyebrow:'Prenočišča',h:'Poišči hotel po najboljši ceni.',html:
+    '<p class="page__p">Ko ujameš pravo letalsko akcijo, ti pomagamo še s prenočiščem. Primerjaj cene hotelov, apartmajev in hostlov med več sto ponudniki na enem mestu.</p>'
+    +'<p><a class="btn btn--lg" href="https://search.hotellook.com/?marker=779438" target="_blank" rel="noopener">Poišči hotel</a></p>'},
+  'rentacar':{title:'Rent a car',eyebrow:'Prevoz',h:'Najem avtomobila na destinaciji.',html:
+    '<p class="page__p">Za svobodo raziskovanja — primerjaj ponudbe najema vozil na letališčih po vsem svetu, brez skritih stroškov in s prosto odpovedjo.</p>'
+    +'<p><a class="btn btn--lg" href="https://www.discovercars.com/" target="_blank" rel="noopener">Poišči najem</a></p>'},
+  'parking':{title:'Parking',eyebrow:'Na letališču',h:'Cenejše parkiranje na letališču.',html:
+    '<p class="page__p">Pripravljamo primerjavo parkirišč ob letališčih, ki jih uporabljamo — Ljubljana, Trst, Benetke, Zagreb in Dunaj — da prihraniš tudi pri parkiranju.</p>'
+    +'<p class="page__p"><strong>Kmalu na voljo.</strong></p>'
+    +'<p><a class="btn btn--lg btn--ghost" href="#news">Obvesti me, ko zaživi</a></p>'}
 };
 function pageHTML(slug){var p=PAGES[slug];return ''
   +'<div class="page"><div class="container">'
@@ -881,6 +977,16 @@ function route(){
     }
   }
   const pslug=h.slice(1);
+  if(pslug==='pocitnice'){
+    detailEl.innerHTML=pocitniceHTML(0);
+    homeEl.hidden=true; detailEl.hidden=false;
+    document.title='Počitniški termini — Bookiraj.si'; window.scrollTo(0,0); return;
+  }
+  if(pslug==='planerji'){
+    detailEl.innerHTML=planerjiHTML();
+    homeEl.hidden=true; detailEl.hidden=false;
+    document.title='Planerji — Bookiraj.si'; window.scrollTo(0,0); return;
+  }
   if(PAGES[pslug]){
     detailEl.innerHTML=pageHTML(pslug);
     homeEl.hidden=true; detailEl.hidden=false;
@@ -946,6 +1052,14 @@ tb.addEventListener('click',()=>{
 // nav scrolled
 const nav=document.querySelector('.nav');
 addEventListener('scroll',()=>{nav.classList.toggle('scrolled',scrollY>20);},{passive:true});
+
+// mobilni meni
+const burger=document.getElementById('navBurger');
+const navLinks=document.getElementById('navLinks');
+if(burger&&navLinks){
+  burger.addEventListener('click',()=>{const open=navLinks.classList.toggle('open');burger.setAttribute('aria-expanded',open);});
+  navLinks.addEventListener('click',e=>{if(e.target.closest('a')){navLinks.classList.remove('open');burger.setAttribute('aria-expanded','false');}});
+}
 
 // newsletter — pošlje prijavo prek Web3Forms, če je vpisan ključ (brezplačen z web3forms.com);
 // dokler je ključ prazen, prikaže potrditev in shrani lokalno (graciozno).
