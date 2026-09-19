@@ -87,7 +87,7 @@ if (cities) for (const c of cities) CITY[c.code] = { name: c.name, cc: c.country
 if (countries) for (const c of countries) COUNTRY[c.code] = c.name;
 
 const best = {};
-for (const o of ['LJU', 'TRS', 'VCE', 'ZAG', 'VIE']) {
+for (const o of ['LJU', 'TRS', 'VCE', 'ZAG', 'VIE', 'MXP', 'TSF', 'MUC', 'BUD']) {
   const url = `https://api.travelpayouts.com/aviasales/v3/get_latest_prices?origin=${o}&currency=eur&period_type=year&one_way=false&limit=40&page=1&market=si`;
   let data = [];
   try { const r = await fetch(url, { headers: { 'X-Access-Token': TOKEN } }); if (r.ok) { const j = await r.json(); data = j.data || []; } } catch {}
