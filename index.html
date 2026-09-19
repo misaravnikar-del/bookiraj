@@ -266,9 +266,12 @@ section{scroll-margin-top:78px}
 .cal__clear:hover{color:var(--accent)}
 .cal__done{padding:7px 16px;font-size:.86rem;border-radius:9px}
 @media (max-width:640px){
+  .finderbar{gap:0}
   .fb__field+.fb__field::before{display:none}
-  .fb__field{flex:1 1 100%;border-top:1px solid var(--line);border-radius:0;padding:13px 14px}
-  .fb__field:first-child{border-top:none}
+  .fb__field{flex:1 1 50%;border-radius:0;padding:12px 14px;border-top:1px solid var(--line)}
+  .fb__field:nth-child(1),.fb__field:nth-child(2){border-top:none}
+  .fb__field:nth-child(even){border-left:1px solid var(--line)}
+  #wDate{flex-basis:100%}
   .finderbar__go{width:100%;margin:8px 2px 2px}
   .combo__list{left:14px;right:14px;min-width:0;max-width:none}
   .cal{left:14px;right:14px;width:auto}
@@ -278,6 +281,9 @@ section{scroll-margin-top:78px}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
 @media (max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:560px){.grid{grid-template-columns:1fr}}
+#gridPreview{grid-template-columns:repeat(4,1fr)}
+@media (max-width:1000px){#gridPreview{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){#gridPreview{grid-template-columns:1fr}}
 .more{display:flex;justify-content:center;margin-top:40px}
 .more .btn{gap:9px}
 
@@ -914,7 +920,7 @@ function featuredHTML(d){var t=d.terms&&d.terms[0];return '<article class="pass"
   +'<div class="pass__foot"><div class="price"><small>Povratna karta že od</small><b>'+d.fromPrice+' <i>€</i></b></div><a href="#deal/'+d.img+'" class="btn btn--lg">Poglej akcijo</a></div>'
   +'</div></article>';}
 function renderFeatured(){var el=document.getElementById('featured');var sec=document.getElementById('tedna');if(!el)return;if(!DEALS.length){if(sec)sec.hidden=true;return;}var best=DEALS.slice().sort(function(a,b){return b.discount-a.discount;})[0];el.innerHTML=featuredHTML(best);}
-function renderPreview(){var el=document.getElementById('gridPreview');if(!el)return;var list=DEALS.slice().sort(function(a,b){return b.discount-a.discount;}).slice(0,6);el.innerHTML=list.map(cardHTML).join('');var m=document.querySelector('#akcije .more');if(m)m.hidden=DEALS.length<=6;}
+function renderPreview(){var el=document.getElementById('gridPreview');if(!el)return;var list=DEALS.slice().sort(function(a,b){return b.discount-a.discount;}).slice(0,4);el.innerHTML=list.map(cardHTML).join('');var m=document.querySelector('#akcije .more');if(m)m.hidden=DEALS.length<=4;}
 function renderDiscover(){var el=document.getElementById('discoverList');if(!el)return;var list=(window.__BOOKIRAJ_DEALS__&&window.__BOOKIRAJ_DEALS__.discover)||[];var sec=document.getElementById('radar');if(!list.length){if(sec)sec.hidden=true;return;}el.innerHTML='<div class="radar">'+list.map(function(d){return '<a class="radar__row" href="'+d.url+'" target="_blank" rel="noopener"><span class="radar__route">'+d.fromCode+'<span class="arrow">→</span>'+d.code+'</span><span class="radar__city">'+d.city+(d.country?'<small>'+d.country+'</small>':'')+'</span><span class="radar__when">'+fmtRangeISO(d.depart,d.ret)+'</span><span class="radar__price">'+d.price+' €</span></a>';}).join('')+'</div>';}
 function detailHTML(d){
   const cheapest=(d.terms&&d.terms[0])||null;
