@@ -308,8 +308,6 @@ section{scroll-margin-top:78px}
   color:var(--accent-ink);background:var(--accent-2)}
 .badge.hot{background:var(--hot);color:#fff}
 .badge.cool{background:var(--sky);color:#fff}
-.badge--sky{left:auto;right:12px;background:var(--ink);color:var(--bg);display:inline-flex;align-items:center;gap:5px}
-.badge--sky svg{width:12px;height:12px}
 .card__body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:9px;flex:1}
 .card__route{display:flex;align-items:center;justify-content:space-between;
   font-family:var(--font-mono);font-size:.76rem;color:var(--muted);letter-spacing:.04em}
@@ -854,16 +852,6 @@ const GEO={barcelona:{continent:'evropa'},rome:{continent:'evropa'},lisbon:{cont
 const AP_NAME={LJU:'Ljubljana',TRS:'Trst',VCE:'Benetke',ZAG:'Zagreb',VIE:'Dunaj',MXP:'Milano',TSF:'Treviso',MUC:'Minhen',BUD:'Budimpešta'};
 const DEALS=LIVE.map(function(l){var c=byImg[l.img]||{};return Object.assign({},c,GEO[l.img]||{},{fromPrice:l.fromPrice,avg:l.avg,terms:l.terms,discount:Math.max(0,Math.round((l.avg-l.fromPrice)/l.avg*100))});}).filter(function(d){return d.city;});
 
-// Posebna akcija, ki ob kliku vodi NEPOSREDNO na Skyscanner (z datumi)
-DEALS.push({
-  city:'Santorini', code:'JTR', country:'Grčija', fromCity:'Ljubljana', fromCode:'LJU',
-  continent:'evropa', img:'santorini', airline:'',
-  teaser:'Beli zidovi, modre kupole in sončni zahodi nad kaldero.',
-  period:'maj–okt.', fromPrice:129, avg:205, discount:37,
-  terms:[{depart:'2026-10-05', ret:'2026-10-12'}],
-  sky: skySearch('LJU','JTR','2026-10-05','2026-10-12')
-});
-
 const state={continent:"vse",country:"",city:"",origins:[],from:"",to:"",sort:"reco"};
 const grid=document.getElementById('grid');
 const countEl=document.getElementById('count');
@@ -877,16 +865,10 @@ const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 function priceHTML(p){return '<b>'+p+' <i>€</i></b>';}
 function cardHTML(d){
   const badge=d.discount>=15?'<span class="badge">−'+d.discount+' %</span>':'';
-  const extIcon='<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>';
-  const arrow='<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
-  const skyTag=d.sky?'<span class="badge badge--sky">'+extIcon+'Skyscanner</span>':'';
-  const href=d.sky?d.sky:'#deal/'+d.img;
-  const ext=d.sky?' target="_blank" rel="noopener"':'';
-  const cta=d.sky?('<span class="go">Poišči na Skyscanner '+extIcon+'</span>'):('<span class="go">Poglej akcijo '+arrow+'</span>');
-  return '<a class="card" href="'+href+'"'+ext+'>'
+  return '<a class="card" href="#deal/'+d.img+'">'
     +'<div class="card__media">'
       +'<img loading="lazy" decoding="async" src="img/'+d.img+'.jpg" alt="'+d.city+', '+d.country+'">'
-      +badge+skyTag
+      +badge
       +'<div class="card__price"><small>že od</small>'+priceHTML(d.fromPrice)+'</div>'
     +'</div>'
     +'<div class="card__body">'
@@ -894,7 +876,7 @@ function cardHTML(d){
       +'<h3>'+d.city+'</h3>'
       +'<div class="card__sub">'+d.country+' · odhod iz '+d.fromCity+'</div>'
       +'<p class="card__teaser">'+d.teaser+'</p>'
-      +'<div class="card__cta">'+cta+'<span class="air">'+(d.airline||'')+'</span></div>'
+      +'<div class="card__cta"><span class="go">Poglej akcijo <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span><span class="air">'+d.airline+'</span></div>'
     +'</div>'
   +'</a>';
 }
