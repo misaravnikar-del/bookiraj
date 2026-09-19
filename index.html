@@ -414,6 +414,16 @@ section{scroll-margin-top:78px}
 .plan__foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:6px;padding-top:14px;border-top:1px dashed var(--line)}
 .plan__price{font-family:var(--font-display);font-size:1.5rem;font-weight:600}
 .plan__price i{font-style:normal;color:var(--accent);font-size:.68em}
+.lots{display:grid;gap:14px;margin-top:1.8rem}
+.lot{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 22px;
+  display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.lot__l{display:flex;align-items:center;gap:16px;min-width:0}
+.lot__code{font-family:var(--font-mono);font-size:1.05rem;color:var(--accent);font-weight:600;letter-spacing:.04em;flex:none}
+.lot__l h3{font-size:1.18rem}
+.lot__l p{color:var(--muted);font-size:.86rem}
+.lot__opts{display:flex;gap:8px;flex-wrap:wrap}
+.lot__opts .btn{padding:9px 16px;font-size:.86rem}
+@media(max-width:520px){.lot{align-items:flex-start;flex-direction:column}.lot__opts{width:100%}.lot__opts .btn{flex:1}}
 
 /* ---------- FOOTER ---------- */
 .foot{background:var(--bg-2);border-top:1px solid var(--line);padding-block:56px 32px}
@@ -459,8 +469,6 @@ section{scroll-margin-top:78px}
       <a href="#akcije">Letalske karte</a>
       <a href="#pocitnice">Počitniški termini</a>
       <a href="#planerji">Planerji</a>
-      <a href="#hoteli">Hoteli</a>
-      <a href="#rentacar">Rent a car</a>
       <a href="#parking">Parking</a>
       <a href="#o-nas">O nas</a>
     </nav>
@@ -924,6 +932,26 @@ function pocitniceHTML(hidx){
 }
 window.__selHoliday=function(i){detailEl.innerHTML=pocitniceHTML(+i);};
 
+// --- Parkiranje ob letališčih ---
+const PARKING=[
+  {code:'LJU',city:'Ljubljana',name:'Letališče Jožeta Pučnika (Brnik)',official:'https://www.lju-airport.si/',compare:''},
+  {code:'TRS',city:'Trst',name:'Aeroporto di Trieste (Ronchi dei Legionari)',official:'https://triesteairport.it/en/',compare:'https://www.parkos.com/trieste-airport/'},
+  {code:'VCE',city:'Benetke',name:'Aeroporto Marco Polo',official:'https://www.veneziaairport.it/en/',compare:'https://www.parkos.com/venice-marco-polo-airport/'},
+  {code:'ZAG',city:'Zagreb',name:'Zračna luka Franjo Tuđman',official:'https://www.zagreb-airport.hr/en',compare:'https://www.parkos.com/zagreb-airport/'},
+  {code:'VIE',city:'Dunaj',name:'Flughafen Wien (Vienna International)',official:'https://www.viennaairport.com/en/passengers',compare:'https://www.parkos.com/vienna-airport/'}
+];
+function lotRow(a){return '<div class="lot"><div class="lot__l"><span class="lot__code">'+a.code+'</span><div><h3>'+a.city+'</h3><p>'+a.name+'</p></div></div>'
+  +'<div class="lot__opts">'
+  +(a.compare?'<a class="btn" href="'+a.compare+'" target="_blank" rel="noopener">Primerjaj cene</a>':'')
+  +'<a class="btn btn--ghost" href="'+a.official+'" target="_blank" rel="noopener">Uradna stran</a>'
+  +'</div></div>';}
+function parkingHTML(){return '<div class="page"><div class="container">'+BACK
+  +'<p class="eyebrow">Parkiranje</p><h1 class="page__h">Parkiraj ob letališču, s katerega letiš.</h1>'
+  +'<p class="page__p" style="max-width:62ch">Pregled parkirišč na vseh letališčih, ki jih uporabljamo. Primerjaj cene zasebnih parkirišč ali odpri uradno stran letališča.</p>'
+  +'<div class="lots">'+PARKING.map(lotRow).join('')+'</div>'
+  +'<p class="terms__note" style="margin-top:1.4rem">Cene in razpoložljivost preveri na povezavi. Za Ljubljano (Brnik) je na voljo uradno letališko parkirišče.</p>'
+  +'</div></div>';}
+
 const PAGES={
   'kako-deluje':{title:'Kako deluje',eyebrow:'Kako deluje',h:'Od iskanja do vzleta v treh korakih.',html:
     '<div class="steps">'
@@ -944,17 +972,7 @@ const PAGES={
   'o-nas':{title:'O nas',eyebrow:'Naša zgodba',h:'Zakaj obstaja Bookiraj.si.',html:
     '<p class="page__p">Bookiraj.si je nastal iz preproste ideje: da bi bilo potovanje po svetu dostopno vsakomur — brez ur iskanja in brez ugibanja, ali je cena res dobra.</p>'
     +'<p class="page__p">Namesto brskanja po desetih iskalnikih ti vsak dan postrežemo le prave akcije — take, ki so dejansko cenejše od običajne cene proge. Kar vidiš, je resnično.</p>'
-    +'<p class="page__p">Odhajamo iz Slovenije in bližnjih letališč, ciljamo pa povsod — od evropskih vikendov do daljnih sanjskih destinacij. Manj brskanja, več potovanj.</p>'},
-  'hoteli':{title:'Hoteli',eyebrow:'Prenočišča',h:'Poišči hotel po najboljši ceni.',html:
-    '<p class="page__p">Ko ujameš pravo letalsko akcijo, ti pomagamo še s prenočiščem. Primerjaj cene hotelov, apartmajev in hostlov med več sto ponudniki na enem mestu.</p>'
-    +'<p><a class="btn btn--lg" href="https://search.hotellook.com/?marker=779438" target="_blank" rel="noopener">Poišči hotel</a></p>'},
-  'rentacar':{title:'Rent a car',eyebrow:'Prevoz',h:'Najem avtomobila na destinaciji.',html:
-    '<p class="page__p">Za svobodo raziskovanja — primerjaj ponudbe najema vozil na letališčih po vsem svetu, brez skritih stroškov in s prosto odpovedjo.</p>'
-    +'<p><a class="btn btn--lg" href="https://www.discovercars.com/" target="_blank" rel="noopener">Poišči najem</a></p>'},
-  'parking':{title:'Parking',eyebrow:'Na letališču',h:'Cenejše parkiranje na letališču.',html:
-    '<p class="page__p">Pripravljamo primerjavo parkirišč ob letališčih, ki jih uporabljamo — Ljubljana, Trst, Benetke, Zagreb in Dunaj — da prihraniš tudi pri parkiranju.</p>'
-    +'<p class="page__p"><strong>Kmalu na voljo.</strong></p>'
-    +'<p><a class="btn btn--lg btn--ghost" href="#news">Obvesti me, ko zaživi</a></p>'}
+    +'<p class="page__p">Odhajamo iz Slovenije in bližnjih letališč, ciljamo pa povsod — od evropskih vikendov do daljnih sanjskih destinacij. Manj brskanja, več potovanj.</p>'}
 };
 function pageHTML(slug){var p=PAGES[slug];return ''
   +'<div class="page"><div class="container">'
@@ -986,6 +1004,11 @@ function route(){
     detailEl.innerHTML=planerjiHTML();
     homeEl.hidden=true; detailEl.hidden=false;
     document.title='Planerji — Bookiraj.si'; window.scrollTo(0,0); return;
+  }
+  if(pslug==='parking'){
+    detailEl.innerHTML=parkingHTML();
+    homeEl.hidden=true; detailEl.hidden=false;
+    document.title='Parking — Bookiraj.si'; window.scrollTo(0,0); return;
   }
   if(PAGES[pslug]){
     detailEl.innerHTML=pageHTML(pslug);
