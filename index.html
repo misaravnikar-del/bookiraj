@@ -711,7 +711,7 @@ function render(){
 // ---- detail sub-page ----
 const CHK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
 function detailHTML(d){
-  const flights='https://www.google.com/travel/flights?q='+encodeURIComponent('leti '+d.fromCity+' '+d.city);
+  const flights='https://www.skyscanner.net/transport/flights/'+d.fromCode.toLowerCase()+'/'+d.code.toLowerCase()+'/';
   const related=DEALS.filter(x=>x.img!==d.img&&x.region===d.region)
     .concat(DEALS.filter(x=>x.img!==d.img&&x.region!==d.region)).slice(0,3);
   const badge=d.badge?'<span class="badge '+(d.badgeType==='hot'?'hot':d.badgeType==='cool'?'cool':'')+'" style="position:static;display:inline-block">'+d.badge+'</span>':'';
@@ -743,8 +743,8 @@ function detailHTML(d){
           +'<dt>Prevoznik</dt><dd>'+d.airline+'</dd>'
           +'<dt>Najboljši čas</dt><dd>'+d.period+'</dd>'
         +'</dl>'
-        +'<a class="btn btn--lg" href="'+flights+'" target="_blank" rel="noopener">Poišči lete</a>'
-        +'<p class="note">Cena je okvirna najnižja povratna cena na osebo. Klik te odpelje na iskalnik letov.</p>'
+        +'<a class="btn btn--lg" href="'+flights+'" target="_blank" rel="noopener">Poišči lete na Skyscanner</a>'
+        +'<p class="note">Cena je okvirna. Klik odpre žive cene za to progo na Skyscannerju.</p>'
       +'</div>'
     +'</aside>'
   +'</div>'
