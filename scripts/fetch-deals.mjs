@@ -4,7 +4,7 @@
 //     filtrira po whitelistu držav (varno/obljudeno), po SEZONI destinacije in
 //     po MINIMALNI dolžini potovanja glede na oddaljenost → velik seznam akcij.
 // Zažene GitHub Action (skrivnost TRAVELPAYOUTS_TOKEN); lokalno: TRAVELPAYOUTS_TOKEN=... node scripts/fetch-deals.mjs
-import { writeFileSync } from 'node:fs';
+import { writeFileSync, mkdirSync } from 'node:fs';
 
 const TOKEN = process.env.TRAVELPAYOUTS_TOKEN;
 const MARKER = process.env.TP_MARKER || '779438';
@@ -184,7 +184,7 @@ for (const o of ORIGINS) {
     const key = o.code+'|'+dest;
     if (best[key] && best[key].price <= it.value) continue;
     best[key] = {
-      fromCode:o.code, fromCity:o.city, code:dest, city:cityName(dest),
+      fromCode:o.code, fromCity:o.city, code:dest, city:cityName(dest), en:ci.name, enCountry:CC[ci.cc]||'',
       country:cat.sl, continent:cat.cont, exotic:cat.x,
       price:Math.round(it.value), depart:it.depart_date.slice(0,10), ret:it.return_date.slice(0,10),
       nights, transfers:it.number_of_changes??0, season:SEASON[cat.season].note,
@@ -193,19 +193,63 @@ for (const o of ORIGINS) {
     kept++;
   }
 }
-let all = Object.values(best);
-const fullByCont = {}; all.forEach(d=>{fullByCont[d.continent]=(fullByCont[d.continent]||0)+1;});
-console.log(`\nPregledano ${scanned} letov · ustreznih ${kept} · unikatnih ${all.length}`);
-console.log('Vseh ustreznih po celinah:', JSON.stringify(fullByCont));
-// uravnotežen izbor: najcenejši v vsaki celini (da pridejo zraven tudi eksotične)
-const CAPS = {evropa:120, azija:50, afrika:40, 'sev-amerika':35, 'juz-amerika':20, oceanija:12};
-const groups = {}; all.forEach(d=>{(groups[d.continent]=groups[d.continent]||[]).push(d);});
-let discover = [];
-for (const k in groups){ groups[k].sort((a,b)=>a.price-b.price); discover = discover.concat(groups[k].slice(0, CAPS[k]||30)); }
+// ZDRUŽI PO DESTINACIJI (ena kartica = ena destinacija; različna letališča v `froms`)
+const byDest = {};
+for (const d of Object.values(best)) {
+  const ex = byDest[d.code];
+  if (!ex) { byDest[d.code] = Object.assign({}, d, {froms:[d.fromCode]}); }
+  else { const froms = ex.froms.concat([d.fromCode]);
+    if (d.price < ex.price) byDest[d.code] = Object.assign({}, d, {froms});
+    else ex.froms = froms; }
+}
+let uniq = Object.values(byDest);
+uniq.forEach(d=>{ d.froms = [...new Set(d.froms)]; });
+const fullByCont = {}; uniq.forEach(d=>{fullByCont[d.continent]=(fullByCont[d.continent]||0)+1;});
+console.log(`\nPregledano ${scanned} letov · unikatnih destinacij ${uniq.length}`);
+console.log('Po celinah:', JSON.stringify(fullByCont));
+
+// uravnotežen izbor po celinah (da pridejo zraven tudi eksotične)
+const CAPS = {evropa:70, azija:35, afrika:30, 'sev-amerika':18, 'juz-amerika':12, oceanija:5};
+const groups = {}; uniq.forEach(d=>{(groups[d.continent]=groups[d.continent]||[]).push(d);});
+let picked = [];
+for (const k in groups){ groups[k].sort((a,b)=>a.price-b.price); picked = picked.concat(groups[k].slice(0, CAPS[k]||25)); }
+
+// SLIKE: prava fotografija mesta prek MediaWiki pageimages (~960px); prenesi lokalno
+mkdirSync(new URL('../img/deals/', import.meta.url), {recursive:true});
+async function photoURL(city, country){
+  try{
+    const u='https://en.wikipedia.org/w/api.php?action=query&format=json&generator=search&gsrsearch='+encodeURIComponent(city+' '+country)+'&gsrlimit=3&prop=pageimages|coordinates&piprop=thumbnail&pithumbsize=900&origin=*';
+    const r=await fetch(u,{headers:{'User-Agent':'BookirajBot/1.0 (misa.ravnikar@gmail.com)'}}); if(!r.ok) return null;
+    const j=await r.json(); const pages=Object.values((j.query&&j.query.pages)||{});
+    if(!pages.length) return null;
+    pages.sort((a,b)=>((a.index||9)-(b.index||9)));           // vrstni red iskanja
+    const pick=pages.find(p=>p.thumbnail&&p.coordinates)||pages.find(p=>p.thumbnail); // pravo mesto (koordinate) ima prednost
+    return (pick&&pick.thumbnail&&pick.thumbnail.source)||null;
+  }catch{ return null; }
+}
+async function download(url, code){
+  try{
+    const r=await fetch(url,{headers:{'User-Agent':'BookirajBot/1.0 (misa.ravnikar@gmail.com)'}}); if(!r.ok) return false;
+    const ct=r.headers.get('content-type')||''; if(!ct.startsWith('image/')) return false;
+    const buf=Buffer.from(await r.arrayBuffer()); if(buf.byteLength<3000) return false;
+    writeFileSync(new URL('../img/deals/'+code+'.jpg', import.meta.url), buf); return true;
+  }catch{ return false; }
+}
+let discover = [], withImg=0, noImg=0;
+for (const d of picked){
+  const src = await photoURL(d.en, d.enCountry); await sleep(120);
+  let ok=false;
+  if (src) { ok = await download(src, d.code); await sleep(120); }
+  if (!ok) { noImg++; continue; }         // brez prave (unikatne) slike kartice ne dodamo
+  d.photo = 'img/deals/'+d.code+'.jpg';
+  delete d.en; delete d.enCountry;
+  discover.push(d); withImg++;
+}
 discover.sort((a,b)=>a.price-b.price);
 const byCont = {}; discover.forEach(d=>{byCont[d.continent]=(byCont[d.continent]||0)+1;});
-console.log('V seznamu po celinah:', JSON.stringify(byCont));
+console.log(`Slike: ${withImg} ok · ${noImg} brez slike (izpuščene)`);
+console.log('Kartice po celinah:', JSON.stringify(byCont));
 
 const payload = { updated:new Date().toISOString(), deals:curated, discover };
 writeFileSync(new URL('../deals.js', import.meta.url), 'window.__BOOKIRAJ_DEALS__ = '+JSON.stringify(payload)+';\n');
-console.log(`\nKurirane akcije: ${curated.length} · Odkrite akcije: ${discover.length}`);
+console.log(`\nKurirane akcije: ${curated.length} · Odkrite akcije (kartice): ${discover.length}`);

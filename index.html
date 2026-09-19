@@ -753,8 +753,6 @@ section{scroll-margin-top:78px}
       </select>
     </div>
     <div class="grid" id="grid"></div>
-    <h3 class="listhead" id="listHead" hidden>Vse destinacije</h3>
-    <div id="karteList"></div>
   </div>
 </section>
 
@@ -871,20 +869,33 @@ const bySlug=s=>DEALS.find(d=>d.img===s);
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 
 function priceHTML(p){return '<b>'+p+' <i>€</i></b>';}
+function fmtShort(dep,ret){var a=dep.split('-'),b=ret.split('-');var am=MON[+a[1]-1],bm=MON[+b[1]-1];return (+a[2])+'.'+(am===bm?'':' '+am)+'–'+(+b[2])+'. '+bm;}
 function cardHTML(d){
-  const badge=d.discount>=15?'<span class="badge">−'+d.discount+' %</span>':'';
-  return '<a class="card" href="#deal/'+d.img+'">'
+  var disc=!!d.photo;
+  var src=disc?d.photo:'img/'+d.img+'.jpg';
+  var href=disc?d.url:'#deal/'+d.img;
+  var ext=disc?' target="_blank" rel="noopener"':'';
+  var price=disc?d.price:d.fromPrice;
+  var badge=(!disc&&d.discount>=15)?'<span class="badge">−'+d.discount+' %</span>':'';
+  var rRight=disc?fmtShort(d.depart,d.ret):d.period;
+  var teaser=disc?('Najlepše: '+d.season):d.teaser;
+  var ctaTxt=disc?'Rezerviraj':'Poglej akcijo';
+  var cRight=disc?termSub({transfers:d.transfers}):d.airline;
+  var svg=disc
+    ?'<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>'
+    :'<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+  return '<a class="card" href="'+href+'"'+ext+'>'
     +'<div class="card__media">'
-      +'<img loading="lazy" decoding="async" src="img/'+d.img+'.jpg" alt="'+d.city+', '+d.country+'">'
+      +'<img loading="lazy" decoding="async" src="'+src+'" alt="'+d.city+', '+d.country+'">'
       +badge
-      +'<div class="card__price"><small>že od</small>'+priceHTML(d.fromPrice)+'</div>'
+      +'<div class="card__price"><small>že od</small>'+priceHTML(price)+'</div>'
     +'</div>'
     +'<div class="card__body">'
-      +'<div class="card__route"><span>'+d.fromCode+' <span class="arrow">→</span> '+d.code+'</span><span>'+d.period+'</span></div>'
+      +'<div class="card__route"><span>'+d.fromCode+' <span class="arrow">→</span> '+d.code+'</span><span>'+rRight+'</span></div>'
       +'<h3>'+d.city+'</h3>'
       +'<div class="card__sub">'+d.country+' · odhod iz '+d.fromCity+'</div>'
-      +'<p class="card__teaser">'+d.teaser+'</p>'
-      +'<div class="card__cta"><span class="go">Poglej akcijo <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span><span class="air">'+d.airline+'</span></div>'
+      +'<p class="card__teaser">'+teaser+'</p>'
+      +'<div class="card__cta"><span class="go">'+ctaTxt+' '+svg+'</span><span class="air">'+(cRight||'')+'</span></div>'
     +'</div>'
   +'</a>';
 }
@@ -898,7 +909,7 @@ function matchFilters(d){
   return (state.continent==='vse'||(state.continent==='eksotika'?d.exotic:d.continent===state.continent))
     &&(!state.country||d.country===state.country)
     &&(!state.city||d.city===state.city)
-    &&(state.origins.length===0||state.origins.indexOf(d.fromCode)>=0)
+    &&(state.origins.length===0||(d.froms||[d.fromCode]).some(function(o){return state.origins.indexOf(o)>=0;}))
     &&dateMatch(d);
 }
 function slText(n){return n+(n===1?' akcija':(n===2?' akciji':(n<5&&n>0?' akcije':' akcij')));}
@@ -910,22 +921,16 @@ function rowHTML(d){
     +'<span class="radar__price">'+d.price+' €</span></a>';
 }
 function render(){
-  let cards=DEALS.filter(matchFilters);
-  let rows=EXTRA.filter(matchFilters);
-  if(state.sort==='asc'){cards.sort((a,b)=>priceOf(a)-priceOf(b));rows.sort((a,b)=>priceOf(a)-priceOf(b));}
-  else if(state.sort==='desc'){cards.sort((a,b)=>priceOf(b)-priceOf(a));rows.sort((a,b)=>priceOf(b)-priceOf(a));}
-  var listEl=document.getElementById('karteList'), headEl=document.getElementById('listHead');
-  var total=cards.length+rows.length;
-  if(!total){
-    grid.hidden=false;
+  var cur=DEALS.filter(matchFilters), dis=EXTRA.filter(matchFilters), list;
+  if(state.sort==='asc'){list=cur.concat(dis).sort((a,b)=>priceOf(a)-priceOf(b));}
+  else if(state.sort==='desc'){list=cur.concat(dis).sort((a,b)=>priceOf(b)-priceOf(a));}
+  else{cur.sort((a,b)=>(b.discount||0)-(a.discount||0));dis.sort((a,b)=>priceOf(a)-priceOf(b));list=cur.concat(dis);}
+  if(!list.length){
     grid.innerHTML='<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><p>Za te filtre trenutno ni akcij.<br>Poskusi z drugo celino, državo ali letališčem.</p></div>';
-    if(listEl)listEl.hidden=true; if(headEl)headEl.hidden=true;
   }else{
-    grid.innerHTML=cards.map(cardHTML).join(''); grid.hidden=!cards.length;
-    if(listEl){listEl.innerHTML=rows.length?('<div class="radar">'+rows.map(rowHTML).join('')+'</div>'):''; listEl.hidden=!rows.length;}
-    if(headEl)headEl.hidden=!(cards.length&&rows.length);
+    grid.innerHTML=list.map(cardHTML).join('');
   }
-  countEl.textContent=slText(total)+' · osveženo '+fmtUpdated(UPDATED);
+  countEl.textContent=slText(list.length)+' · osveženo '+fmtUpdated(UPDATED);
 }
 
 // ---- detail sub-page ----
