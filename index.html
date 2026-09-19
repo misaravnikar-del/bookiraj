@@ -977,7 +977,7 @@ function gateCard(a){return '<a class="gate" href="#parking/'+a.code+'">'
   +'<div class="gate__body"><h3>'+a.city+'</h3><p>'+a.name+'</p>'
   +'<div class="gate__foot"><span>PARKIRIŠČA · '+a.providers.length+'</span><span class="go">Poglej <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>'
   +'</div></a>';}
-function parkingHTML(){return '<div class="page"><div class="container">'+BACK
+function parkingHTML(){return '<div class="page"><div class="container">'
   +'<p class="eyebrow">Parkiranje</p><h1 class="page__h">Izberi letališče.</h1>'
   +'<p class="page__p" style="max-width:60ch">Parkiraj ob letališču, s katerega letiš. Klikni na letališče in poglej ponudnike parkiranja.</p>'
   +'<div class="gates">'+PARKING.map(gateCard).join('')+'</div>'
