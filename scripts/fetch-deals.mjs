@@ -245,10 +245,18 @@ for (const d of picked){
     const src = await photoURL(d.en, d.enCountry); await sleep(120);
     if (src) { ok = await download(src, d.code); await sleep(120); }
   }
-  if (!ok) { noImg++; continue; }         // brez prave (unikatne) slike kartice ne dodamo
-  d.photo = 'img/deals/'+d.code+'.jpg';
-  delete d.en; delete d.enCountry;
-  discover.push(d); withImg++;
+  if (!ok) { noImg++; continue; }         // brez slike destinacije ne dodamo
+  const photo = 'img/deals/'+d.code+'.jpg';
+  // RAZČLENI: ločena kartica za VSAK odhod (ne združuj); vse kartice iste destinacije rabijo isto (pravo) sliko
+  for (const o of d.offers) {
+    discover.push({
+      fromCode:o.fromCode, fromCity:o.fromCity, code:d.code, city:d.city,
+      country:d.country, continent:d.continent, exotic:d.exotic, season:d.season,
+      price:o.price, depart:o.depart, ret:o.ret, nights:o.nights, transfers:o.transfers,
+      url:o.url, photo,
+    });
+  }
+  withImg++;
 }
 discover.sort((a,b)=>a.price-b.price);
 const byCont = {}; discover.forEach(d=>{byCont[d.continent]=(byCont[d.continent]||0)+1;});
