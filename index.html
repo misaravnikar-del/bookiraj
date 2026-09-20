@@ -334,10 +334,13 @@ section{scroll-margin-top:78px}
 /* drseča vrsta razglednic */
 .tmt__marquee{position:relative;z-index:1;margin-top:6px;overflow:hidden;
   -webkit-mask:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);mask:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
-.tmt__track{display:flex;align-items:flex-start;gap:20px;width:max-content;padding:40px 24px 48px}
+.tmt__track{display:flex;align-items:flex-start;gap:20px;width:max-content;padding:40px 24px 26px}
 .js .tmt__track{animation:tmt-scroll 145s linear infinite}
-.tmt__word{flex:none;align-self:flex-end;margin-bottom:14px;font-family:'Caveat',var(--font-display),cursive;font-size:1.7rem;line-height:1;
-  color:var(--accent);opacity:.9;white-space:nowrap;transform:rotate(var(--r,-3deg))}
+.tmt__marquee--words{margin-top:-4px}
+.tmt__track--words{align-items:center;gap:52px;padding:2px 24px 10px}
+.js .tmt__track--words{animation:tmt-scroll 82s linear infinite reverse}
+.tmt__word{flex:none;font-family:'Caveat',var(--font-display),cursive;font-size:1.55rem;line-height:1;
+  color:var(--accent);opacity:.82;white-space:nowrap;transform:rotate(var(--r,-3deg))}
 @keyframes tmt-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @media (prefers-reduced-motion:reduce){.tmt__track{animation:none!important;flex-wrap:wrap;width:auto;justify-content:center}}
 .pc{flex:none;transform:rotate(var(--r,0deg));margin-top:var(--y,0);transition:transform .3s ease,box-shadow .3s ease}
@@ -402,6 +405,15 @@ section{scroll-margin-top:78px}
 .rv__submit{width:100%;margin-top:16px}
 .rv__note{color:var(--muted);font-size:.8rem;text-align:center;margin-top:10px}
 .rv__ok{color:var(--accent);font-weight:600;text-align:center;margin-top:12px}
+.rv__buildhint{color:var(--muted);font-size:.82rem;margin:-2px 0 4px}
+.rv__preview{display:flex;justify-content:center;padding:12px 4px 20px}
+.rv__preview .pc{margin:0;cursor:default;transition:none}
+.rv__preview .pc--card{width:100%;max-width:326px;min-height:196px}
+.rv__preview .pc--pola{width:min(230px,74%)}
+.rv__preview .pc:hover{transform:rotate(var(--r,0deg));z-index:auto;box-shadow:var(--shadow)}
+.rv__preview .pc--pola:hover{box-shadow:0 14px 34px -14px rgba(16,32,31,.42)}
+.rv__preview .pc__note{overflow-wrap:anywhere}
+.pc__hand .pc__lead{font-size:1.55rem;color:#182726;margin-top:0}
 /* eSIM detail */
 .esimpage{max-width:760px;margin-top:22px}
 .esimpage__media{height:190px;border-radius:16px;overflow:hidden;background:#fff;margin-bottom:1.4rem;border:1px solid var(--line)}
@@ -838,23 +850,29 @@ section{scroll-margin-top:78px}
     <div class="tmt__track" id="tmtTrack">
       <figure class="pc pc--pola" style="--r:-3deg;--y:10px"><div class="pc__photo"><img src="img/lisbon.jpg" alt="Lizbona" loading="lazy" decoding="async"></div><figcaption class="pc__hand">Lizbona, 94 €!<span>— Nina K.</span></figcaption></figure>
       <figure class="pc pc--card" style="--r:2deg;--y:36px"><span class="pc__stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L12 19v-5.5z"/></svg></span><p class="pc__note">Marakeš iz Benetk — prihranila sva skoraj polovico!</p><div class="pc__from"><span class="pc__av">SM</span><div><b>Sara in Matej</b><span>VCE → RAK · Kranj</span></div></div></figure>
-      <div class="tmt__word" style="--r:-4deg">Prihranek na maksimumu ✦</div>
       <figure class="pc pc--pola" style="--r:3deg;--y:2px"><div class="pc__photo"><img src="img/marrakesh.jpg" alt="Marakeš" loading="lazy" decoding="async"></div><figcaption class="pc__hand">Marakeš, 89 €<span>— Luka T.</span></figcaption></figure>
       <figure class="pc pc--card" style="--r:-2deg;--y:30px"><span class="pc__stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L12 19v-5.5z"/></svg></span><p class="pc__note">Cene so prave in takoj vidiš, od kod je najceneje. Priporočam!</p><div class="pc__from"><span class="pc__av">AP</span><div><b>Ana P.</b><span>ZAG → BCN · Maribor</span></div></div></figure>
       <figure class="pc pc--pola" style="--r:-4deg;--y:16px"><div class="pc__photo"><img src="img/santorini.jpg" alt="Santorini" loading="lazy" decoding="async"></div><figcaption class="pc__hand">Santorini, sanjsko<span>— Eva M.</span></figcaption></figure>
-      <div class="tmt__word" style="--r:3deg">Komaj čakam naslednjo pot ✈</div>
       <figure class="pc pc--card" style="--r:3deg;--y:8px"><span class="pc__stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L12 19v-5.5z"/></svg></span><p class="pc__note">V par minutah do povratne karte. Odslej edini način!</p><div class="pc__from"><span class="pc__av">RM</span><div><b>Rok in Maja</b><span>LJU → DXB · Nova Gorica</span></div></div></figure>
       <figure class="pc pc--pola" style="--r:2deg;--y:30px"><div class="pc__photo"><img src="img/barcelona.jpg" alt="Barcelona" loading="lazy" decoding="async"></div><figcaption class="pc__hand">Barcelona, 98 €<span>— Tjaša R.</span></figcaption></figure>
       <figure class="pc pc--card" style="--r:-3deg;--y:2px"><span class="pc__stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L12 19v-5.5z"/></svg></span><p class="pc__note">Odlična podpora in resnične cene. Vredno zaupanja!</p><div class="pc__from"><span class="pc__av">ŽK</span><div><b>Žan K.</b><span>LJU → AMS · Ljubljana</span></div></div></figure>
-      <div class="tmt__word" style="--r:-2deg">5 zvezdic ★★★★★</div>
       <figure class="pc pc--pola" style="--r:4deg;--y:22px"><div class="pc__photo"><img src="img/dubai.jpg" alt="Dubaj" loading="lazy" decoding="async"></div><figcaption class="pc__hand">Dubaj, sanje ✈<span>— Peter in Nika</span></figcaption></figure>
       <figure class="pc pc--card" style="--r:-2deg;--y:40px"><span class="pc__stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L12 19v-5.5z"/></svg></span><p class="pc__note">Zdaj ne rezerviram nikjer drugje — vse na enem mestu.</p><div class="pc__from"><span class="pc__av">MS</span><div><b>Maja S.</b><span>VCE → BKK · Domžale</span></div></div></figure>
       <figure class="pc pc--pola" style="--r:-3deg;--y:8px"><div class="pc__photo"><img src="img/bali.jpg" alt="Bali" loading="lazy" decoding="async"></div><figcaption class="pc__hand">Bali, končno!<span>— Klara B.</span></figcaption></figure>
-      <div class="tmt__word" style="--r:3deg">Najboljša odločitev letos</div>
+    </div>
+  </div>
+  <div class="tmt__marquee tmt__marquee--words">
+    <div class="tmt__track tmt__track--words" id="tmtWords">
+      <span class="tmt__word" style="--r:-3deg">Prihranek na maksimumu ✦</span>
+      <span class="tmt__word" style="--r:2deg">Komaj čakam naslednjo pot ✈</span>
+      <span class="tmt__word" style="--r:-2deg">5 zvezdic ★★★★★</span>
+      <span class="tmt__word" style="--r:3deg">Sanjske cene, brez ur brskanja</span>
+      <span class="tmt__word" style="--r:-3deg">Najboljša odločitev letos</span>
+      <span class="tmt__word" style="--r:2deg">Odslej potujem pametno ✈</span>
     </div>
   </div>
 </section>
-<script>(function(){var t=document.getElementById('tmtTrack');if(t)t.innerHTML+=t.innerHTML;})();</script>
+<script>(function(){['tmtTrack','tmtWords'].forEach(function(id){var t=document.getElementById(id);if(t)t.innerHTML+=t.innerHTML;});})();</script>
 
 <!-- ===================== MODAL: pusti svoje mnenje ===================== -->
 <div class="modal" id="rvModal" hidden>
@@ -879,19 +897,31 @@ section{scroll-margin-top:78px}
     <form class="rv__step" id="rvStep2" hidden novalidate>
       <button class="rv__back" type="button" data-rvback><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> Nazaj</button>
       <h3 id="rvFormTitle">Razglednica</h3>
+      <p class="rv__buildhint">Predogled se gradi sproti — tako bo videti tvoj vtis.</p>
+      <div class="rv__preview">
+        <figure class="pc pc--card rvp" data-rvp-card style="--r:-1.5deg">
+          <span class="pc__stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L12 19v-5.5z"/></svg></span>
+          <p class="pc__note" data-rvp="note">Kako ti je bilo?</p>
+          <div class="pc__from"><span class="pc__av" data-rvp="av">?</span><div><b data-rvp="name">Tvoje ime</b><span data-rvp="route">LJU → LIS · Slovenija</span></div></div>
+        </figure>
+        <figure class="pc pc--pola rvp" data-rvp-pola hidden style="--r:2.5deg">
+          <div class="pc__photo"><img data-rvp="photo" src="img/santorini.jpg" alt=""></div>
+          <figcaption class="pc__hand"><span class="pc__lead" data-rvp="ptext">Tvoj podpis</span><span data-rvp="pname">— Ime</span></figcaption>
+        </figure>
+      </div>
       <div class="rv__fields" data-for="card">
-        <label>Mnenje<textarea name="mnenje" rows="3" placeholder="Kako ti je bilo?"></textarea></label>
-        <label>Ime<input name="ime" placeholder="npr. Nina K."></label>
+        <label>Mnenje<textarea name="mnenje" data-rvp-in="note" rows="3" placeholder="Kako ti je bilo?"></textarea></label>
+        <label>Ime<input name="ime" data-rvp-in="name" placeholder="npr. Nina K."></label>
         <div class="rv__row">
-          <label>Od<input name="od" placeholder="Ljubljana / LJU"></label>
-          <label>Do<input name="do" placeholder="Lizbona / LIS"></label>
+          <label>Od<input name="od" data-rvp-in="od" placeholder="Ljubljana / LJU"></label>
+          <label>Do<input name="do" data-rvp-in="do" placeholder="Lizbona / LIS"></label>
         </div>
-        <label>Od kod ste<input name="kraj" placeholder="npr. Kranj"></label>
+        <label>Od kod ste<input name="kraj" data-rvp-in="kraj" placeholder="npr. Kranj"></label>
       </div>
       <div class="rv__fields" data-for="pola" hidden>
-        <label class="rv__file">Fotografija<input type="file" name="slika" accept="image/*"></label>
-        <label>Kratek tekst<input name="tekst" placeholder="npr. Bali, končno!"></label>
-        <label>Ime<input name="imepola" placeholder="npr. Klara B."></label>
+        <label class="rv__file">Fotografija<input type="file" name="slika" data-rvp-in="photo" accept="image/*"></label>
+        <label>Kratek tekst<input name="tekst" data-rvp-in="ptext" placeholder="npr. Bali, končno!"></label>
+        <label>Ime<input name="imepola" data-rvp-in="pname" placeholder="npr. Klara B."></label>
       </div>
       <button class="btn btn--lg rv__submit" type="submit">Pošlji vtis</button>
       <p class="rv__note">Mnenje objavimo po kratkem pregledu.</p>
@@ -905,11 +935,33 @@ section{scroll-margin-top:78px}
   var fTitle=document.getElementById('rvFormTitle');
   var fCard=step2.querySelector('[data-for="card"]'),fPola=step2.querySelector('[data-for="pola"]');
   var REVIEW_KEY=''; // Web3Forms access key (prazen = samo lokalna potrditev; vpiši za pošiljanje na e-pošto)
+  var pv={card:step2.querySelector('[data-rvp-card]'),pola:step2.querySelector('[data-rvp-pola]'),
+    note:step2.querySelector('[data-rvp="note"]'),name:step2.querySelector('[data-rvp="name"]'),
+    av:step2.querySelector('[data-rvp="av"]'),route:step2.querySelector('[data-rvp="route"]'),
+    photo:step2.querySelector('[data-rvp="photo"]'),ptext:step2.querySelector('[data-rvp="ptext"]'),
+    pname:step2.querySelector('[data-rvp="pname"]')};
+  function val(n){var el=step2.querySelector('[name="'+n+'"]');return el?el.value.trim():'';}
+  function initials(n){var p=(n||'').trim().split(/\s+/).filter(function(w){return w&&!/^(in|&)$/i.test(w);});
+    var s=(p[0]?p[0][0]:'')+(p[1]?p[1][0]:'');return s?s.toUpperCase():'?';}
+  function update(){
+    pv.note.textContent=val('mnenje')||'Kako ti je bilo?';
+    var nm=val('ime');pv.name.textContent=nm||'Tvoje ime';pv.av.textContent=initials(nm);
+    var od=val('od'),dodo=val('do'),kr=val('kraj');
+    pv.route.textContent=(od||'Ljubljana')+' → '+(dodo||'Lizbona')+' · '+(kr||'Slovenija');
+    pv.ptext.textContent=val('tekst')||'Tvoj podpis';
+    pv.pname.textContent='— '+(val('imepola')||'Ime');
+  }
+  var photoIn=step2.querySelector('input[name="slika"]');
+  if(photoIn)photoIn.addEventListener('change',function(){
+    var f=photoIn.files&&photoIn.files[0];if(!f)return;
+    var rd=new FileReader();rd.onload=function(){pv.photo.src=rd.result;};rd.readAsDataURL(f);
+  });
+  step2.addEventListener('input',update);
   function setF(el,off){el.hidden=off;[].forEach.call(el.querySelectorAll('input,textarea'),function(i){i.disabled=off;});}
-  function reset(){step1.hidden=false;step2.hidden=true;step2.reset();step2.querySelector('.rv__ok').hidden=true;}
+  function reset(){step1.hidden=false;step2.hidden=true;step2.reset();step2.querySelector('.rv__ok').hidden=true;pv.photo.src='img/santorini.jpg';update();}
   function open(){modal.hidden=false;document.body.style.overflow='hidden';reset();}
   function close(){modal.hidden=true;document.body.style.overflow='';}
-  function choose(t){step1.hidden=true;step2.hidden=false;step2.dataset.type=t;var c=t==='card';fTitle.textContent=c?'Razglednica':'Polaroid';setF(fCard,!c);setF(fPola,c);}
+  function choose(t){step1.hidden=true;step2.hidden=false;step2.dataset.type=t;var c=t==='card';fTitle.textContent=c?'Razglednica':'Polaroid';setF(fCard,!c);setF(fPola,c);pv.card.hidden=!c;pv.pola.hidden=c;update();}
   if(openBtn)openBtn.addEventListener('click',open);
   [].forEach.call(modal.querySelectorAll('[data-rvclose]'),function(b){b.addEventListener('click',close);});
   [].forEach.call(modal.querySelectorAll('[data-rvback]'),function(b){b.addEventListener('click',reset);});
