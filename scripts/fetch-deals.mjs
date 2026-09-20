@@ -83,9 +83,10 @@ const CATALOG = {
   NA:C('Namibija','afrika','southern',1), MU:C('Mauritius','afrika','tropic',1), SC:C('Sejšeli','afrika','tropic',1),
   CV:C('Zelenortski otoki','afrika','equator',1), SN:C('Senegal','afrika','tropic',1),
   // Severna Amerika
-  US:C('ZDA','sev-amerika','eu'), CA:C('Kanada','sev-amerika','canada'), MX:C('Mehika','sev-amerika','tropic',1),
-  CU:C('Kuba','sev-amerika','tropic',1), DO:C('Dominikanska rep.','sev-amerika','tropic',1),
-  JM:C('Jamajka','sev-amerika','tropic',1), CR:C('Kostarika','sev-amerika','equator',1), PA:C('Panama','sev-amerika','equator',1),
+  US:C('ZDA','sev-amerika','eu'), CA:C('Kanada','sev-amerika','canada'),
+  // Srednja Amerika (+ Karibi)
+  MX:C('Mehika','sred-amerika','tropic',1), CU:C('Kuba','sred-amerika','tropic',1), DO:C('Dominikanska rep.','sred-amerika','tropic',1),
+  JM:C('Jamajka','sred-amerika','tropic',1), CR:C('Kostarika','sred-amerika','equator',1), PA:C('Panama','sred-amerika','equator',1),
   // Južna Amerika
   BR:C('Brazilija','juz-amerika','southern',1), AR:C('Argentina','juz-amerika','southern',1),
   CL:C('Čile','juz-amerika','southern',1), PE:C('Peru','juz-amerika','andes',1), CO:C('Kolumbija','juz-amerika','equator',1),
@@ -212,7 +213,7 @@ console.log(`\nPregledano ${scanned} letov · unikatnih destinacij ${uniq.length
 console.log('Po celinah:', JSON.stringify(fullByCont));
 
 // uravnotežen izbor po celinah (da pridejo zraven tudi eksotične)
-const CAPS = {evropa:70, azija:35, afrika:30, 'sev-amerika':18, 'juz-amerika':12, oceanija:5};
+const CAPS = {evropa:70, azija:35, afrika:30, 'sev-amerika':14, 'sred-amerika':20, 'juz-amerika':12, oceanija:5};
 const groups = {}; uniq.forEach(d=>{(groups[d.continent]=groups[d.continent]||[]).push(d);});
 let picked = [];
 for (const k in groups){ groups[k].sort((a,b)=>a.price-b.price); picked = picked.concat(groups[k].slice(0, CAPS[k]||25)); }
