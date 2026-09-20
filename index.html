@@ -433,6 +433,9 @@ section{scroll-margin-top:78px}
 .hf{--coral:#E1596A;--coral-d:#D5445A;--hf-hero:linear-gradient(155deg,#dae9fb 0%,#f7dee7 47%,#ffe3d4 100%);max-width:1060px;margin:0 auto;padding:20px 20px 40px}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .hf{--hf-hero:linear-gradient(155deg,#202b45 0%,#3a2633 52%,#452c2a 100%)}}
 :root[data-theme="dark"] .hf{--hf-hero:linear-gradient(155deg,#202b45 0%,#3a2633 52%,#452c2a 100%)}
+.ar{--coral:#DE4E96;--coral-d:#8B3CB0;--hf-hero:linear-gradient(150deg,#ffe4d1 0%,#fbd5e8 46%,#e7ddfb 100%)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ar{--hf-hero:linear-gradient(150deg,#3a2620 0%,#3a2338 50%,#2a2350 100%)}}
+:root[data-theme="dark"] .ar{--hf-hero:linear-gradient(150deg,#3a2620 0%,#3a2338 50%,#2a2350 100%)}
 .hf .detail__back{margin-bottom:16px}
 .hf__hero{position:relative;overflow:hidden;border-radius:28px;background:var(--hf-hero);border:1px solid var(--line);padding:40px 30px 46px;text-align:center}
 .hf__show{display:block;width:min(400px,86%);margin:0 auto 26px;border-radius:16px;box-shadow:0 22px 46px -18px rgba(180,50,70,.5);transform:rotate(-1.5deg)}
@@ -443,7 +446,7 @@ section{scroll-margin-top:78px}
 .hf__roam{display:inline-flex;align-items:center;gap:9px;font-weight:700;color:var(--ink);background:color-mix(in srgb,#35c78a 16%,var(--surface));border:1px solid color-mix(in srgb,#35c78a 42%,transparent);padding:8px 16px;border-radius:100px;font-size:.94rem}
 .hf__roam svg{width:18px;height:18px;color:#1fa869}
 .hf__cta{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;align-items:center;margin:26px 0 16px}
-.hf__btn{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(180deg,#EA6A76,var(--coral-d));color:#fff;font-weight:700;font-size:1.02rem;padding:15px 28px;border-radius:100px;box-shadow:0 12px 26px -10px rgba(213,68,90,.6);transition:transform .2s,box-shadow .2s;border:none;cursor:pointer;text-decoration:none}
+.hf__btn{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(180deg,var(--coral),var(--coral-d));color:#fff;font-weight:700;font-size:1.02rem;padding:15px 28px;border-radius:100px;box-shadow:0 12px 26px -10px rgba(213,68,90,.6);transition:transform .2s,box-shadow .2s;border:none;cursor:pointer;text-decoration:none}
 .hf__btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px -10px rgba(213,68,90,.72)}
 .hf__btn svg{width:17px;height:17px}
 .hf__code{display:inline-flex;align-items:center;gap:12px;background:var(--surface);border:1.5px dashed var(--coral);border-radius:16px;padding:9px 10px 9px 18px}
@@ -464,7 +467,7 @@ section{scroll-margin-top:78px}
 .hf__sec h2{font-family:var(--font-display);font-size:clamp(1.5rem,3.5vw,2rem);color:var(--ink);margin:0 0 24px;text-align:center;text-wrap:balance}
 .hf__steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 .hf__step{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:28px 22px 24px;position:relative}
-.hf__stepn{position:absolute;top:-15px;left:24px;width:36px;height:36px;border-radius:50%;background:linear-gradient(180deg,#EA6A76,var(--coral-d));color:#fff;font-weight:700;display:grid;place-items:center;font-family:var(--font-display);box-shadow:0 8px 18px -6px rgba(213,68,90,.6)}
+.hf__stepn{position:absolute;top:-15px;left:24px;width:36px;height:36px;border-radius:50%;background:linear-gradient(180deg,var(--coral),var(--coral-d));color:#fff;font-weight:700;display:grid;place-items:center;font-family:var(--font-display);box-shadow:0 8px 18px -6px rgba(213,68,90,.6)}
 .hf__step .hf__ic{display:block;color:var(--coral);margin:8px 0 12px}
 .hf__step .hf__ic svg{width:30px;height:30px;stroke-width:1.8}
 .hf__step h3{font-size:1.08rem;margin:0 0 7px;color:var(--ink)}
@@ -482,7 +485,7 @@ section{scroll-margin-top:78px}
 .hf__cover p{color:var(--ink);opacity:.82;max-width:52ch;margin:0 auto 18px}
 .hf__chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
 .hf__chips span{background:var(--surface);border:1px solid var(--line);border-radius:100px;padding:7px 15px;font-size:.85rem;color:var(--ink);font-weight:600}
-.hf__final{text-align:center;background:linear-gradient(150deg,#EA6A76,var(--coral-d));border-radius:26px;padding:46px 28px;color:#fff;margin-top:46px}
+.hf__final{text-align:center;background:linear-gradient(150deg,var(--coral),var(--coral-d));border-radius:26px;padding:46px 28px;color:#fff;margin-top:46px}
 .hf__final h2{color:#fff;margin:0 0 10px;font-family:var(--font-display);font-size:clamp(1.6rem,4vw,2.2rem)}
 .hf__final p{color:rgba(255,255,255,.92);margin:0 auto 24px;max-width:42ch;line-height:1.55}
 .hf__final .hf__btn{background:#fff;color:var(--coral-d);box-shadow:0 14px 30px -10px rgba(0,0,0,.4)}
@@ -1668,10 +1671,52 @@ document.addEventListener('click',function(e){
   var o=b.textContent; b.textContent='Kopirano ✓'; b.style.pointerEvents='none';
   setTimeout(function(){b.textContent=o;b.style.pointerEvents='';},1500);
 });
+function airaloHTML(){
+  var e=ESIM.airalo;
+  var up='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>';
+  function ben(icon,t,d){return '<div class="hf__ben"><span class="hf__chip">'+icon+'</span><div><b>'+t+'</b><span>'+d+'</span></div></div>';}
+  function cta(){return '<div class="hf__cta"><a class="hf__btn" href="'+e.link+'" target="_blank" rel="noopener">Kupi na Airalo '+up+'</a></div>';}
+  return '<div class="hf ar">'
+   +'<a class="detail__back" href="#esim"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> Nazaj na eSIM</a>'
+   +'<section class="hf__hero">'
+     +'<img class="hf__show" src="img/esim/airalo.jpg" alt="Airalo eSIM" decoding="async">'
+     +'<p class="hf__eyebrow">Podatki v tujini · eSIM</p>'
+     +'<h1 class="hf__h1">Plačaš le, <span>kolikor porabiš</span></h1>'
+     +'<p class="hf__lead">Izbereš eSIM paket z natančno količino podatkov in trajanjem — od nekaj GB do neomejeno, v več kot 200 državah in regijah. Že od nekaj evrov.</p>'
+     +'<div class="hf__roam">'+HFIC.check+' Paketi že od ~4 € — plačaš samo, kar rabiš</div>'
+     +cta()
+     +'<div class="hf__trust"><span class="hf__stars">★★★★★</span> <b>30M+</b> popotnikov po svetu</div>'
+   +'</section>'
+   +'<div class="hf__stats">'
+     +'<div class="hf__stat"><b>200+</b><span>držav in regij</span></div>'
+     +'<div class="hf__stat"><b>GB</b><span>paketi po meri</span></div>'
+     +'<div class="hf__stat"><b>24/7</b><span>podpora</span></div>'
+     +'<div class="hf__stat"><b>53</b><span>jezikov v aplikaciji</span></div>'
+   +'</div>'
+   +'<section class="hf__sec"><h2>Kako deluje — v treh korakih</h2><div class="hf__steps">'
+     +'<div class="hf__step"><span class="hf__stepn">1</span><span class="hf__ic">'+HFIC.globe+'</span><h3>Izbereš paket</h3><p>Izbereš državo ali regijo, količino podatkov (npr. 3, 5, 10 GB … ali neomejeno) in trajanje.</p></div>'
+     +'<div class="hf__step"><span class="hf__stepn">2</span><span class="hf__ic">'+HFIC.qr+'</span><h3>Prejmeš QR kodo</h3><p>Takoj po nakupu na e-pošto (in v aplikacijo) prejmeš QR kodo z navodili.</p></div>'
+     +'<div class="hf__step"><span class="hf__stepn">3</span><span class="hf__ic">'+HFIC.bolt+'</span><h3>Poveži se in doplačaj</h3><p>eSIM aktiviraš prek QR; ko podatke porabiš, paket enostavno obnoviš v aplikaciji.</p></div>'
+   +'</div></section>'
+   +'<section class="hf__sec"><h2>Zakaj Airalo</h2><div class="hf__grid">'
+     +ben(HFIC.wifi,'Paketi po GB','Izbereš točno količino (1, 3, 5, 10, 20 GB … ali neomejeno) — brez plačevanja odveč.')
+     +ben(HFIC.globe,'Lokalno, regijsko, globalno','Ena država, cela celina ali ves svet — več kot 200 lokacij.')
+     +ben(HFIC.bolt,'Že od nekaj evrov','Med najugodnejšimi za krajše poti in manjšo porabo.')
+     +ben(HFIC.phone,'Doplačaš po potrebi','Ko podatke porabiš, paket preprosto obnoviš — brez nove kartice.')
+     +ben(HFIC.head,'Podpora 24/7','Pomoč v 53 jezikih, tudi prek WhatsAppa.')
+     +ben(HFIC.shield,'Enostavna namestitev','eSIM aktiviraš prek QR kode v nekaj minutah, brez fizične kartice.')
+   +'</div></section>'
+   +'<section class="hf__sec"><div class="hf__cover"><h2>Kje deluje</h2><p>Več kot 200 lokacij po vsem svetu — lokalni, regijski in globalni paketi. Nekaj priljubljenih:</p><div class="hf__chips">'
+     +['Evropa','ZDA','Turčija','Japonska','Tajska','Italija','Egipt','Kitajska','Bali','Maroko','Mehika','Ves svet'].map(function(c){return '<span>'+c+'</span>';}).join('')
+   +'</div></div></section>'
+   +'<section class="hf__final"><h2>Pripravljen na naslednjo pot?</h2><p>Izberi paket po svoji meri in pristani že povezan — brez fizične kartice in brez roaminga.</p>'+cta()+'</section>'
+   +'</div>';
+}
 function esimHTML(key){
   var e=ESIM[key];
   if(!e) return '<div class="container"><section class="sec"><p>Ni najdeno.</p><a class="detail__back" href="#esim">Nazaj</a></section></div>';
   if(key==='holafly') return holaflyHTML();
+  if(key==='airalo') return airaloHTML();
   var ext='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>';
   var code=e.code?'<div class="esim__code"><div><small>Promo koda za '+e.discount+' popust</small><b>'+e.code+'</b></div><span>Vpiši jo ob nakupu na Holafly.</span></div>':'';
   return '<div class="container"><section class="sec">'
