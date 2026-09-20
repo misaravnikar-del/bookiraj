@@ -320,15 +320,13 @@ section{scroll-margin-top:78px}
 .tmt__plane path{fill:currentColor}
 .tmt__plane{opacity:.32}
 /* potni žigi (za v pasport) */
-.stamp{position:absolute;z-index:0;pointer-events:none;color:var(--ink);opacity:.08;width:148px;height:148px}
-.stamp text{fill:currentColor;text-anchor:middle;font-family:var(--font-mono);font-weight:700}
-.stamp .stt{font-size:18px;letter-spacing:1.5px}
-.stamp .std{font-size:16px;letter-spacing:1px}
-.stamp .sty{font-size:26px;letter-spacing:3px}
-.stamp--1{top:24px;right:5%;transform:rotate(-16deg)}
-.stamp--2{bottom:32px;left:3%;transform:rotate(11deg)}
-.stamp--3{top:44%;right:9%;transform:rotate(-7deg);width:126px;height:126px}
-.stamp--4{bottom:48px;left:31%;transform:rotate(-20deg);width:118px;height:118px;opacity:.06}
+.stamp{position:absolute;z-index:0;pointer-events:none;width:150px;height:auto;opacity:.17;filter:saturate(.9)}
+.stamp--1{top:18px;right:4%;width:162px;transform:rotate(-14deg)}
+.stamp--2{bottom:20px;left:2%;width:192px;transform:rotate(9deg)}
+.stamp--3{top:42%;right:7%;width:150px;transform:rotate(-6deg)}
+.stamp--4{bottom:36px;left:32%;width:134px;transform:rotate(-16deg);opacity:.15}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .stamp{opacity:.3}}
+:root[data-theme="dark"] .stamp{opacity:.3}
 @media (max-width:820px){.stamp--3,.stamp--4{display:none}}
 #mnenja .container{position:relative;z-index:1}
 /* drseča vrsta razglednic */
@@ -838,10 +836,10 @@ section{scroll-margin-top:78px}
     <g class="tmt__plane" transform="translate(486 250) rotate(-26)"><path d="M2 21 23 12 2 3 6 12z"/></g>
     <g class="tmt__plane" style="opacity:.22" transform="translate(940 150) rotate(14)"><path d="M2 21 23 12 2 3 6 12z"/></g>
   </svg>
-  <svg class="stamp stamp--1" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="84" fill="none" stroke="currentColor" stroke-width="4"/><circle cx="100" cy="100" r="76" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="100" y="54" class="stt">SLOVENIJA</text><line x1="42" y1="66" x2="158" y2="66" stroke="currentColor" stroke-width="1.5"/><text x="100" y="98" class="std">12 MAR</text><text x="100" y="130" class="sty">2026</text><line x1="42" y1="142" x2="158" y2="142" stroke="currentColor" stroke-width="1.5"/><text x="100" y="164" class="stt">LJUBLJANA</text></svg>
-  <svg class="stamp stamp--2" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="84" fill="none" stroke="currentColor" stroke-width="4"/><circle cx="100" cy="100" r="76" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="100" y="54" class="stt">ESPAÑA</text><line x1="42" y1="66" x2="158" y2="66" stroke="currentColor" stroke-width="1.5"/><text x="100" y="98" class="std">04 JUN</text><text x="100" y="130" class="sty">2026</text><line x1="42" y1="142" x2="158" y2="142" stroke="currentColor" stroke-width="1.5"/><text x="100" y="164" class="stt">BARCELONA</text></svg>
-  <svg class="stamp stamp--3" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="84" fill="none" stroke="currentColor" stroke-width="4"/><circle cx="100" cy="100" r="76" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="100" y="54" class="stt">MALDIVES</text><line x1="42" y1="66" x2="158" y2="66" stroke="currentColor" stroke-width="1.5"/><text x="100" y="98" class="std">17 JUL</text><text x="100" y="130" class="sty">2026</text><line x1="42" y1="142" x2="158" y2="142" stroke="currentColor" stroke-width="1.5"/><text x="100" y="164" class="stt">MALÉ</text></svg>
-  <svg class="stamp stamp--4" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="84" fill="none" stroke="currentColor" stroke-width="4"/><circle cx="100" cy="100" r="76" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="100" y="54" class="stt">MAROC</text><line x1="42" y1="66" x2="158" y2="66" stroke="currentColor" stroke-width="1.5"/><text x="100" y="98" class="std">21 OKT</text><text x="100" y="130" class="sty">2026</text><line x1="42" y1="142" x2="158" y2="142" stroke="currentColor" stroke-width="1.5"/><text x="100" y="164" class="stt">MARRAKECH</text></svg>
+  <img class="stamp stamp--1" src="img/stamps/manila.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
+  <img class="stamp stamp--2" src="img/stamps/uae.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
+  <img class="stamp stamp--3" src="img/stamps/japan.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
+  <img class="stamp stamp--4" src="img/stamps/maldives.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
   <div class="container">
     <div class="sec__head reveal">
       <div>
