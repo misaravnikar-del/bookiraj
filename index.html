@@ -880,7 +880,7 @@ function cardHTML(d){
   var fromCity=d.fromCity;
   var badge=(!disc&&d.discount>=15)?'<span class="badge">−'+d.discount+' %</span>':'';
   var rRight=disc?fmtShort(d.depart,d.ret):d.period;
-  var teaser=disc?('Najlepše: '+d.season):d.teaser;
+  var teaser=disc?'':d.teaser;
   var ctaTxt=disc?'Rezerviraj':'Poglej akcijo';
   var cRight=disc?termSub({transfers:d.transfers}):d.airline;
   var svg=disc
@@ -896,7 +896,7 @@ function cardHTML(d){
       +'<div class="card__route"><span>'+fromCode+' <span class="arrow">→</span> '+d.code+'</span><span>'+rRight+'</span></div>'
       +'<h3>'+d.city+'</h3>'
       +'<div class="card__sub">'+d.country+' · odhod iz '+fromCity+'</div>'
-      +'<p class="card__teaser">'+teaser+'</p>'
+      +(teaser?'<p class="card__teaser">'+teaser+'</p>':'')
       +'<div class="card__cta"><span class="go">'+ctaTxt+' '+svg+'</span><span class="air">'+(cRight||'')+'</span></div>'
     +'</div>'
   +'</a>';
