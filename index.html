@@ -291,6 +291,39 @@ section{scroll-margin-top:78px}
 @media (max-width:560px){#gridPreview{grid-template-columns:1fr}}
 .more{display:flex;justify-content:center;margin-top:40px}
 .more .btn{gap:9px}
+/* eSIM */
+.esim{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media (max-width:720px){.esim{grid-template-columns:1fr}}
+.esim__card{display:flex;flex-direction:column;gap:13px;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--radius);padding:26px 28px;box-shadow:var(--shadow);
+  transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.esim__card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.esim__top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.esim__logo{font-family:var(--font-display);font-size:1.75rem;font-weight:600}
+.esim__tag{background:var(--accent);color:var(--on-accent);font-family:var(--font-mono);font-size:.64rem;
+  letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;border-radius:999px;white-space:nowrap}
+.esim__desc{color:var(--ink-2);font-size:1rem;line-height:1.55}
+.esim__perk{font-family:var(--font-mono);font-size:.82rem;color:var(--muted)}
+.esim__perk b{color:var(--accent);font-weight:600}
+.esim__go{margin-top:auto;color:var(--accent);font-weight:600;display:inline-flex;align-items:center;gap:7px}
+.esim__go svg{width:15px;height:15px;transition:margin .2s ease}
+.esim__card:hover .esim__go svg{margin-left:4px}
+/* eSIM detail */
+.esimpage{max-width:760px;margin-top:22px}
+.esimpage h1{font-size:clamp(2rem,4vw,3rem);margin:.4rem 0 0}
+.esimpage .lead{font-size:1.15rem;color:var(--ink-2);margin:1rem 0 1.7rem;line-height:1.6}
+.esimpage h3{font-size:1.3rem;margin:1.7rem 0 .5rem}
+.esim__list{list-style:none;padding:0;margin:0;display:grid;gap:11px}
+.esim__list li{display:flex;gap:10px;align-items:flex-start;color:var(--ink-2)}
+.esim__list li svg{width:19px;height:19px;color:var(--accent);flex:none;margin-top:2px}
+.esim__cover{color:var(--ink-2);line-height:1.75}
+.esim__for{color:var(--muted);font-style:italic;margin-top:1rem}
+.esim__code{display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px;background:var(--surface-2);
+  border:1px dashed var(--accent);border-radius:14px;padding:15px 20px;margin:1.7rem 0}
+.esim__code small{display:block;font-family:var(--font-mono);font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.esim__code b{font-family:var(--font-mono);font-size:1.35rem;letter-spacing:.06em;color:var(--accent)}
+.esim__code span{color:var(--ink-2);font-size:.9rem}
+.esimpage .btn{margin-top:1.9rem}
 .listhead{font-family:var(--font-display);font-size:1.4rem;font-weight:600;margin:44px 0 16px;padding-top:30px;border-top:1px solid var(--line)}
 
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
@@ -614,17 +647,31 @@ section{scroll-margin-top:78px}
   </div>
 </section>
 
-<!-- ===================== RADAR (auto-discovery) ===================== -->
-<section class="sec sec--alt" id="radar">
+<!-- ===================== eSIM (podatki v tujini) ===================== -->
+<!-- (arhiviran »Radar cen« razdelek je v git zgodovini; discover podatki še naprej poganjajo kartice na #letalske-karte) -->
+<section class="sec sec--alt" id="esim">
   <div class="container">
     <div class="sec__head reveal">
       <div>
-        <p class="eyebrow">Radar cen</p>
-        <h2>Sveže odkrite akcije z vseh tvojih letališč.</h2>
+        <p class="eyebrow">Podatki v tujini</p>
+        <h2>Internet na potovanju brez skrbi.</h2>
       </div>
-      <p>API samodejno preveri najcenejše lete iz Ljubljane, Trsta, Benetk, Zagreba in Dunaja — spodaj so tisti pod povprečno ceno.</p>
+      <p>eSIM za mobilni internet po vsem svetu — brez menjave kartice, aktivacija v minuti prek QR kode. Izberi ponudnika, ki ti ustreza.</p>
     </div>
-    <div id="discoverList" class="reveal"></div>
+    <div class="esim reveal">
+      <a class="esim__card" href="#esim/holafly">
+        <div class="esim__top"><span class="esim__logo">Holafly</span><span class="esim__tag">Neomejeni podatki</span></div>
+        <p class="esim__desc">Neomejeni mobilni podatki v 190+ državah — ne šteješ GB, samo uporabljaš.</p>
+        <div class="esim__perk">−10 % s kodo <b>L874QM0XHPKM</b></div>
+        <span class="esim__go">Poglej ponudbo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a class="esim__card" href="#esim/airalo">
+        <div class="esim__top"><span class="esim__logo">Airalo</span><span class="esim__tag">GB po meri</span></div>
+        <p class="esim__desc">Izbereš paket z določeno količino GB (1, 3, 5, 10 …) — plačaš le, kolikor rabiš.</p>
+        <div class="esim__perk">200+ držav · lokalni in globalni paketi</div>
+        <span class="esim__go">Poglej ponudbo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+    </div>
   </div>
 </section>
 
@@ -1138,6 +1185,39 @@ function parkingProvidersHTML(code){var a=PARK_BY[code];if(!a)return parkingHTML
   +'<div class="provs">'+a.providers.map(provCard).join('')+'</div>'
   +'</div></div>';}
 
+// ---- eSIM (podatki v tujini) ----
+const ESIM={
+  holafly:{ name:'Holafly', tag:'Neomejeni podatki',
+    lead:'Neomejeni mobilni podatki v več kot 190 državah in regijah. Ne skrbiš za porabo — internet uporabljaš brez omejitev.',
+    cover:'Kupiš eSIM za posamezno državo, celo celino ali ves svet. Prejmeš jo takoj po nakupu prek QR kode in jo aktiviraš, ko prispeš na cilj. Idealno za tiste, ki veliko uporabljajo internet — navigacija, klici prek aplikacij (WhatsApp, Messenger), deljenje vsebin, družbena omrežja in delo na poti.',
+    bullets:['Neomejeni podatki (pravična uporaba)','190+ držav in regij','eSIM — aktivacija prek QR kode v minuti','Domača številka ostane za klice in SMS','Podpora 24/7'],
+    forWho:'Za brezskrbne uporabnike, ki ne želijo šteti gigabajtov.',
+    link:'https://holafly.go.link/kpthC', code:'L874QM0XHPKM', discount:'10 %', cta:'Odpri Holafly' },
+  airalo:{ name:'Airalo', tag:'GB po meri',
+    lead:'Izbereš eSIM paket z natančno količino podatkov in trajanjem — plačaš le toliko, kolikor res potrebuješ.',
+    cover:'Na voljo so lokalni (ena država), regijski (npr. Evropa, Azija) in globalni paketi v več kot 200 državah. Sam izbereš količino (npr. 1, 3, 5, 10 ali 20 GB) in trajanje (običajno 7–30 dni). Ko podatke porabiš, enostavno doplačaš. Idealno za občasno rabo — zemljevidi, sporočila in hitro preverjanje interneta.',
+    bullets:['Paketi po GB (1, 3, 5, 10, 20 …)','200+ držav · lokalni, regijski in globalni','eSIM — aktivacija prek QR kode','Doplačaš ali obnoviš po potrebi','Pogosto ugodno za manjšo porabo'],
+    forWho:'Za tiste, ki želijo plačati le toliko podatkov, kolikor jih porabijo.',
+    link:'https://airalo.tpx.li/QbbxLnE9', code:'', discount:'', cta:'Kupi na Airalo' },
+};
+function esimHTML(key){
+  var e=ESIM[key];
+  if(!e) return '<div class="container"><section class="sec"><p>Ni najdeno.</p><a class="detail__back" href="#esim">Nazaj</a></section></div>';
+  var ext='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>';
+  var code=e.code?'<div class="esim__code"><div><small>Promo koda za '+e.discount+' popust</small><b>'+e.code+'</b></div><span>Vpiši jo ob nakupu na Holafly.</span></div>':'';
+  return '<div class="container"><section class="sec">'
+    +'<a class="detail__back" href="#esim"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> Nazaj na eSIM</a>'
+    +'<div class="esimpage">'
+    +'<p class="eyebrow">Podatki v tujini · eSIM</p><h1>'+e.name+'</h1>'
+    +'<p class="lead">'+e.lead+'</p>'
+    +'<ul class="esim__list">'+e.bullets.map(function(b){return '<li>'+CHK+' '+b+'</li>';}).join('')+'</ul>'
+    +'<h3>Kaj pokriva</h3><p class="esim__cover">'+e.cover+'</p>'
+    +'<p class="esim__for">'+e.forWho+'</p>'
+    +code
+    +'<a class="btn btn--lg" href="'+e.link+'" target="_blank" rel="noopener">'+e.cta+' '+ext+'</a>'
+    +'</div></section></div>';
+}
+
 const PAGES={
   'kako-deluje':{title:'Kako deluje',eyebrow:'Kako deluje',h:'Od iskanja do vzleta v treh korakih.',html:
     '<div class="steps">'
@@ -1181,6 +1261,11 @@ function route(){
     }
   }
   const pslug=h.slice(1);
+  if(pslug.indexOf('esim/')===0){
+    detailEl.innerHTML=esimHTML(pslug.slice(5));
+    showView('detail');
+    document.title=(ESIM[pslug.slice(5)]?ESIM[pslug.slice(5)].name:'eSIM')+' — Bookiraj.si'; window.scrollTo(0,0); return;
+  }
   if(pslug==='pocitnice'){
     detailEl.innerHTML=pocitniceHTML(0);
     showView('detail');
