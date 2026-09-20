@@ -4,7 +4,7 @@
 //     filtrira po whitelistu držav (varno/obljudeno), po SEZONI destinacije in
 //     po MINIMALNI dolžini potovanja glede na oddaljenost → velik seznam akcij.
 // Zažene GitHub Action (skrivnost TRAVELPAYOUTS_TOKEN); lokalno: TRAVELPAYOUTS_TOKEN=... node scripts/fetch-deals.mjs
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { writeFileSync, mkdirSync, existsSync } from 'node:fs';
 
 const TOKEN = process.env.TRAVELPAYOUTS_TOKEN;
 const MARKER = process.env.TP_MARKER || '779438';
@@ -193,17 +193,20 @@ for (const o of ORIGINS) {
     kept++;
   }
 }
-// ZDRUŽI PO DESTINACIJI (ena kartica = ena destinacija; različna letališča v `froms`)
+// ZDRUŽI PO DESTINACIJI (ena kartica = ena destinacija; ponudbe iz VSEH letališč v `offers`)
 const byDest = {};
 for (const d of Object.values(best)) {
-  const ex = byDest[d.code];
-  if (!ex) { byDest[d.code] = Object.assign({}, d, {froms:[d.fromCode]}); }
-  else { const froms = ex.froms.concat([d.fromCode]);
-    if (d.price < ex.price) byDest[d.code] = Object.assign({}, d, {froms});
-    else ex.froms = froms; }
+  const off = {fromCode:d.fromCode, fromCity:d.fromCity, price:d.price, depart:d.depart, ret:d.ret, nights:d.nights, transfers:d.transfers, url:d.url};
+  if (!byDest[d.code]) byDest[d.code] = Object.assign({}, d, {offers:[off]});
+  else byDest[d.code].offers.push(off);
 }
 let uniq = Object.values(byDest);
-uniq.forEach(d=>{ d.froms = [...new Set(d.froms)]; });
+uniq.forEach(d=>{
+  d.offers.sort((a,b)=>a.price-b.price);
+  d.froms = [...new Set(d.offers.map(o=>o.fromCode))];
+  const c = d.offers[0];  // najcenejši = privzet prikaz (brez filtra po odhodu)
+  d.fromCode=c.fromCode; d.fromCity=c.fromCity; d.price=c.price; d.depart=c.depart; d.ret=c.ret; d.nights=c.nights; d.transfers=c.transfers; d.url=c.url;
+});
 const fullByCont = {}; uniq.forEach(d=>{fullByCont[d.continent]=(fullByCont[d.continent]||0)+1;});
 console.log(`\nPregledano ${scanned} letov · unikatnih destinacij ${uniq.length}`);
 console.log('Po celinah:', JSON.stringify(fullByCont));
@@ -237,9 +240,11 @@ async function download(url, code){
 }
 let discover = [], withImg=0, noImg=0;
 for (const d of picked){
-  const src = await photoURL(d.en, d.enCountry); await sleep(120);
-  let ok=false;
-  if (src) { ok = await download(src, d.code); await sleep(120); }
+  let ok = existsSync(new URL('../img/deals/'+d.code+'.jpg', import.meta.url));  // ne prenašaj že prenesenih
+  if (!ok) {
+    const src = await photoURL(d.en, d.enCountry); await sleep(120);
+    if (src) { ok = await download(src, d.code); await sleep(120); }
+  }
   if (!ok) { noImg++; continue; }         // brez prave (unikatne) slike kartice ne dodamo
   d.photo = 'img/deals/'+d.code+'.jpg';
   delete d.en; delete d.enCountry;

@@ -856,7 +856,9 @@ const DEALS=LIVE.map(function(l){var c=byImg[l.img]||{};return Object.assign({},
 // odkrite akcije (velik seznam iz API-ja: prave cene, sezona in dolžina že upoštevani)
 const EXTRA=(window.__BOOKIRAJ_DEALS__&&window.__BOOKIRAJ_DEALS__.discover)||[];
 const ALL=DEALS.concat(EXTRA);
-const priceOf=d=>(d.fromPrice!=null?d.fromPrice:(d.price!=null?d.price:999999));
+const priceOf=d=>{if(d.offers){var o=pickOffer(d);return o?o.price:999999;}return d.fromPrice!=null?d.fromPrice:(d.price!=null?d.price:999999);};
+function dateOk(dep){if(state.from&&dep<state.from)return false;if(state.to&&dep>state.to)return false;return true;}
+function pickOffer(d){if(!d.offers)return null;var ok=d.offers.filter(function(o){return (state.origins.length===0||state.origins.indexOf(o.fromCode)>=0)&&dateOk(o.depart);});return ok[0]||d.offers[0];}
 
 const state={continent:"vse",country:"",city:"",origins:[],from:"",to:"",sort:"reco"};
 const grid=document.getElementById('grid');
@@ -872,15 +874,18 @@ function priceHTML(p){return '<b>'+p+' <i>€</i></b>';}
 function fmtShort(dep,ret){var a=dep.split('-'),b=ret.split('-');var am=MON[+a[1]-1],bm=MON[+b[1]-1];return (+a[2])+'.'+(am===bm?'':' '+am)+'–'+(+b[2])+'. '+bm;}
 function cardHTML(d){
   var disc=!!d.photo;
+  var o=disc?pickOffer(d):null;
   var src=disc?d.photo:'img/'+d.img+'.jpg';
-  var href=disc?d.url:'#deal/'+d.img;
+  var href=disc?o.url:'#deal/'+d.img;
   var ext=disc?' target="_blank" rel="noopener"':'';
-  var price=disc?d.price:d.fromPrice;
+  var price=disc?o.price:d.fromPrice;
+  var fromCode=disc?o.fromCode:d.fromCode;
+  var fromCity=disc?o.fromCity:d.fromCity;
   var badge=(!disc&&d.discount>=15)?'<span class="badge">−'+d.discount+' %</span>':'';
-  var rRight=disc?fmtShort(d.depart,d.ret):d.period;
+  var rRight=disc?fmtShort(o.depart,o.ret):d.period;
   var teaser=disc?('Najlepše: '+d.season):d.teaser;
   var ctaTxt=disc?'Rezerviraj':'Poglej akcijo';
-  var cRight=disc?termSub({transfers:d.transfers}):d.airline;
+  var cRight=disc?termSub({transfers:o.transfers}):d.airline;
   var svg=disc
     ?'<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>'
     :'<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
@@ -891,9 +896,9 @@ function cardHTML(d){
       +'<div class="card__price"><small>že od</small>'+priceHTML(price)+'</div>'
     +'</div>'
     +'<div class="card__body">'
-      +'<div class="card__route"><span>'+d.fromCode+' <span class="arrow">→</span> '+d.code+'</span><span>'+rRight+'</span></div>'
+      +'<div class="card__route"><span>'+fromCode+' <span class="arrow">→</span> '+d.code+'</span><span>'+rRight+'</span></div>'
       +'<h3>'+d.city+'</h3>'
-      +'<div class="card__sub">'+d.country+' · odhod iz '+d.fromCity+'</div>'
+      +'<div class="card__sub">'+d.country+' · odhod iz '+fromCity+'</div>'
       +'<p class="card__teaser">'+teaser+'</p>'
       +'<div class="card__cta"><span class="go">'+ctaTxt+' '+svg+'</span><span class="air">'+(cRight||'')+'</span></div>'
     +'</div>'
@@ -906,11 +911,13 @@ function dateMatch(d){
   return deps.some(function(dep){if(state.from&&dep<state.from)return false;if(state.to&&dep>state.to)return false;return true;});
 }
 function matchFilters(d){
-  return (state.continent==='vse'||(state.continent==='eksotika'?d.exotic:d.continent===state.continent))
-    &&(!state.country||d.country===state.country)
-    &&(!state.city||d.city===state.city)
-    &&(state.origins.length===0||(d.froms||[d.fromCode]).some(function(o){return state.origins.indexOf(o)>=0;}))
-    &&dateMatch(d);
+  if(!(state.continent==='vse'||(state.continent==='eksotika'?d.exotic:d.continent===state.continent)))return false;
+  if(state.country&&d.country!==state.country)return false;
+  if(state.city&&d.city!==state.city)return false;
+  if(d.offers){ // ena ponudba mora ustrezati IZBRANEMU odhodu IN datumu
+    return d.offers.some(function(o){return (state.origins.length===0||state.origins.indexOf(o.fromCode)>=0)&&dateOk(o.depart);});
+  }
+  return (state.origins.length===0||(d.froms||[d.fromCode]).some(function(o){return state.origins.indexOf(o)>=0;}))&&dateMatch(d);
 }
 function slText(n){return n+(n===1?' akcija':(n===2?' akciji':(n<5&&n>0?' akcije':' akcij')));}
 function rowHTML(d){
