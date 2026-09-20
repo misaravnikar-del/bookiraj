@@ -156,6 +156,9 @@ section{scroll-margin-top:78px}
 /* ---------- SECTION HEADS ---------- */
 .sec{padding-block:clamp(3.8rem,8vh,6.6rem)}
 .sec--alt{background:var(--bg-2)}
+#esim{position:relative}
+.esim__mascot{position:absolute;top:6px;right:2%;width:214px;height:auto;z-index:2;pointer-events:none;filter:drop-shadow(0 16px 30px rgba(16,32,31,.22))}
+@media (max-width:1040px){.esim__mascot{display:none}}
 .sec__head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;
   margin-bottom:2.6rem;flex-wrap:wrap}
 .sec__head h2{font-size:clamp(1.95rem,3.6vw,3.1rem);max-width:20ch}
@@ -833,6 +836,7 @@ section{scroll-margin-top:78px}
 <!-- ===================== eSIM (podatki v tujini) ===================== -->
 <!-- (arhiviran »Radar cen« razdelek je v git zgodovini; discover podatki še naprej poganjajo kartice na #letalske-karte) -->
 <section class="sec sec--alt" id="esim">
+  <img class="esim__mascot" src="img/maskota-podatki.webp" alt="Maskota Bookiraj s podatki za tujino" loading="lazy" decoding="async">
   <div class="container">
     <div class="sec__head reveal">
       <div>
