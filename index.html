@@ -334,10 +334,10 @@ section{scroll-margin-top:78px}
 /* drseča vrsta razglednic */
 .tmt__marquee{position:relative;z-index:1;margin-top:6px;overflow:hidden;
   -webkit-mask:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);mask:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
-.tmt__track{display:flex;align-items:flex-start;gap:28px;width:max-content;padding:44px 28px}
+.tmt__track{display:flex;align-items:flex-start;gap:20px;width:max-content;padding:40px 24px 48px}
 .js .tmt__track{animation:tmt-scroll 145s linear infinite}
-.tmt__word{flex:none;align-self:center;font-family:'Caveat',var(--font-display),cursive;font-size:2rem;line-height:1;
-  color:var(--accent);opacity:.92;white-space:nowrap;transform:rotate(var(--r,-3deg))}
+.tmt__word{flex:none;align-self:flex-end;margin-bottom:14px;font-family:'Caveat',var(--font-display),cursive;font-size:1.7rem;line-height:1;
+  color:var(--accent);opacity:.9;white-space:nowrap;transform:rotate(var(--r,-3deg))}
 @keyframes tmt-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @media (prefers-reduced-motion:reduce){.tmt__track{animation:none!important;flex-wrap:wrap;width:auto;justify-content:center}}
 .pc{flex:none;transform:rotate(var(--r,0deg));margin-top:var(--y,0);transition:transform .3s ease,box-shadow .3s ease}
@@ -372,12 +372,23 @@ section{scroll-margin-top:78px}
 .rv__lead{color:var(--muted);margin-bottom:20px}
 .rv__choices{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media (max-width:480px){.rv__choices{grid-template-columns:1fr}}
-.rv__choice{display:flex;flex-direction:column;gap:6px;align-items:flex-start;text-align:left;background:var(--surface-2);
-  border:1px solid var(--line);border-radius:14px;padding:18px;cursor:pointer;transition:all .2s ease;color:inherit}
+.rv__choice{display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center;background:var(--surface-2);
+  border:1px solid var(--line);border-radius:14px;padding:20px 16px 16px;cursor:pointer;transition:all .2s ease;color:inherit}
 .rv__choice:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow)}
-.rv__choice svg{width:26px;height:26px;color:var(--accent)}
-.rv__choice b{font-weight:600;font-size:1.02rem}
+.rv__choice:hover .rv__prev{transform:rotate(0)}
+.rv__choice b{font-weight:600;font-size:1.02rem;margin-top:4px}
 .rv__choice span{color:var(--muted);font-size:.82rem}
+.rv__prev{transition:transform .25s ease;margin-bottom:2px}
+.rv__prev--card{position:relative;width:104px;height:70px;background:var(--surface);border:1px solid var(--line);border-radius:6px;
+  box-shadow:var(--shadow);padding:11px;display:flex;flex-direction:column;gap:6px;transform:rotate(-4deg)}
+.rv__prev--card i{display:block;height:4px;border-radius:2px;background:var(--line)}
+.rv__prev-stamp{position:absolute;top:7px;right:7px;width:17px;height:17px;border:1.2px dashed var(--accent);border-radius:3px;
+  display:grid;place-items:center;color:var(--accent)}
+.rv__prev-stamp svg{width:10px;height:10px;fill:currentColor}
+.rv__prev--pola{width:78px;background:#fff;padding:6px 6px 0;border-radius:3px;box-shadow:0 10px 20px -8px rgba(16,32,31,.42);transform:rotate(4deg)}
+.rv__prev-photo{display:block;aspect-ratio:1;overflow:hidden;background:#e8e8e8}
+.rv__prev-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.rv__prev--pola em{display:block;font-family:'Caveat',var(--font-display),cursive;font-style:normal;font-size:1rem;text-align:center;color:#182726;padding:3px 0 6px}
 .rv__back{background:none;border:none;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-weight:600;padding:0;margin-bottom:6px}
 .rv__back:hover{color:var(--accent)}
 .rv__fields{display:flex;flex-direction:column;gap:13px;margin:10px 0 4px}
@@ -856,11 +867,11 @@ section{scroll-margin-top:78px}
       <p class="rv__lead">Izberi obliko — razglednico ali polaroid.</p>
       <div class="rv__choices">
         <button class="rv__choice" type="button" data-type="card">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18"/><circle cx="17" cy="7" r="0"/><path d="M7 13h5M7 16h8"/></svg>
+          <div class="rv__prev rv__prev--card" aria-hidden="true"><span class="rv__prev-stamp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L12 19v-5.5z"/></svg></span><i style="width:74%"></i><i style="width:56%"></i><i style="width:40%"></i></div>
           <b>Razglednica</b><span>Mnenje + tvoja pot</span>
         </button>
         <button class="rv__choice" type="button" data-type="pola">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><rect x="7" y="6" width="10" height="8" rx="1"/><path d="M8 18h8"/></svg>
+          <div class="rv__prev rv__prev--pola" aria-hidden="true"><span class="rv__prev-photo"><img src="img/santorini.jpg" alt="" loading="lazy"></span><em>Santorini ✈</em></div>
           <b>Polaroid</b><span>Fotografija + podpis</span>
         </button>
       </div>
