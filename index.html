@@ -335,8 +335,9 @@ section{scroll-margin-top:78px}
 .tmt__marquee{position:relative;z-index:1;margin-top:6px;overflow:hidden;
   -webkit-mask:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);mask:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
 .tmt__track{display:flex;align-items:flex-start;gap:28px;width:max-content;padding:44px 28px}
-.js .tmt__track{animation:tmt-scroll 70s linear infinite}
-.tmt__marquee:hover .tmt__track{animation-play-state:paused}
+.js .tmt__track{animation:tmt-scroll 145s linear infinite}
+.tmt__word{flex:none;align-self:center;font-family:'Caveat',var(--font-display),cursive;font-size:2rem;line-height:1;
+  color:var(--accent);opacity:.92;white-space:nowrap;transform:rotate(var(--r,-3deg))}
 @keyframes tmt-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @media (prefers-reduced-motion:reduce){.tmt__track{animation:none!important;flex-wrap:wrap;width:auto;justify-content:center}}
 .pc{flex:none;transform:rotate(var(--r,0deg));margin-top:var(--y,0);transition:transform .3s ease,box-shadow .3s ease}
@@ -791,10 +792,19 @@ section{scroll-margin-top:78px}
     <div class="tmt__track" id="tmtTrack">
       <figure class="pc pc--pola" style="--r:-3deg;--y:10px"><div class="pc__photo"><img src="img/lisbon.jpg" alt="Lizbona" loading="lazy" decoding="async"></div><figcaption class="pc__hand">Lizbona, 94 €!<span>— Nina K.</span></figcaption></figure>
       <figure class="pc pc--card" style="--r:2deg;--y:36px"><span class="pc__stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L12 19v-5.5z"/></svg></span><p class="pc__note">Marakeš iz Benetk — prihranila sva skoraj polovico!</p><div class="pc__from"><span class="pc__av">SM</span><div><b>Sara in Matej</b><span>VCE → RAK · Kranj</span></div></div></figure>
-      <figure class="pc pc--pola" style="--r:3deg;--y:0"><div class="pc__photo"><img src="img/marrakesh.jpg" alt="Marakeš" loading="lazy" decoding="async"></div><figcaption class="pc__hand">Marakeš, 89 €<span>— Luka T.</span></figcaption></figure>
-      <figure class="pc pc--card" style="--r:-2deg;--y:28px"><span class="pc__stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L12 19v-5.5z"/></svg></span><p class="pc__note">Cene so prave in takoj vidiš, od kod je najceneje. Priporočam!</p><div class="pc__from"><span class="pc__av">AP</span><div><b>Ana P.</b><span>ZAG → BCN · Maribor</span></div></div></figure>
-      <figure class="pc pc--pola" style="--r:-4deg;--y:18px"><div class="pc__photo"><img src="img/santorini.jpg" alt="Santorini" loading="lazy" decoding="async"></div><figcaption class="pc__hand">Santorini, sanjsko<span>— Eva M.</span></figcaption></figure>
-      <figure class="pc pc--card" style="--r:3deg;--y:6px"><span class="pc__stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L12 19v-5.5z"/></svg></span><p class="pc__note">V par minutah do povratne karte. Odslej edini način!</p><div class="pc__from"><span class="pc__av">RM</span><div><b>Rok in Maja</b><span>LJU → DXB · Nova Gorica</span></div></div></figure>
+      <div class="tmt__word" style="--r:-4deg">Prihranek na maksimumu ✦</div>
+      <figure class="pc pc--pola" style="--r:3deg;--y:2px"><div class="pc__photo"><img src="img/marrakesh.jpg" alt="Marakeš" loading="lazy" decoding="async"></div><figcaption class="pc__hand">Marakeš, 89 €<span>— Luka T.</span></figcaption></figure>
+      <figure class="pc pc--card" style="--r:-2deg;--y:30px"><span class="pc__stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L12 19v-5.5z"/></svg></span><p class="pc__note">Cene so prave in takoj vidiš, od kod je najceneje. Priporočam!</p><div class="pc__from"><span class="pc__av">AP</span><div><b>Ana P.</b><span>ZAG → BCN · Maribor</span></div></div></figure>
+      <figure class="pc pc--pola" style="--r:-4deg;--y:16px"><div class="pc__photo"><img src="img/santorini.jpg" alt="Santorini" loading="lazy" decoding="async"></div><figcaption class="pc__hand">Santorini, sanjsko<span>— Eva M.</span></figcaption></figure>
+      <div class="tmt__word" style="--r:3deg">Komaj čakam naslednjo pot ✈</div>
+      <figure class="pc pc--card" style="--r:3deg;--y:8px"><span class="pc__stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L12 19v-5.5z"/></svg></span><p class="pc__note">V par minutah do povratne karte. Odslej edini način!</p><div class="pc__from"><span class="pc__av">RM</span><div><b>Rok in Maja</b><span>LJU → DXB · Nova Gorica</span></div></div></figure>
+      <figure class="pc pc--pola" style="--r:2deg;--y:30px"><div class="pc__photo"><img src="img/barcelona.jpg" alt="Barcelona" loading="lazy" decoding="async"></div><figcaption class="pc__hand">Barcelona, 98 €<span>— Tjaša R.</span></figcaption></figure>
+      <figure class="pc pc--card" style="--r:-3deg;--y:2px"><span class="pc__stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L12 19v-5.5z"/></svg></span><p class="pc__note">Odlična podpora in resnične cene. Vredno zaupanja!</p><div class="pc__from"><span class="pc__av">ŽK</span><div><b>Žan K.</b><span>LJU → AMS · Ljubljana</span></div></div></figure>
+      <div class="tmt__word" style="--r:-2deg">5 zvezdic ★★★★★</div>
+      <figure class="pc pc--pola" style="--r:4deg;--y:22px"><div class="pc__photo"><img src="img/dubai.jpg" alt="Dubaj" loading="lazy" decoding="async"></div><figcaption class="pc__hand">Dubaj, sanje ✈<span>— Peter in Nika</span></figcaption></figure>
+      <figure class="pc pc--card" style="--r:-2deg;--y:40px"><span class="pc__stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L12 19v-5.5z"/></svg></span><p class="pc__note">Zdaj ne rezerviram nikjer drugje — vse na enem mestu.</p><div class="pc__from"><span class="pc__av">MS</span><div><b>Maja S.</b><span>VCE → BKK · Domžale</span></div></div></figure>
+      <figure class="pc pc--pola" style="--r:-3deg;--y:8px"><div class="pc__photo"><img src="img/bali.jpg" alt="Bali" loading="lazy" decoding="async"></div><figcaption class="pc__hand">Bali, končno!<span>— Klara B.</span></figcaption></figure>
+      <div class="tmt__word" style="--r:3deg">Najboljša odločitev letos</div>
     </div>
   </div>
 </section>
