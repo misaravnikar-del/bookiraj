@@ -3,7 +3,7 @@
 <title>Bookiraj.si</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Hanken+Grotesk:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Hanken+Grotesk:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Caveat:wght@500;600;700&display=swap">
 
 <!-- Travelpayouts Drive (auto-monetizacija; marker 575644) -->
 <script nowprocket data-noptimize="1" data-cfasync="false" data-wpfc-render="false" seraph-accel-crit="1" data-no-defer="1" data-cmp-ab="2">
@@ -312,33 +312,52 @@ section{scroll-margin-top:78px}
 .esim__go{margin-top:auto;color:var(--accent);font-weight:600;display:inline-flex;align-items:center;gap:7px}
 .esim__go svg{width:15px;height:15px;transition:margin .2s ease}
 .esim__card:hover .esim__go svg{margin-left:4px}
-/* mnenja strank — razglednice */
+/* mnenja strank — razglednice v gibanju */
 #mnenja{position:relative;overflow:hidden;background:radial-gradient(135% 105% at 50% -20%,color-mix(in srgb,var(--accent) 10%,var(--bg)) 0%,var(--bg) 55%)}
 .tmt__bg{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;color:var(--accent)}
 .tmt__arc{stroke:currentColor;stroke-width:2;stroke-dasharray:2 12;stroke-linecap:round;opacity:.22}
 .tmt__bg circle{fill:currentColor;opacity:.3}
 .tmt__plane path{fill:currentColor}
 .tmt__plane{opacity:.32}
+/* potni žigi (za v pasport) */
+.stamp{position:absolute;z-index:0;pointer-events:none;color:var(--ink);opacity:.08;width:148px;height:148px}
+.stamp text{fill:currentColor;text-anchor:middle;font-family:var(--font-mono);font-weight:700}
+.stamp .stt{font-size:18px;letter-spacing:1.5px}
+.stamp .std{font-size:16px;letter-spacing:1px}
+.stamp .sty{font-size:26px;letter-spacing:3px}
+.stamp--1{top:24px;right:5%;transform:rotate(-16deg)}
+.stamp--2{bottom:32px;left:3%;transform:rotate(11deg)}
+.stamp--3{top:44%;right:9%;transform:rotate(-7deg);width:126px;height:126px}
+.stamp--4{bottom:48px;left:31%;transform:rotate(-20deg);width:118px;height:118px;opacity:.06}
+@media (max-width:820px){.stamp--3,.stamp--4{display:none}}
 #mnenja .container{position:relative;z-index:1}
-.tmt{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-@media (max-width:820px){.tmt{grid-template-columns:1fr}}
-.tmt__card{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:15px;background:var(--surface);
-  border:1px solid var(--line);border-radius:var(--radius);padding:26px 26px 28px;box-shadow:var(--shadow);
-  transition:transform .25s ease,box-shadow .25s ease}
-.tmt__card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
-.tmt__stamp{position:absolute;top:15px;right:15px;width:44px;height:44px;border:1.6px dashed color-mix(in srgb,var(--accent) 55%,transparent);
-  border-radius:50%;display:grid;place-items:center;color:var(--accent);transform:rotate(-14deg);opacity:.7}
-.tmt__stamp svg{width:20px;height:20px}
-.tmt__who{display:flex;align-items:center;gap:12px;padding-right:44px}
-.tmt__avatar{width:44px;height:44px;border-radius:50%;flex:none;display:grid;place-items:center;
-  background:color-mix(in srgb,var(--accent) 15%,var(--surface));color:var(--accent);
-  font-family:var(--font-display);font-weight:600;font-size:1.02rem}
-.tmt__meta{display:flex;flex-direction:column;gap:1px;min-width:0}
-.tmt__meta b{font-weight:600}
-.tmt__trip{color:var(--muted);font-family:var(--font-mono);font-size:.68rem;letter-spacing:.05em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tmt__trip i{color:var(--accent);font-style:normal;margin:0 4px}
-.tmt__stars{color:var(--accent);letter-spacing:3px;font-size:.9rem}
-.tmt__card blockquote{margin:0;font-family:var(--font-display);font-style:italic;font-size:1.06rem;line-height:1.55;color:var(--ink)}
+/* drseča vrsta razglednic */
+.tmt__marquee{position:relative;z-index:1;margin-top:6px;overflow:hidden;
+  -webkit-mask:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);mask:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
+.tmt__track{display:flex;align-items:flex-start;gap:28px;width:max-content;padding:44px 28px}
+.js .tmt__track{animation:tmt-scroll 70s linear infinite}
+.tmt__marquee:hover .tmt__track{animation-play-state:paused}
+@keyframes tmt-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.tmt__track{animation:none!important;flex-wrap:wrap;width:auto;justify-content:center}}
+.pc{flex:none;transform:rotate(var(--r,0deg));margin-top:var(--y,0);transition:transform .3s ease,box-shadow .3s ease}
+.pc:hover{transform:rotate(0deg) translateY(-5px);z-index:3;position:relative;box-shadow:0 26px 50px -22px rgba(16,32,31,.55)}
+.pc--pola{width:246px;background:#fff;padding:14px 14px 0;border-radius:3px;box-shadow:0 14px 34px -14px rgba(16,32,31,.42)}
+.pc--pola .pc__photo{aspect-ratio:1;overflow:hidden;background:#e8e8e8}
+.pc--pola .pc__photo img{width:100%;height:100%;object-fit:cover;display:block}
+.pc__hand{font-family:'Caveat',var(--font-display),cursive;font-size:1.55rem;line-height:1.05;color:#182726;text-align:center;padding:12px 6px 16px}
+.pc__hand span{display:block;font-size:1.02rem;color:#66756f;margin-top:2px}
+.pc--card{width:332px;min-height:220px;display:flex;flex-direction:column;gap:14px;position:relative;
+  background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:24px;box-shadow:var(--shadow)}
+.pc__note{margin:0;font-family:'Caveat',var(--font-display),cursive;font-size:1.55rem;line-height:1.25;color:var(--ink)}
+.pc__stamp{position:absolute;top:15px;right:15px;width:42px;height:42px;color:var(--accent);opacity:.75;transform:rotate(9deg);
+  border:1.5px dashed color-mix(in srgb,var(--accent) 55%,transparent);border-radius:8px;display:grid;place-items:center}
+.pc__stamp svg{width:20px;height:20px;fill:currentColor}
+.pc__from{margin-top:auto;display:flex;align-items:center;gap:11px}
+.pc__av{width:40px;height:40px;border-radius:50%;flex:none;display:grid;place-items:center;font-family:var(--font-display);font-weight:600;
+  background:color-mix(in srgb,var(--accent) 15%,var(--surface));color:var(--accent)}
+.pc__from>div{display:flex;flex-direction:column;gap:1px;min-width:0}
+.pc__from b{font-weight:600;font-size:.95rem}
+.pc__from span{color:var(--muted);font-family:var(--font-mono);font-size:.64rem;letter-spacing:.03em}
 /* eSIM detail */
 .esimpage{max-width:760px;margin-top:22px}
 .esimpage__media{height:190px;border-radius:16px;overflow:hidden;background:#fff;margin-bottom:1.4rem;border:1px solid var(--line)}
@@ -755,6 +774,10 @@ section{scroll-margin-top:78px}
     <g class="tmt__plane" transform="translate(486 250) rotate(-26)"><path d="M2 21 23 12 2 3 6 12z"/></g>
     <g class="tmt__plane" style="opacity:.22" transform="translate(940 150) rotate(14)"><path d="M2 21 23 12 2 3 6 12z"/></g>
   </svg>
+  <svg class="stamp stamp--1" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="84" fill="none" stroke="currentColor" stroke-width="4"/><circle cx="100" cy="100" r="76" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="100" y="54" class="stt">SLOVENIJA</text><line x1="42" y1="66" x2="158" y2="66" stroke="currentColor" stroke-width="1.5"/><text x="100" y="98" class="std">12 MAR</text><text x="100" y="130" class="sty">2026</text><line x1="42" y1="142" x2="158" y2="142" stroke="currentColor" stroke-width="1.5"/><text x="100" y="164" class="stt">LJUBLJANA</text></svg>
+  <svg class="stamp stamp--2" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="84" fill="none" stroke="currentColor" stroke-width="4"/><circle cx="100" cy="100" r="76" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="100" y="54" class="stt">ESPAÑA</text><line x1="42" y1="66" x2="158" y2="66" stroke="currentColor" stroke-width="1.5"/><text x="100" y="98" class="std">04 JUN</text><text x="100" y="130" class="sty">2026</text><line x1="42" y1="142" x2="158" y2="142" stroke="currentColor" stroke-width="1.5"/><text x="100" y="164" class="stt">BARCELONA</text></svg>
+  <svg class="stamp stamp--3" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="84" fill="none" stroke="currentColor" stroke-width="4"/><circle cx="100" cy="100" r="76" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="100" y="54" class="stt">MALDIVES</text><line x1="42" y1="66" x2="158" y2="66" stroke="currentColor" stroke-width="1.5"/><text x="100" y="98" class="std">17 JUL</text><text x="100" y="130" class="sty">2026</text><line x1="42" y1="142" x2="158" y2="142" stroke="currentColor" stroke-width="1.5"/><text x="100" y="164" class="stt">MALÉ</text></svg>
+  <svg class="stamp stamp--4" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="84" fill="none" stroke="currentColor" stroke-width="4"/><circle cx="100" cy="100" r="76" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="100" y="54" class="stt">MAROC</text><line x1="42" y1="66" x2="158" y2="66" stroke="currentColor" stroke-width="1.5"/><text x="100" y="98" class="std">21 OKT</text><text x="100" y="130" class="sty">2026</text><line x1="42" y1="142" x2="158" y2="142" stroke="currentColor" stroke-width="1.5"/><text x="100" y="164" class="stt">MARRAKECH</text></svg>
   <div class="container">
     <div class="sec__head reveal">
       <div>
@@ -763,28 +786,19 @@ section{scroll-margin-top:78px}
       </div>
       <p>Prihranek časa in denarja — tako, kot mora biti. Nekaj utrinkov tistih, ki so že ujeli svojo akcijo.</p>
     </div>
-    <div class="tmt reveal">
-      <figure class="tmt__card">
-        <span class="tmt__stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L12 19v-5.5z"/></svg></span>
-        <div class="tmt__who"><span class="tmt__avatar">NK</span><div class="tmt__meta"><b>Nina K.</b><span class="tmt__trip">LJU<i>→</i>LIS</span></div></div>
-        <div class="tmt__stars" aria-label="5 od 5">★★★★★</div>
-        <blockquote>V nekaj minutah sem našla povratno karto v Lizbono za manj kot 100 €. Prej sem ure brskala po različnih straneh — tukaj je vse na enem mestu.</blockquote>
-      </figure>
-      <figure class="tmt__card">
-        <span class="tmt__stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L12 19v-5.5z"/></svg></span>
-        <div class="tmt__who"><span class="tmt__avatar">SM</span><div class="tmt__meta"><b>Sara in Matej</b><span class="tmt__trip">VCE<i>→</i>RAK</span></div></div>
-        <div class="tmt__stars" aria-label="5 od 5">★★★★★</div>
-        <blockquote>Super pregled akcij z bližnjih letališč. Za Marakeš sva prihranila skoraj polovico — in odhod je bil kar iz Benetk.</blockquote>
-      </figure>
-      <figure class="tmt__card">
-        <span class="tmt__stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L12 19v-5.5z"/></svg></span>
-        <div class="tmt__who"><span class="tmt__avatar">AP</span><div class="tmt__meta"><b>Ana P.</b><span class="tmt__trip">ZAG<i>→</i>BCN</span></div></div>
-        <div class="tmt__stars" aria-label="5 od 5">★★★★★</div>
-        <blockquote>Najbolj mi je všeč, da so cene resnične in da takoj vidim, od kod je najceneje. Priporočam vsem, ki radi potujejo po nizki ceni.</blockquote>
-      </figure>
+  </div>
+  <div class="tmt__marquee">
+    <div class="tmt__track" id="tmtTrack">
+      <figure class="pc pc--pola" style="--r:-3deg;--y:10px"><div class="pc__photo"><img src="img/lisbon.jpg" alt="Lizbona" loading="lazy" decoding="async"></div><figcaption class="pc__hand">Lizbona, 94 €!<span>— Nina K.</span></figcaption></figure>
+      <figure class="pc pc--card" style="--r:2deg;--y:36px"><span class="pc__stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L12 19v-5.5z"/></svg></span><p class="pc__note">Marakeš iz Benetk — prihranila sva skoraj polovico!</p><div class="pc__from"><span class="pc__av">SM</span><div><b>Sara in Matej</b><span>VCE → RAK · Kranj</span></div></div></figure>
+      <figure class="pc pc--pola" style="--r:3deg;--y:0"><div class="pc__photo"><img src="img/marrakesh.jpg" alt="Marakeš" loading="lazy" decoding="async"></div><figcaption class="pc__hand">Marakeš, 89 €<span>— Luka T.</span></figcaption></figure>
+      <figure class="pc pc--card" style="--r:-2deg;--y:28px"><span class="pc__stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L12 19v-5.5z"/></svg></span><p class="pc__note">Cene so prave in takoj vidiš, od kod je najceneje. Priporočam!</p><div class="pc__from"><span class="pc__av">AP</span><div><b>Ana P.</b><span>ZAG → BCN · Maribor</span></div></div></figure>
+      <figure class="pc pc--pola" style="--r:-4deg;--y:18px"><div class="pc__photo"><img src="img/santorini.jpg" alt="Santorini" loading="lazy" decoding="async"></div><figcaption class="pc__hand">Santorini, sanjsko<span>— Eva M.</span></figcaption></figure>
+      <figure class="pc pc--card" style="--r:3deg;--y:6px"><span class="pc__stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L12 19v-5.5z"/></svg></span><p class="pc__note">V par minutah do povratne karte. Odslej edini način!</p><div class="pc__from"><span class="pc__av">RM</span><div><b>Rok in Maja</b><span>LJU → DXB · Nova Gorica</span></div></div></figure>
     </div>
   </div>
 </section>
+<script>(function(){var t=document.getElementById('tmtTrack');if(t)t.innerHTML+=t.innerHTML;})();</script>
 
 <!-- ===================== NEWSLETTER ===================== -->
 <section class="sec" id="news">
