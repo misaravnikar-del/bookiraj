@@ -337,8 +337,8 @@ section{scroll-margin-top:78px}
 .tmt__track{display:flex;align-items:flex-start;gap:20px;width:max-content;padding:40px 24px 26px}
 .js .tmt__track{animation:tmt-scroll 145s linear infinite}
 .tmt__marquee--words{margin-top:-4px}
-.tmt__track--words{align-items:center;gap:52px;padding:2px 24px 10px}
-.js .tmt__track--words{animation:tmt-scroll 82s linear infinite reverse}
+.tmt__track--words{align-items:center;gap:132px;padding:2px 24px 10px}
+.js .tmt__track--words{animation:tmt-scroll 96s linear infinite reverse}
 .tmt__word{flex:none;font-family:'Caveat',var(--font-display),cursive;font-size:1.55rem;line-height:1;
   color:var(--accent);opacity:.82;white-space:nowrap;transform:rotate(var(--r,-3deg))}
 @keyframes tmt-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
@@ -414,6 +414,14 @@ section{scroll-margin-top:78px}
 .rv__preview .pc--pola:hover{box-shadow:0 14px 34px -14px rgba(16,32,31,.42)}
 .rv__preview .pc__note{overflow-wrap:anywhere;padding-right:46px}
 .pc__hand .pc__lead{font-size:1.55rem;color:#182726;margin-top:0}
+.rv__preview .pc--pola .pc__photo{position:relative;cursor:grab;touch-action:none;user-select:none}
+.rv__preview .pc--pola .pc__photo.dragging{cursor:grabbing}
+.rv__preview .pc--pola .pc__photo img{transform-origin:center center;will-change:transform;pointer-events:none}
+.rv__phint{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);background:rgba(16,32,31,.6);color:#fff;
+  font-family:var(--font-mono);font-size:.62rem;letter-spacing:.02em;white-space:nowrap;padding:3px 10px;border-radius:20px;pointer-events:none;transition:opacity .25s}
+.rv__preview .pc--pola .pc__photo.dragging .rv__phint{opacity:0}
+.rv__zoom{gap:6px}
+.rv__zoom input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer;margin:2px 0}
 /* eSIM detail */
 .esimpage{max-width:760px;margin-top:22px}
 .esimpage__media{height:190px;border-radius:16px;overflow:hidden;background:#fff;margin-bottom:1.4rem;border:1px solid var(--line)}
@@ -905,7 +913,7 @@ section{scroll-margin-top:78px}
           <div class="pc__from"><span class="pc__av" data-rvp="av">?</span><div><b data-rvp="name">Tvoje ime</b><span data-rvp="route">LJU → LIS · Slovenija</span></div></div>
         </figure>
         <figure class="pc pc--pola rvp" data-rvp-pola hidden style="--r:2.5deg">
-          <div class="pc__photo"><img data-rvp="photo" src="img/santorini.jpg" alt=""></div>
+          <div class="pc__photo" data-rvp-photowrap><img data-rvp="photo" src="img/santorini.jpg" alt=""><span class="rv__phint" data-rvp-hint>✥ povleci za premik</span></div>
           <figcaption class="pc__hand"><span class="pc__lead" data-rvp="ptext">Tvoj podpis</span><span data-rvp="pname">— Ime</span></figcaption>
         </figure>
       </div>
@@ -920,6 +928,8 @@ section{scroll-margin-top:78px}
       </div>
       <div class="rv__fields" data-for="pola" hidden>
         <label class="rv__file">Fotografija<input type="file" name="slika" data-rvp-in="photo" accept="image/*"></label>
+        <label class="rv__zoom">Povečava slike<input type="range" name="zoom" min="1" max="3" step="0.01" value="1"></label>
+        <input type="hidden" name="posx" value="0"><input type="hidden" name="posy" value="0">
         <label>Kratek tekst<input name="tekst" data-rvp-in="ptext" placeholder="npr. Bali, končno!"></label>
         <label>Ime<input name="imepola" data-rvp-in="pname" placeholder="npr. Klara B."></label>
       </div>
@@ -952,13 +962,31 @@ section{scroll-margin-top:78px}
     pv.pname.textContent='— '+(val('imepola')||'Ime');
   }
   var photoIn=step2.querySelector('input[name="slika"]');
+  var photoWrap=step2.querySelector('[data-rvp-photowrap]');
+  var zoomIn=step2.querySelector('input[name="zoom"]');
+  var posX=step2.querySelector('input[name="posx"]'),posY=step2.querySelector('input[name="posy"]');
+  var tf={x:0,y:0,z:1};
+  function applyTf(){
+    var sz=(photoWrap&&photoWrap.clientWidth)||220,max=(tf.z-1)*sz/2;
+    tf.x=Math.max(-max,Math.min(max,tf.x));tf.y=Math.max(-max,Math.min(max,tf.y));
+    pv.photo.style.transform='translate('+tf.x.toFixed(1)+'px,'+tf.y.toFixed(1)+'px) scale('+tf.z+')';
+    if(posX)posX.value=Math.round(tf.x);if(posY)posY.value=Math.round(tf.y);
+  }
+  function resetTf(){tf.x=0;tf.y=0;tf.z=1;if(zoomIn)zoomIn.value=1;applyTf();}
+  if(zoomIn)zoomIn.addEventListener('input',function(){tf.z=parseFloat(zoomIn.value)||1;applyTf();});
+  if(photoWrap){var drag=false,sx=0,sy=0;
+    photoWrap.addEventListener('pointerdown',function(e){drag=true;sx=e.clientX-tf.x;sy=e.clientY-tf.y;photoWrap.classList.add('dragging');try{photoWrap.setPointerCapture(e.pointerId);}catch(_){}});
+    photoWrap.addEventListener('pointermove',function(e){if(!drag)return;tf.x=e.clientX-sx;tf.y=e.clientY-sy;applyTf();});
+    function endDrag(){drag=false;photoWrap.classList.remove('dragging');}
+    photoWrap.addEventListener('pointerup',endDrag);photoWrap.addEventListener('pointercancel',endDrag);
+  }
   if(photoIn)photoIn.addEventListener('change',function(){
     var f=photoIn.files&&photoIn.files[0];if(!f)return;
-    var rd=new FileReader();rd.onload=function(){pv.photo.src=rd.result;};rd.readAsDataURL(f);
+    var rd=new FileReader();rd.onload=function(){pv.photo.src=rd.result;resetTf();};rd.readAsDataURL(f);
   });
   step2.addEventListener('input',update);
   function setF(el,off){el.hidden=off;[].forEach.call(el.querySelectorAll('input,textarea'),function(i){i.disabled=off;});}
-  function reset(){step1.hidden=false;step2.hidden=true;step2.reset();step2.querySelector('.rv__ok').hidden=true;pv.photo.src='img/santorini.jpg';update();}
+  function reset(){step1.hidden=false;step2.hidden=true;step2.reset();step2.querySelector('.rv__ok').hidden=true;pv.photo.src='img/santorini.jpg';resetTf();update();}
   function open(){modal.hidden=false;document.body.style.overflow='hidden';reset();}
   function close(){modal.hidden=true;document.body.style.overflow='';}
   function choose(t){step1.hidden=true;step2.hidden=false;step2.dataset.type=t;var c=t==='card';fTitle.textContent=c?'Razglednica':'Polaroid';setF(fCard,!c);setF(fPola,c);pv.card.hidden=!c;pv.pola.hidden=c;update();}
