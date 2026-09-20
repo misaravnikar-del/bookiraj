@@ -317,6 +317,7 @@ section{scroll-margin-top:78px}
 .card h3{font-size:1.42rem;font-weight:600}
 .card__sub{color:var(--muted);font-size:.86rem;margin-top:-2px}
 .card__sub strong{color:var(--ink);font-weight:600}
+.card__sub .s-arr{margin:0 4px;font-weight:400;color:var(--muted)}
 .card__teaser{color:var(--ink-2);font-size:.92rem;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .card__cta{margin-top:auto;padding-top:14px;border-top:1px dashed var(--line);
@@ -897,7 +898,7 @@ function cardHTML(d){
     +'<div class="card__body">'
       +'<div class="card__route"><span>'+fromCode+' <span class="arrow">→</span> '+d.code+'</span><span>'+rRight+'</span></div>'
       +'<h3>'+d.country+'</h3>'
-      +'<div class="card__sub"><strong>'+d.city+'</strong> · odhod iz '+fromCity+'</div>'
+      +'<div class="card__sub">'+fromCity+' <span class="s-arr">→</span> <strong>'+d.city+'</strong></div>'
       +(teaser?'<p class="card__teaser">'+teaser+'</p>':'')
       +'<div class="card__cta"><span class="go">'+ctaTxt+' '+svg+'</span><span class="air">'+(cRight||'')+'</span></div>'
     +'</div>'
