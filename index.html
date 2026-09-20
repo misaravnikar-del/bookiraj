@@ -359,6 +359,38 @@ section{scroll-margin-top:78px}
 .pc__from>div{display:flex;flex-direction:column;gap:1px;min-width:0}
 .pc__from b{font-weight:600;font-size:.95rem}
 .pc__from span{color:var(--muted);font-family:var(--font-mono);font-size:.64rem;letter-spacing:.03em}
+.tmt__intro{display:flex;flex-direction:column;align-items:flex-start;gap:16px}
+.rv__open{align-self:flex-start;gap:8px}
+/* modal: pusti svoje mnenje */
+.modal{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:20px}
+.modal__scrim{position:absolute;inset:0;background:rgba(6,14,16,.55);backdrop-filter:blur(3px)}
+.modal__box{position:relative;z-index:1;width:min(480px,100%);max-height:90vh;overflow:auto;background:var(--surface);
+  border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow-lg);padding:32px 30px}
+.modal__x{position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.15rem;color:var(--muted);cursor:pointer;line-height:1;padding:6px}
+.modal__x:hover{color:var(--ink)}
+.rv__step h3{font-family:var(--font-display);font-size:1.6rem;margin:.3rem 0}
+.rv__lead{color:var(--muted);margin-bottom:20px}
+.rv__choices{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:480px){.rv__choices{grid-template-columns:1fr}}
+.rv__choice{display:flex;flex-direction:column;gap:6px;align-items:flex-start;text-align:left;background:var(--surface-2);
+  border:1px solid var(--line);border-radius:14px;padding:18px;cursor:pointer;transition:all .2s ease;color:inherit}
+.rv__choice:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow)}
+.rv__choice svg{width:26px;height:26px;color:var(--accent)}
+.rv__choice b{font-weight:600;font-size:1.02rem}
+.rv__choice span{color:var(--muted);font-size:.82rem}
+.rv__back{background:none;border:none;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-weight:600;padding:0;margin-bottom:6px}
+.rv__back:hover{color:var(--accent)}
+.rv__fields{display:flex;flex-direction:column;gap:13px;margin:10px 0 4px}
+.rv__row{display:flex;gap:12px}.rv__row label{flex:1}
+.rv__fields label{display:flex;flex-direction:column;gap:5px;font-size:.78rem;font-weight:600;color:var(--ink-2)}
+.rv__fields input,.rv__fields textarea{font:inherit;font-weight:400;padding:11px 13px;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);color:var(--ink);outline:none;transition:border-color .15s}
+.rv__fields input:focus,.rv__fields textarea:focus{border-color:var(--accent)}
+.rv__fields textarea{resize:vertical;min-height:68px}
+.rv__file input{padding:9px 0}
+.rv__submit{width:100%;margin-top:16px}
+.rv__note{color:var(--muted);font-size:.8rem;text-align:center;margin-top:10px}
+.rv__ok{color:var(--accent);font-weight:600;text-align:center;margin-top:12px}
 /* eSIM detail */
 .esimpage{max-width:760px;margin-top:22px}
 .esimpage__media{height:190px;border-radius:16px;overflow:hidden;background:#fff;margin-bottom:1.4rem;border:1px solid var(--line)}
@@ -785,7 +817,10 @@ section{scroll-margin-top:78px}
         <p class="eyebrow">Vtisi popotnikov</p>
         <h2>Razglednice naših popotnikov.</h2>
       </div>
-      <p>Prihranek časa in denarja — tako, kot mora biti. Nekaj utrinkov tistih, ki so že ujeli svojo akcijo.</p>
+      <div class="tmt__intro">
+        <p>Prihranek časa in denarja — tako, kot mora biti. Nekaj utrinkov tistih, ki so že ujeli svojo akcijo.</p>
+        <button class="btn rv__open" id="rvOpen" type="button"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg> Pusti svoje mnenje</button>
+      </div>
     </div>
   </div>
   <div class="tmt__marquee">
@@ -809,6 +844,76 @@ section{scroll-margin-top:78px}
   </div>
 </section>
 <script>(function(){var t=document.getElementById('tmtTrack');if(t)t.innerHTML+=t.innerHTML;})();</script>
+
+<!-- ===================== MODAL: pusti svoje mnenje ===================== -->
+<div class="modal" id="rvModal" hidden>
+  <div class="modal__scrim" data-rvclose></div>
+  <div class="modal__box" role="dialog" aria-modal="true" aria-labelledby="rvTitle">
+    <button class="modal__x" type="button" data-rvclose aria-label="Zapri">✕</button>
+    <div class="rv__step" id="rvStep1">
+      <p class="eyebrow">Deli svoj vtis</p>
+      <h3 id="rvTitle">Kako želiš deliti?</h3>
+      <p class="rv__lead">Izberi obliko — razglednico ali polaroid.</p>
+      <div class="rv__choices">
+        <button class="rv__choice" type="button" data-type="card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18"/><circle cx="17" cy="7" r="0"/><path d="M7 13h5M7 16h8"/></svg>
+          <b>Razglednica</b><span>Mnenje + tvoja pot</span>
+        </button>
+        <button class="rv__choice" type="button" data-type="pola">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><rect x="7" y="6" width="10" height="8" rx="1"/><path d="M8 18h8"/></svg>
+          <b>Polaroid</b><span>Fotografija + podpis</span>
+        </button>
+      </div>
+    </div>
+    <form class="rv__step" id="rvStep2" hidden novalidate>
+      <button class="rv__back" type="button" data-rvback><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> Nazaj</button>
+      <h3 id="rvFormTitle">Razglednica</h3>
+      <div class="rv__fields" data-for="card">
+        <label>Mnenje<textarea name="mnenje" rows="3" placeholder="Kako ti je bilo?"></textarea></label>
+        <label>Ime<input name="ime" placeholder="npr. Nina K."></label>
+        <div class="rv__row">
+          <label>Od<input name="od" placeholder="Ljubljana / LJU"></label>
+          <label>Do<input name="do" placeholder="Lizbona / LIS"></label>
+        </div>
+        <label>Od kod ste<input name="kraj" placeholder="npr. Kranj"></label>
+      </div>
+      <div class="rv__fields" data-for="pola" hidden>
+        <label class="rv__file">Fotografija<input type="file" name="slika" accept="image/*"></label>
+        <label>Kratek tekst<input name="tekst" placeholder="npr. Bali, končno!"></label>
+        <label>Ime<input name="imepola" placeholder="npr. Klara B."></label>
+      </div>
+      <button class="btn btn--lg rv__submit" type="submit">Pošlji vtis</button>
+      <p class="rv__note">Mnenje objavimo po kratkem pregledu.</p>
+      <p class="rv__ok" hidden>Hvala! Tvoj vtis smo prejeli. ✈</p>
+    </form>
+  </div>
+</div>
+<script>(function(){
+  var modal=document.getElementById('rvModal'); if(!modal)return;
+  var openBtn=document.getElementById('rvOpen'),step1=document.getElementById('rvStep1'),step2=document.getElementById('rvStep2');
+  var fTitle=document.getElementById('rvFormTitle');
+  var fCard=step2.querySelector('[data-for="card"]'),fPola=step2.querySelector('[data-for="pola"]');
+  var REVIEW_KEY=''; // Web3Forms access key (prazen = samo lokalna potrditev; vpiši za pošiljanje na e-pošto)
+  function setF(el,off){el.hidden=off;[].forEach.call(el.querySelectorAll('input,textarea'),function(i){i.disabled=off;});}
+  function reset(){step1.hidden=false;step2.hidden=true;step2.reset();step2.querySelector('.rv__ok').hidden=true;}
+  function open(){modal.hidden=false;document.body.style.overflow='hidden';reset();}
+  function close(){modal.hidden=true;document.body.style.overflow='';}
+  function choose(t){step1.hidden=true;step2.hidden=false;step2.dataset.type=t;var c=t==='card';fTitle.textContent=c?'Razglednica':'Polaroid';setF(fCard,!c);setF(fPola,c);}
+  if(openBtn)openBtn.addEventListener('click',open);
+  [].forEach.call(modal.querySelectorAll('[data-rvclose]'),function(b){b.addEventListener('click',close);});
+  [].forEach.call(modal.querySelectorAll('[data-rvback]'),function(b){b.addEventListener('click',reset);});
+  [].forEach.call(step1.querySelectorAll('[data-type]'),function(b){b.addEventListener('click',function(){choose(b.dataset.type);});});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!modal.hidden)close();});
+  step2.addEventListener('submit',function(e){
+    e.preventDefault();
+    var ok=step2.querySelector('.rv__ok'),sub=step2.querySelector('.rv__submit');
+    function done(){ok.hidden=false;setTimeout(close,1700);}
+    if(!REVIEW_KEY){done();return;}
+    var fd=new FormData(step2);fd.append('access_key',REVIEW_KEY);fd.append('subject','Bookiraj.si — novo mnenje ('+(step2.dataset.type||'')+')');
+    sub.disabled=true;sub.textContent='Pošiljam…';
+    fetch('https://api.web3forms.com/submit',{method:'POST',body:fd}).then(function(r){return r.json();}).then(done).catch(done).then(function(){sub.disabled=false;sub.textContent='Pošlji vtis';});
+  });
+})();</script>
 
 <!-- ===================== NEWSLETTER ===================== -->
 <section class="sec" id="news">
