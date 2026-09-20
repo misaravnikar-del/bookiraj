@@ -1157,6 +1157,21 @@ const COPY=[
  {city:"Pariz",code:"PAR",country:"Francija",fromCity:"Benetke",fromCode:"VCE",airline:"Transavia",price:46,period:"okt.–jan.",months:[10,11,12,1],region:"europa",img:"paris",teaser:"Eifflov stolp, kavarne in sprehodi ob Seni.",badge:"−43 %",badgeType:"acc",
   long:"Mesto luči — Eifflov stolp, Louvre in Montmartre, vmes pa kavice na terasah, sprehodi ob Seni in sveže pecivo iz vsake pekarne. Popolno za podaljšan vikend v dvoje.",
   hl:["Eifflov stolp in sprehod ob Seni","Louvre in Musée d'Orsay","Montmartre in Sacré-Cœur"]},
+ {city:"Praga",code:"PRG",country:"Češka",fromCity:"Ljubljana",fromCode:"LJU",airline:"",price:131,period:"okt.–jan.",months:[10,11,12,1],region:"europa",img:"prague",teaser:"Zlato mesto stotih stolpov ob Vltavi.",badge:"",badgeType:"",
+  long:"Srednjeveško jedro s Karlovim mostom in Praškim gradom, secesijske kavarne in najboljše pivo v Evropi. Popoln jesenski ali predbožični mestni oddih.",
+  hl:["Karlov most in Praški grad","Staromestni trg in orloj","Češko pivo v pravih pivnicah"]},
+ {city:"Berlin",code:"BER",country:"Nemčija",fromCity:"Ljubljana",fromCode:"LJU",airline:"",price:152,period:"okt.–apr.",months:[3,4,10,11],region:"europa",img:"berlin",teaser:"Zgodovina, umetnost in vrelo nočno življenje.",badge:"",badgeType:"",
+  long:"Brandenburška vrata in ostanki zidu podnevi, muzejski otok in alternativna scena ponoči. Mesto, ki se nenehno na novo izumlja — in ostaja dostopno.",
+  hl:["Brandenburška vrata in Reichstag","Muzejski otok","East Side Gallery in Kreuzberg"]},
+ {city:"Tenerife",code:"TCI",country:"Španija",fromCity:"Ljubljana",fromCode:"LJU",airline:"",price:232,period:"nov.–apr.",months:[11,12,1,2,3,4],region:"europa",img:"tenerife",teaser:"Vulkanski otok večne pomladi in črnega peska.",badge:"",badgeType:"",
+  long:"Največji Kanarski otok s pohodom na vulkan Teide, opazovanjem kitov ob obali in soncem tudi pozimi. Idealen pobeg pred mrazom.",
+  hl:["Vulkan Teide (3718 m)","Črne vulkanske plaže","Opazovanje kitov in delfinov"]},
+ {city:"Atene",code:"ATH",country:"Grčija",fromCity:"Ljubljana",fromCode:"LJU",airline:"",price:189,period:"okt.–maj.",months:[3,4,5,10,11],region:"europa",img:"athens",teaser:"Zibelka demokracije pod Akropolo.",badge:"",badgeType:"",
+  long:"Antični Akropolis in Partenon nad živahnima sosekama Plaka in Monastiraki, vmes pa grška meza in sončni zahodi z griča Likavitos.",
+  hl:["Akropolis in Partenon","Soseska Plaka","Muzeji in grška kulinarika"]},
+ {city:"Podgorica",code:"TGD",country:"Črna gora",fromCity:"Ljubljana",fromCode:"LJU",airline:"",price:54,period:"apr.–nov.",months:[4,5,6,9,10,11],region:"europa",img:"podgorica",teaser:"Vrata v Črno goro — kanjoni, gore in Jadran.",badge:"",badgeType:"",
+  long:"Izhodišče za Skadarsko jezero, veličastni kanjon reke Tare in obalo Boke Kotorske. Nizka cena, blizu doma, a povsem drug svet.",
+  hl:["Skadarsko jezero","Kanjon reke Tare","Izlet do Kotorja in Budve"]},
  {city:"Rim",code:"FCO",country:"Italija",fromCity:"Trst",fromCode:"TRS",airline:"Ryanair",price:29,period:"mar.–jun.",months:[3,4,5,6],region:"europa",img:"rome",teaser:"Večno mesto, le uro leta od doma.",badge:"Najceneje",badgeType:"hot",
   long:"Sprehod skozi dva tisoč let zgodovine — od Kolizeja in Foruma do Vatikana. Vmes najboljša pasta cacio e pepe in sladoled na vsakem vogalu.",
   hl:["Kolizej in Rimski forum","Vatikan in Sikstinska kapela","Fontana di Trevi ob zori"]},
@@ -1203,7 +1218,7 @@ const INCLUDED=["Povratni let","Ročna prtljaga","Preverjen ponudnik","Brez skri
 const byImg={}; COPY.forEach(function(c){byImg[c.img]=c;});
 const LIVE=(window.__BOOKIRAJ_DEALS__&&window.__BOOKIRAJ_DEALS__.deals)||[];
 const UPDATED=(window.__BOOKIRAJ_DEALS__&&window.__BOOKIRAJ_DEALS__.updated)||null;
-const GEO={barcelona:{continent:'evropa'},paris:{continent:'evropa'},rome:{continent:'evropa'},lisbon:{continent:'evropa'},santorini:{continent:'evropa'},istanbul:{continent:'evropa'},amsterdam:{continent:'evropa'},london:{continent:'evropa'},iceland:{continent:'evropa'},dubai:{continent:'azija'},bangkok:{continent:'azija'},maldives:{continent:'azija',exotic:true},bali:{continent:'azija',exotic:true},marrakesh:{continent:'afrika',exotic:true},newyork:{continent:'sev-amerika'}};
+const GEO={barcelona:{continent:'evropa'},paris:{continent:'evropa'},prague:{continent:'evropa'},berlin:{continent:'evropa'},tenerife:{continent:'evropa',exotic:true},athens:{continent:'evropa'},podgorica:{continent:'evropa'},rome:{continent:'evropa'},lisbon:{continent:'evropa'},santorini:{continent:'evropa'},istanbul:{continent:'evropa'},amsterdam:{continent:'evropa'},london:{continent:'evropa'},iceland:{continent:'evropa'},dubai:{continent:'azija'},bangkok:{continent:'azija'},maldives:{continent:'azija',exotic:true},bali:{continent:'azija',exotic:true},marrakesh:{continent:'afrika',exotic:true},newyork:{continent:'sev-amerika'}};
 const AP_NAME={LJU:'Ljubljana',TRS:'Trst',VCE:'Benetke',ZAG:'Zagreb',VIE:'Dunaj',MXP:'Milano',TSF:'Treviso',MUC:'Minhen',BUD:'Budimpešta'};
 const DEALS=LIVE.map(function(l){var c=byImg[l.img]||{};return Object.assign({},c,GEO[l.img]||{},{fromPrice:l.fromPrice,avg:l.avg,terms:l.terms,discount:Math.max(0,Math.round((l.avg-l.fromPrice)/l.avg*100))});}).filter(function(d){return d.city;});
 // odkrite akcije (velik seznam iz API-ja: prave cene, sezona in dolžina že upoštevani)
