@@ -1154,6 +1154,9 @@ const COPY=[
  {city:"Barcelona",code:"BCN",country:"Španija",fromCity:"Ljubljana",fromCode:"LJU",airline:"Vueling",price:39,period:"apr.–maj.",months:[4,5],region:"europa",img:"barcelona",teaser:"Gaudí, tapas in mestna plaža na dosegu vikenda.",badge:"−52 %",badgeType:"acc",
   long:"Metropola Antonija Gaudíja, kjer se srednjeveške uličice Gotske četrti stapljajo z valovitimi fasadami Eixampla in s peščenimi mestnimi plažami. Popoldan za tapase, večer za sprehod po La Rambli.",
   hl:["Sagrada Família in Park Güell","Plaža Barceloneta sredi mesta","Bar hopping po četrti El Born"]},
+ {city:"Pariz",code:"PAR",country:"Francija",fromCity:"Benetke",fromCode:"VCE",airline:"Transavia",price:46,period:"okt.–jan.",months:[10,11,12,1],region:"europa",img:"paris",teaser:"Eifflov stolp, kavarne in sprehodi ob Seni.",badge:"−43 %",badgeType:"acc",
+  long:"Mesto luči — Eifflov stolp, Louvre in Montmartre, vmes pa kavice na terasah, sprehodi ob Seni in sveže pecivo iz vsake pekarne. Popolno za podaljšan vikend v dvoje.",
+  hl:["Eifflov stolp in sprehod ob Seni","Louvre in Musée d'Orsay","Montmartre in Sacré-Cœur"]},
  {city:"Rim",code:"FCO",country:"Italija",fromCity:"Trst",fromCode:"TRS",airline:"Ryanair",price:29,period:"mar.–jun.",months:[3,4,5,6],region:"europa",img:"rome",teaser:"Večno mesto, le uro leta od doma.",badge:"Najceneje",badgeType:"hot",
   long:"Sprehod skozi dva tisoč let zgodovine — od Kolizeja in Foruma do Vatikana. Vmes najboljša pasta cacio e pepe in sladoled na vsakem vogalu.",
   hl:["Kolizej in Rimski forum","Vatikan in Sikstinska kapela","Fontana di Trevi ob zori"]},
@@ -1200,7 +1203,7 @@ const INCLUDED=["Povratni let","Ročna prtljaga","Preverjen ponudnik","Brez skri
 const byImg={}; COPY.forEach(function(c){byImg[c.img]=c;});
 const LIVE=(window.__BOOKIRAJ_DEALS__&&window.__BOOKIRAJ_DEALS__.deals)||[];
 const UPDATED=(window.__BOOKIRAJ_DEALS__&&window.__BOOKIRAJ_DEALS__.updated)||null;
-const GEO={barcelona:{continent:'evropa'},rome:{continent:'evropa'},lisbon:{continent:'evropa'},santorini:{continent:'evropa'},istanbul:{continent:'evropa'},amsterdam:{continent:'evropa'},london:{continent:'evropa'},iceland:{continent:'evropa'},dubai:{continent:'azija'},bangkok:{continent:'azija'},maldives:{continent:'azija',exotic:true},bali:{continent:'azija',exotic:true},marrakesh:{continent:'afrika',exotic:true},newyork:{continent:'sev-amerika'}};
+const GEO={barcelona:{continent:'evropa'},paris:{continent:'evropa'},rome:{continent:'evropa'},lisbon:{continent:'evropa'},santorini:{continent:'evropa'},istanbul:{continent:'evropa'},amsterdam:{continent:'evropa'},london:{continent:'evropa'},iceland:{continent:'evropa'},dubai:{continent:'azija'},bangkok:{continent:'azija'},maldives:{continent:'azija',exotic:true},bali:{continent:'azija',exotic:true},marrakesh:{continent:'afrika',exotic:true},newyork:{continent:'sev-amerika'}};
 const AP_NAME={LJU:'Ljubljana',TRS:'Trst',VCE:'Benetke',ZAG:'Zagreb',VIE:'Dunaj',MXP:'Milano',TSF:'Treviso',MUC:'Minhen',BUD:'Budimpešta'};
 const DEALS=LIVE.map(function(l){var c=byImg[l.img]||{};return Object.assign({},c,GEO[l.img]||{},{fromPrice:l.fromPrice,avg:l.avg,terms:l.terms,discount:Math.max(0,Math.round((l.avg-l.fromPrice)/l.avg*100))});}).filter(function(d){return d.city;});
 // odkrite akcije (velik seznam iz API-ja: prave cene, sezona in dolžina že upoštevani)
