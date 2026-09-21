@@ -229,6 +229,32 @@ section{scroll-margin-top:78px}
 .tip p{color:var(--ink-2);margin:0;line-height:1.5;font-size:.92rem}
 @media (max-width:900px){.tips{grid-template-columns:1fr 1fr}}
 @media (max-width:520px){.tips{grid-template-columns:1fr}}
+/* ===== Blog ===== */
+.blog{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.bpost{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:transform .2s ease,box-shadow .2s ease}
+.bpost:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.bpost__media{aspect-ratio:16/10;overflow:hidden}
+.bpost__media img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.bpost:hover .bpost__media img{transform:scale(1.06)}
+.bpost__body{padding:20px 22px 24px;display:flex;flex-direction:column;gap:9px;flex:1}
+.bpost__cat{align-self:flex-start;font-family:var(--font-mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.bpost__body h3{font-size:1.18rem;margin:0;line-height:1.25}
+.bpost__ex{color:var(--ink-2);font-size:.94rem;line-height:1.5;margin:0}
+.bpost__meta{margin-top:auto;color:var(--muted);font-family:var(--font-mono);font-size:.72rem}
+@media (max-width:900px){.blog{grid-template-columns:1fr 1fr}}
+@media (max-width:600px){.blog{grid-template-columns:1fr}}
+.article{max-width:760px;margin:0 auto}
+.article__cat{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.article h1{font-size:clamp(2rem,4.5vw,3rem);line-height:1.08;margin:.5rem 0 .5rem;max-width:22ch}
+.article__meta{color:var(--muted);font-family:var(--font-mono);font-size:.78rem;margin:0 0 6px}
+.article__media{aspect-ratio:16/8;border-radius:20px;overflow:hidden;margin:18px 0 26px;border:1px solid var(--line)}
+.article__media img{width:100%;height:100%;object-fit:cover}
+.article__body{color:var(--ink-2);font-size:1.06rem;line-height:1.75}
+.article__body p{margin:0 0 1.1rem}
+.article__body h2{font-family:var(--font-display);color:var(--ink);font-size:1.45rem;margin:1.9rem 0 .7rem}
+.article__body ul{margin:0 0 1.1rem;padding-left:1.2rem;display:flex;flex-direction:column;gap:.5rem}
+.article__body strong{color:var(--ink)}
+.article__cta{margin-top:2.2rem;padding-top:1.6rem;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:16px;align-items:center}
 .sec__head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;
   margin-bottom:2.6rem;flex-wrap:wrap}
 .sec__head h2{font-size:clamp(1.95rem,3.6vw,3.1rem);max-width:20ch}
@@ -832,6 +858,7 @@ section{scroll-margin-top:78px}
       <a href="#pocitnice">Počitniški termini</a>
       <a href="#planerji">Planerji</a>
       <a href="#parking">Parking</a>
+      <a href="#blog">Blog</a>
       <a href="#o-nas">O nas</a>
     </nav>
     <div class="nav__tools">
@@ -1231,6 +1258,11 @@ section{scroll-margin-top:78px}
         <p>Z eSIM-om prispeš že povezan — brez roaminga in brez iskanja odprtega WiFi-ja na cilju.</p>
       </article>
     </div>
+    <div class="more reveal" style="margin-top:12px">
+      <a href="#blog" class="btn">Več na blogu
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
   </div>
 </section>
 
@@ -1354,6 +1386,7 @@ section{scroll-margin-top:78px}
       </ul></div>
       <div><h4>Bookiraj</h4><ul>
         <li><a href="#kako-deluje">Kako deluje</a></li>
+        <li><a href="#blog">Blog</a></li>
         <li><a href="#faq">Pogosta vprašanja</a></li>
         <li><a href="#o-nas">O nas</a></li>
         <li><a href="#tedna">Akcija tedna</a></li>
@@ -1634,6 +1667,49 @@ function detailHTML(d){
 }
 
 const BACK='<a class="detail__back" href="#top"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> Domov</a>';
+// --- Blog ---
+const BLOG=[
+ {slug:'pariz-v-3-dneh',cat:'Destinacije',img:'img/paris.jpg',date:'18. sep. 2026',title:'Pariz v 3 dneh: popoln načrt vikenda',excerpt:'Eifflov stolp, Louvre in skrite kavarne — kako v treh dneh ujameš dušo mesta luči brez naglice.',body:`<p>Pariz je mesto, ki ga ni mogoče »odkljukati« — a v treh dneh ujameš vse najpomembnejše in še nekaj skritih kotičkov. Ključ je preprost: manj hitenja, več sprehodov.</p>
+<h2>Dan 1 — klasika ob Seni</h2><p>Začni pri <strong>Eifflovem stolpu</strong> zjutraj, ko so vrste še kratke, in nadaljuj po nabrežju do <strong>Louvra</strong>. Popoldne prihrani za sprehod skozi vrtove Tuileries do trga Concorde in po Elizejskih poljanah.</p>
+<h2>Dan 2 — umetnost in Montmartre</h2><p>Dopoldne posveti muzeju <strong>Orsay</strong> (impresionisti), popoldne pa se povzpni na <strong>Montmartre</strong> — Sacré-Cœur, uličice slikarjev in pogled na celo mesto ob sončnem zahodu.</p>
+<h2>Dan 3 — Marais in kavarne</h2><p>Zadnji dan je za brezciljno tavanje po četrti <strong>Marais</strong>: butiki, galerije, falafel in najboljše kavarne. Če ostane čas, skoči še do Notre-Dame na otoku Île de la Cité.</p>
+<h2>Praktični namigi</h2><ul><li>Vstopnice za znamenitosti kupi vnaprej — prihraniš ure čakanja.</li><li>Metro je najhitrejši; vzemi dnevno vozovnico.</li><li>Kosilo v soseskah stran od znamenitosti je boljše in cenejše.</li></ul>
+<p>Najcenejši leti v Pariz so pogosto iz Benetk — preveri aktualne akcije in ujemi vikend.</p>`},
+ {slug:'kdaj-rezervirati-let',cat:'Nasveti',img:'img/hero.jpg',date:'15. sep. 2026',title:'Kdaj rezervirati let za najnižjo ceno',excerpt:'Obstaja sladka točka za nakup vozovnic. Razkrivamo, koliko vnaprej rezervirati in kateri dnevi so najcenejši.',body:`<p>Cene letalskih vozovnic nihajo vsak dan. Dobra novica: obstaja okno, v katerem so v povprečju najnižje.</p>
+<h2>Evropski leti: 1–3 mesece prej</h2><p>Za krajše evropske poti je sladka točka <strong>od 4 do 12 tednov pred odhodom</strong>. Prezgodaj so cene še visoke, v zadnjem tednu pa poskočijo.</p>
+<h2>Daljna potovanja: 3–6 mesecev prej</h2><p>Za medcelinske lete rezerviraj <strong>2–6 mesecev vnaprej</strong>, za praznične termine (božič, prvi maj) pa še prej — takrat se dobre cene hitro razprodajo.</p>
+<h2>Kateri dnevi so najcenejši</h2><ul><li><strong>Leti sredi tedna</strong> (torek, sreda) so praviloma cenejši od vikend letov.</li><li>Zgodnji jutranji in pozni večerni odhodi so pogosto ugodnejši.</li><li>Prilagodljivost za dan ali dva zna pomeniti desetke evrov razlike.</li></ul>
+<h2>Najboljši trik</h2><p>Ne loti se iskanja vsak dan sam — pusti, da cene spremljamo mi namesto tebe. Objavimo le termine, ki so <strong>pod povprečjem proge</strong>, tako da veš, kdaj je res vredno klikniti.</p>`},
+ {slug:'esim-za-popotnike',cat:'Nasveti',img:'img/dubai.jpg',date:'12. sep. 2026',title:'eSIM za popotnike: povezan brez roaminga',excerpt:'Pozabi na drage roaming račune in iskanje WiFi-ja. Takole v nekaj minutah urediš internet za tujino.',body:`<p>Roaming računi znajo pokvariti še tako lepo potovanje. eSIM je najpreprostejša rešitev: digitalna SIM-kartica, ki jo urediš, preden sploh vzletiš.</p>
+<h2>Kako deluje</h2><p>eSIM je »vgrajena« kartica v tvojem telefonu. Namesto menjave fizične kartice preprosto <strong>skeniraš QR kodo</strong>, ki jo prejmeš po e-pošti, in izbereš paket za državo ali regijo.</p>
+<h2>Neomejeno ali po GB?</h2><ul><li><strong>Neomejeni podatki</strong> (npr. Holafly) — za tiste, ki veliko uporabljajo navigacijo, klice prek aplikacij in družbena omrežja.</li><li><strong>Paket po GB</strong> (npr. Airalo) — ugodneje za krajše poti in manjšo porabo.</li></ul>
+<h2>Zakaj vnaprej</h2><p>eSIM aktiviraš v nekaj minutah in <strong>domača številka ti ostane</strong> za klice in SMS. Ko prispeš na cilj, si takoj povezan — brez iskanja odprtega WiFi-ja in brez presenečenj na računu.</p>
+<p>Oba ponudnika najdeš v razdelku »Podatki v tujini« — s promo kodo pri Holafly prihraniš še dodatnih 10 %.</p>`},
+ {slug:'marakes-prvic',cat:'Destinacije',img:'img/marrakesh.jpg',date:'8. sep. 2026',title:'Marakeš prvič: kaj videti, jesti in doživeti',excerpt:'Medina, vrtovi Majorelle in vonj začimb — praktičen vodnik za prvi obisk maroškega bisera.',body:`<p>Marakeš je napad na vse čute — barve, vonji, zvoki. Za prvi obisk so dovolj trije do štirje dnevi, da se navadiš ritma in ga vzljubiš.</p>
+<h2>Srce mesta: medina</h2><p>Stara <strong>medina</strong> je labirint uličic, tržnic (souk) in skritih dvorišč. Ne boj se izgubiti — tam se skrivajo najlepši prizori. Zvečer oživi trg <strong>Jemaa el-Fna</strong> s stojnicami s hrano in ulično glasbo.</p>
+<h2>Oaza miru</h2><p>Ko potrebuješ predah, obišči <strong>vrtove Majorelle</strong> (nekoč last Yvesa Saint Laurenta) in palačo Bahia. Popoln kontrast vrvežu medine.</p>
+<h2>Kaj jesti</h2><ul><li><strong>Tažin</strong> in kuskus — počasi kuhana klasika.</li><li>Mentin čaj — pije se ob vsaki priložnosti.</li><li>Sveže pecivo iz sladkih trgovinic ob souku.</li></ul>
+<h2>Praktično</h2><p>V souku se o ceni dogovori z nasmehom — barantanje je del izkušnje. Iz Benetk in Trsta so pogosto ugodne povezave; preveri aktualne akcije za Marakeš.</p>`}
+];
+const bpost=s=>BLOG.find(b=>b.slug===s);
+function blogHTML(){
+  return '<div class="page"><div class="container">'+BACK
+   +'<p class="eyebrow">Blog</p><h1 class="page__h">Popotniški navdih in nasveti.</h1>'
+   +'<p class="page__p" style="max-width:58ch">Vodniki po destinacijah in triki, s katerimi potuješ ceneje in pametneje.</p>'
+   +'<div class="blog" style="margin-top:2rem">'+BLOG.map(function(b){return '<a class="bpost" href="#blog/'+b.slug+'"><div class="bpost__media"><img src="'+b.img+'" alt="'+esc(b.title)+'" loading="lazy" decoding="async"></div><div class="bpost__body"><span class="bpost__cat">'+b.cat+'</span><h3>'+esc(b.title)+'</h3><p class="bpost__ex">'+esc(b.excerpt)+'</p><span class="bpost__meta">'+b.date+'</span></div></a>';}).join('')+'</div>'
+   +'</div></div>';
+}
+function blogPostHTML(slug){
+  var b=bpost(slug); if(!b) return blogHTML();
+  return '<div class="page"><div class="container">'
+   +'<a class="detail__back" href="#blog"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> Nazaj na blog</a>'
+   +'<article class="article"><span class="article__cat">'+b.cat+'</span><h1>'+esc(b.title)+'</h1>'
+   +'<p class="article__meta">'+b.date+' · Bookiraj.si</p>'
+   +'<div class="article__media"><img src="'+b.img+'" alt="'+esc(b.title)+'"></div>'
+   +'<div class="article__body">'+b.body+'</div>'
+   +'<div class="article__cta"><a class="btn btn--lg" href="#letalske-karte">Poišči akcije <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="detail__back" href="#blog" style="margin:0">Vsi članki</a></div>'
+   +'</article></div></div>';
+}
 function fmtDMY(iso){var p=iso.split('-');return (+p[2])+'. '+MON[(+p[1])-1]+' '+p[0];}
 
 // --- Planerji (demo itinerariji) ---
@@ -1960,6 +2036,17 @@ function route(){
     detailEl.innerHTML=parkingHTML();
     showView('detail');
     document.title='Parking — Bookiraj.si'; window.scrollTo(0,0); return;
+  }
+  if(pslug.indexOf('blog/')===0){
+    var _bp=bpost(pslug.slice(5));
+    detailEl.innerHTML=blogPostHTML(pslug.slice(5));
+    showView('detail');
+    document.title=(_bp?_bp.title:'Blog')+' — Bookiraj.si'; window.scrollTo(0,0); return;
+  }
+  if(pslug==='blog'){
+    detailEl.innerHTML=blogHTML();
+    showView('detail');
+    document.title='Blog — Bookiraj.si'; window.scrollTo(0,0); return;
   }
   if(PAGES[pslug]){
     detailEl.innerHTML=pageHTML(pslug);
