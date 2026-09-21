@@ -254,7 +254,41 @@ section{scroll-margin-top:78px}
 .article__body h2{font-family:var(--font-display);color:var(--ink);font-size:1.45rem;margin:1.9rem 0 .7rem}
 .article__body ul{margin:0 0 1.1rem;padding-left:1.2rem;display:flex;flex-direction:column;gap:.5rem}
 .article__body strong{color:var(--ink)}
-.article__cta{margin-top:2.2rem;padding-top:1.6rem;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+.article__cta{margin-top:2.2rem;padding-top:1.6rem;border-top:1px solid #eee;display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+/* blog post = white reading surface + rich elements */
+.article-page{background:#fff;min-height:100vh}
+.article-page .detail__back{color:#5d6b68}
+.article-page .article__cat{color:var(--accent)}
+.article-page .article h1{color:#141f1d}
+.article-page .article__meta{color:#8b9794}
+.article-page .article__body{color:#3b4a47}
+.article-page .article__body h2{color:#141f1d}
+.article-page .article__body strong{color:#141f1d}
+.article-page .article__body a{color:var(--accent);text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px;font-weight:600}
+.article-page .article__body a:hover{text-decoration-thickness:2px}
+.article__summary{background:color-mix(in srgb,var(--accent) 7%,#fff);border:1px solid color-mix(in srgb,var(--accent) 26%,#eaeaea);border-radius:14px;padding:16px 20px;margin:0 0 26px;color:#33423f;line-height:1.6}
+.article__summary .article__summary-t{color:var(--accent);font-family:var(--font-mono);font-size:.7rem;letter-spacing:.09em;text-transform:uppercase;font-weight:700;display:block;margin-bottom:8px}
+.article__summary ul{margin:0;padding-left:1.15rem;display:flex;flex-direction:column;gap:.4rem;font-size:.96rem}
+.callout{background:#f5faf9;border-left:3px solid var(--accent);border-radius:0 12px 12px 0;padding:14px 18px;margin:1.5rem 0;color:#33423f;font-size:.99rem;line-height:1.62}
+.callout .callout__t{color:var(--accent);font-weight:800;margin-right:5px}
+.article__fig{margin:1.9rem 0}
+.article__fig img{width:100%;border-radius:16px;display:block;border:1px solid #ececec}
+.article__fig figcaption{color:#94a09d;font-size:.82rem;margin-top:9px;text-align:center;font-style:italic}
+.qa{border:1px solid #ececec;border-radius:12px;margin:.65rem 0;overflow:hidden;background:#fafcfb}
+.qa summary{cursor:pointer;padding:15px 46px 15px 18px;font-weight:600;color:#141f1d;list-style:none;position:relative}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::after{content:"+";position:absolute;right:18px;top:50%;transform:translateY(-50%);color:var(--accent);font-size:1.4rem;font-weight:400;transition:transform .2s}
+.qa[open] summary::after{transform:translateY(-50%) rotate(45deg)}
+.qa__a{padding:0 18px 16px;color:#485754;line-height:1.65;font-size:.95rem}
+.qa__a a{color:var(--accent);font-weight:600}
+.article__related{max-width:760px;margin:2.6rem auto 0;padding-top:1.8rem;border-top:1px solid #eee}
+.article__related h2{font-family:var(--font-display);color:#141f1d;font-size:1.4rem;margin:0 0 18px}
+.article__related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.rp{display:block;background:#fff;border:1px solid #ececec;border-radius:14px;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.rp:hover{transform:translateY(-3px);box-shadow:0 18px 34px -22px rgba(16,32,31,.4)}
+.rp img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block}
+.rp span{display:block;padding:13px 15px;color:#141f1d;font-weight:600;font-size:.92rem;line-height:1.3}
+@media(max-width:600px){.article__related-grid{grid-template-columns:1fr}}
 .sec__head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;
   margin-bottom:2.6rem;flex-wrap:wrap}
 .sec__head h2{font-size:clamp(1.95rem,3.6vw,3.1rem);max-width:20ch}
@@ -1669,27 +1703,79 @@ function detailHTML(d){
 const BACK='<a class="detail__back" href="#top"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> Domov</a>';
 // --- Blog ---
 const BLOG=[
- {slug:'pariz-v-3-dneh',cat:'Destinacije',img:'img/paris.jpg',date:'18. sep. 2026',title:'Pariz v 3 dneh: popoln načrt vikenda',excerpt:'Eifflov stolp, Louvre in skrite kavarne — kako v treh dneh ujameš dušo mesta luči brez naglice.',body:`<p>Pariz je mesto, ki ga ni mogoče »odkljukati« — a v treh dneh ujameš vse najpomembnejše in še nekaj skritih kotičkov. Ključ je preprost: manj hitenja, več sprehodov.</p>
-<h2>Dan 1 — klasika ob Seni</h2><p>Začni pri <strong>Eifflovem stolpu</strong> zjutraj, ko so vrste še kratke, in nadaljuj po nabrežju do <strong>Louvra</strong>. Popoldne prihrani za sprehod skozi vrtove Tuileries do trga Concorde in po Elizejskih poljanah.</p>
-<h2>Dan 2 — umetnost in Montmartre</h2><p>Dopoldne posveti muzeju <strong>Orsay</strong> (impresionisti), popoldne pa se povzpni na <strong>Montmartre</strong> — Sacré-Cœur, uličice slikarjev in pogled na celo mesto ob sončnem zahodu.</p>
-<h2>Dan 3 — Marais in kavarne</h2><p>Zadnji dan je za brezciljno tavanje po četrti <strong>Marais</strong>: butiki, galerije, falafel in najboljše kavarne. Če ostane čas, skoči še do Notre-Dame na otoku Île de la Cité.</p>
-<h2>Praktični namigi</h2><ul><li>Vstopnice za znamenitosti kupi vnaprej — prihraniš ure čakanja.</li><li>Metro je najhitrejši; vzemi dnevno vozovnico.</li><li>Kosilo v soseskah stran od znamenitosti je boljše in cenejše.</li></ul>
-<p>Najcenejši leti v Pariz so pogosto iz Benetk — preveri aktualne akcije in ujemi vikend.</p>`},
- {slug:'kdaj-rezervirati-let',cat:'Nasveti',img:'img/hero.jpg',date:'15. sep. 2026',title:'Kdaj rezervirati let za najnižjo ceno',excerpt:'Obstaja sladka točka za nakup vozovnic. Razkrivamo, koliko vnaprej rezervirati in kateri dnevi so najcenejši.',body:`<p>Cene letalskih vozovnic nihajo vsak dan. Dobra novica: obstaja okno, v katerem so v povprečju najnižje.</p>
-<h2>Evropski leti: 1–3 mesece prej</h2><p>Za krajše evropske poti je sladka točka <strong>od 4 do 12 tednov pred odhodom</strong>. Prezgodaj so cene še visoke, v zadnjem tednu pa poskočijo.</p>
-<h2>Daljna potovanja: 3–6 mesecev prej</h2><p>Za medcelinske lete rezerviraj <strong>2–6 mesecev vnaprej</strong>, za praznične termine (božič, prvi maj) pa še prej — takrat se dobre cene hitro razprodajo.</p>
-<h2>Kateri dnevi so najcenejši</h2><ul><li><strong>Leti sredi tedna</strong> (torek, sreda) so praviloma cenejši od vikend letov.</li><li>Zgodnji jutranji in pozni večerni odhodi so pogosto ugodnejši.</li><li>Prilagodljivost za dan ali dva zna pomeniti desetke evrov razlike.</li></ul>
-<h2>Najboljši trik</h2><p>Ne loti se iskanja vsak dan sam — pusti, da cene spremljamo mi namesto tebe. Objavimo le termine, ki so <strong>pod povprečjem proge</strong>, tako da veš, kdaj je res vredno klikniti.</p>`},
- {slug:'esim-za-popotnike',cat:'Nasveti',img:'img/dubai.jpg',date:'12. sep. 2026',title:'eSIM za popotnike: povezan brez roaminga',excerpt:'Pozabi na drage roaming račune in iskanje WiFi-ja. Takole v nekaj minutah urediš internet za tujino.',body:`<p>Roaming računi znajo pokvariti še tako lepo potovanje. eSIM je najpreprostejša rešitev: digitalna SIM-kartica, ki jo urediš, preden sploh vzletiš.</p>
-<h2>Kako deluje</h2><p>eSIM je »vgrajena« kartica v tvojem telefonu. Namesto menjave fizične kartice preprosto <strong>skeniraš QR kodo</strong>, ki jo prejmeš po e-pošti, in izbereš paket za državo ali regijo.</p>
-<h2>Neomejeno ali po GB?</h2><ul><li><strong>Neomejeni podatki</strong> (npr. Holafly) — za tiste, ki veliko uporabljajo navigacijo, klice prek aplikacij in družbena omrežja.</li><li><strong>Paket po GB</strong> (npr. Airalo) — ugodneje za krajše poti in manjšo porabo.</li></ul>
-<h2>Zakaj vnaprej</h2><p>eSIM aktiviraš v nekaj minutah in <strong>domača številka ti ostane</strong> za klice in SMS. Ko prispeš na cilj, si takoj povezan — brez iskanja odprtega WiFi-ja in brez presenečenj na računu.</p>
-<p>Oba ponudnika najdeš v razdelku »Podatki v tujini« — s promo kodo pri Holafly prihraniš še dodatnih 10 %.</p>`},
- {slug:'marakes-prvic',cat:'Destinacije',img:'img/marrakesh.jpg',date:'8. sep. 2026',title:'Marakeš prvič: kaj videti, jesti in doživeti',excerpt:'Medina, vrtovi Majorelle in vonj začimb — praktičen vodnik za prvi obisk maroškega bisera.',body:`<p>Marakeš je napad na vse čute — barve, vonji, zvoki. Za prvi obisk so dovolj trije do štirje dnevi, da se navadiš ritma in ga vzljubiš.</p>
-<h2>Srce mesta: medina</h2><p>Stara <strong>medina</strong> je labirint uličic, tržnic (souk) in skritih dvorišč. Ne boj se izgubiti — tam se skrivajo najlepši prizori. Zvečer oživi trg <strong>Jemaa el-Fna</strong> s stojnicami s hrano in ulično glasbo.</p>
-<h2>Oaza miru</h2><p>Ko potrebuješ predah, obišči <strong>vrtove Majorelle</strong> (nekoč last Yvesa Saint Laurenta) in palačo Bahia. Popoln kontrast vrvežu medine.</p>
-<h2>Kaj jesti</h2><ul><li><strong>Tažin</strong> in kuskus — počasi kuhana klasika.</li><li>Mentin čaj — pije se ob vsaki priložnosti.</li><li>Sveže pecivo iz sladkih trgovinic ob souku.</li></ul>
-<h2>Praktično</h2><p>V souku se o ceni dogovori z nasmehom — barantanje je del izkušnje. Iz Benetk in Trsta so pogosto ugodne povezave; preveri aktualne akcije za Marakeš.</p>`}
+ {slug:'pariz-v-3-dneh',cat:'Destinacije',img:'img/paris.jpg',date:'18. sep. 2026',title:'Pariz v 3 dneh: popoln načrt vikenda',excerpt:'Eifflov stolp, Louvre in skrite kavarne — kako v treh dneh ujameš dušo mesta luči brez naglice.',body:`
+<div class="article__summary"><span class="article__summary-t">Na hitro</span><ul><li>Idealno trajanje za prvi obisk: <strong>3 dni</strong> (podaljšan vikend).</li><li>Ne zamudi: Eifflov stolp, Louvre, Montmartre in sprehod ob Seni.</li><li>Najceneje priletiš iz Benetk — <a href="#letalske-karte">poglej akcije za Pariz</a>.</li></ul></div>
+<p>Pariz je mesto, ki ga ni mogoče »odkljukati« — a v treh dneh ujameš vse najpomembnejše in še nekaj skritih kotičkov. Ključ je preprost: <strong>manj hitenja, več sprehodov</strong>. Tukaj je preizkušen načrt po dnevih.</p>
+<div class="callout"><span class="callout__t">Namig</span> Vstopnice za Eifflov stolp in Louvre kupi <strong>na spletu vnaprej</strong> — v živo se čaka tudi po eno uro.</div>
+<h2>Dan 1 — klasika ob Seni</h2>
+<p>Začni zgodaj pri <strong>Eifflovem stolpu</strong>, ko so vrste še kratke. Nato se sprehodi po nabrežju Sene do <strong><a href="https://www.louvre.fr/en" target="_blank" rel="noopener">Louvra</a></strong> — tudi če ne greš noter, je steklena piramida na dvorišču obvezna fotografija. Popoldne prihrani za vrtove Tuileries, trg Concorde in sprehod po Elizejskih poljanah do Slavoloka zmage.</p>
+<figure class="article__fig"><img src="img/blog/louvre.jpg" alt="Louvrska piramida ob mraku" loading="lazy" decoding="async"><figcaption>Steklena piramida pred Louvrom se ob mraku čudovito zasveti.</figcaption></figure>
+<h2>Dan 2 — umetnost in Montmartre</h2>
+<p>Dopoldne posveti muzeju <strong><a href="https://www.musee-orsay.fr/en" target="_blank" rel="noopener">Orsay</a></strong> z eno največjih zbirk impresionistov na svetu. Popoldne se povzpni na <strong>Montmartre</strong>: bazilika Sacré-Cœur, uličice slikarjev na Place du Tertre in eden najlepših razgledov na mesto — še posebej ob sončnem zahodu.</p>
+<figure class="article__fig"><img src="img/blog/montmartre.jpg" alt="Pogled z Montmartra na Pariz" loading="lazy" decoding="async"><figcaption>Z Montmartra se odpre pogled na cel Pariz.</figcaption></figure>
+<h2>Dan 3 — Marais in kavarne</h2>
+<p>Zadnji dan je za brezciljno tavanje po četrti <strong>Marais</strong>: butiki, galerije, najboljši falafel v mestu in prijetne kavarne. Če ostane čas, skoči še do Notre-Dame na otoku Île de la Cité ali v park Luxembourg.</p>
+<h2>Praktični namigi</h2>
+<ul><li><strong>Metro</strong> je najhitrejši — vzemi dnevno ali tedensko vozovnico.</li><li>Jej v soseskah <strong>stran od znamenitosti</strong>: boljše in ceneje.</li><li>Mnogi muzeji so ob ponedeljkih ali torkih zaprti — preveri vnaprej.</li><li>Uredi <a href="#esim">mobilne podatke</a> vnaprej za navigacijo brez skrbi.</li></ul>
+<div class="callout"><span class="callout__t">Preden greš</span> Preveri <a href="#blog/kdaj-rezervirati-let">kdaj rezervirati let za najnižjo ceno</a> in uredi <a href="#blog/esim-za-popotnike">eSIM za internet v tujini</a>.</div>
+<h2>Pogosta vprašanja</h2>
+<details class="qa"><summary>Koliko dni potrebujem za Pariz?</summary><div class="qa__a">Za prvi obisk so trije polni dnevi ravno prav za glavne znamenitosti brez naglice. Če želiš tudi Versailles ali Disneyland, dodaj še dan.</div></details>
+<details class="qa"><summary>Je Pariz drag?</summary><div class="qa__a">Zna biti, a se da varčevati: kosilo namesto večerje, pekarne za malico, brezplačni parki in nabrežja. Največ prihraniš pri <a href="#letalske-karte">letu in nastanitvi</a>.</div></details>
+<details class="qa"><summary>Kako pridem z letališča v center?</summary><div class="qa__a">Z letališča Charles de Gaulle te vlak RER B pripelje v center v približno 35 minutah; iz Beauvaisa (nizkocenovniki) vozi avtobus do mesta.</div></details>
+`},
+ {slug:'kdaj-rezervirati-let',cat:'Nasveti',img:'img/hero.jpg',date:'15. sep. 2026',title:'Kdaj rezervirati let za najnižjo ceno',excerpt:'Obstaja sladka točka za nakup vozovnic. Razkrivamo, koliko vnaprej rezervirati in kateri dnevi so najcenejši.',body:`
+<div class="article__summary"><span class="article__summary-t">Na hitro</span><ul><li>Evropa: rezerviraj <strong>1–3 mesece</strong> prej.</li><li>Daljna potovanja: <strong>3–6 mesecev</strong> prej.</li><li>Najceneje leti <strong>sredi tedna</strong> in izven šolskih počitnic.</li></ul></div>
+<p>Cene letalskih vozovnic nihajo dobesedno vsak dan. Dobra novica: obstaja okno, v katerem so v povprečju najnižje — in nekaj preprostih pravil, s katerimi si na pravi strani.</p>
+<figure class="article__fig"><img src="img/blog/airport.jpg" alt="Letalo na letališču" loading="lazy" decoding="async"><figcaption>Pravi trenutek za nakup ti prihrani desetke evrov.</figcaption></figure>
+<h2>Evropski leti: 1–3 mesece prej</h2>
+<p>Za krajše evropske poti je sladka točka <strong>od 4 do 12 tednov pred odhodom</strong>. Prezgodaj so cene še visoke, v zadnjem tednu pa poskočijo — takrat letalske družbe vedo, da karto nujno potrebuješ.</p>
+<h2>Daljna potovanja: 3–6 mesecev prej</h2>
+<p>Za medcelinske lete (ZDA, Azija, eksotika) rezerviraj <strong>2–6 mesecev vnaprej</strong>. Za praznične termine — božič, novo leto, prvi maj — pa še prej, saj se najboljše cene hitro razprodajo.</p>
+<div class="callout"><span class="callout__t">Namig</span> Bodi <strong>prilagodljiv za dan ali dva</strong>. Že premik odhoda z nedelje na torek zna pomeniti bistveno nižjo ceno.</div>
+<h2>Kateri dnevi in ure so najcenejši</h2>
+<ul><li><strong>Leti sredi tedna</strong> (torek, sreda) so praviloma cenejši od vikend letov.</li><li>Zgodnji jutranji in pozni večerni odhodi so pogosto ugodnejši.</li><li>Izogni se šolskim počitnicam in praznikom, če le lahko.</li><li>Preveri <a href="#letalske-karte">bližnja letališča</a> — iz Benetk ali Trsta je pogosto ceneje kot iz Ljubljane.</li></ul>
+<h2>Najboljši trik</h2>
+<p>Ne loti se iskanja vsak dan sam — pusti, da cene <strong>spremljamo mi namesto tebe</strong>. Objavimo le termine, ki so pod povprečjem proge, tako da na prvi pogled veš, kdaj je res vredno klikniti. <a href="#letalske-karte">Poglej aktualne akcije →</a></p>
+<h2>Pogosta vprašanja</h2>
+<details class="qa"><summary>Je res, da so torkovi leti najcenejši?</summary><div class="qa__a">Železnega pravila ni, a v povprečju so leti sredi tedna cenejši od vikend letov, ker je povpraševanje manjše.</div></details>
+<details class="qa"><summary>Ali brskanje v zasebnem oknu zniža ceno?</summary><div class="qa__a">To je bolj mit. Veliko večji učinek imata prava izbira termina in prilagodljivost datumov kot pa piškotki v brskalniku.</div></details>
+<details class="qa"><summary>Kdaj rezervirati za poletje?</summary><div class="qa__a">Za julij in avgust začni spremljati cene že spomladi; najboljše ponudbe za priljubljene plaže poletijo zgodaj.</div></details>
+`},
+ {slug:'esim-za-popotnike',cat:'Nasveti',img:'img/dubai.jpg',date:'12. sep. 2026',title:'eSIM za popotnike: povezan brez roaminga',excerpt:'Pozabi na drage roaming račune in iskanje WiFi-ja. Takole v nekaj minutah urediš internet za tujino.',body:`
+<div class="article__summary"><span class="article__summary-t">Na hitro</span><ul><li>eSIM = digitalna SIM, ki jo urediš pred odhodom.</li><li><strong>Neomejeno</strong> (Holafly) ali <strong>paket po GB</strong> (Airalo).</li><li>Aktivacija v minuti prek QR kode; domača številka ostane.</li></ul></div>
+<p>Roaming računi znajo pokvariti še tako lepo potovanje. eSIM je najpreprostejša rešitev: digitalna SIM-kartica, ki jo urediš, preden sploh vzletiš — in na cilju si takoj povezan.</p>
+<figure class="article__fig"><img src="img/blog/tokyo.jpg" alt="Ulice Tokia ponoči" loading="lazy" decoding="async"><figcaption>Od Tokia do Marakeša — z eSIM si povezan povsod.</figcaption></figure>
+<h2>Kako deluje</h2>
+<p>eSIM je »vgrajena« kartica v tvojem telefonu (podpira jo večina novejših modelov). Namesto menjave fizične kartice preprosto <strong>skeniraš QR kodo</strong>, ki jo prejmeš po e-pošti, in izbereš paket za državo ali regijo. Vse skupaj traja nekaj minut.</p>
+<h2>Neomejeno ali po GB?</h2>
+<ul><li><strong><a href="#esim/holafly">Holafly</a></strong> — neomejeni podatki v 190+ državah. Idealno, če veliko uporabljaš navigacijo, klice prek aplikacij in družbena omrežja.</li><li><strong><a href="#esim/airalo">Airalo</a></strong> — paketi po GB (1, 3, 5, 10 …) v 200+ državah. Ugodneje za krajše poti in manjšo porabo.</li></ul>
+<div class="callout"><span class="callout__t">Prihrani</span> Pri Holafly s promo kodo <strong>L874QM0XHPKM</strong> dobiš dodatnih 10 % popusta. Podrobnosti v razdelku <a href="#esim">Podatki v tujini</a>.</div>
+<h2>Zakaj urediti vnaprej</h2>
+<p>eSIM aktiviraš v nekaj minutah in <strong>domača številka ti ostane</strong> za klice in SMS. Ko prispeš na cilj, si povezan takoj — brez iskanja odprtega WiFi-ja, brez menjave kartic in brez presenečenj na računu.</p>
+<h2>Pogosta vprašanja</h2>
+<details class="qa"><summary>Ali moj telefon podpira eSIM?</summary><div class="qa__a">Večina telefonov od iPhona XS in novejših ter novejši Android modeli (Samsung Galaxy S20+, Google Pixel 3+) podpirajo eSIM. Preveri v nastavitvah pod »Mobilno omrežje«.</div></details>
+<details class="qa"><summary>Ali obdržim WhatsApp in svojo številko?</summary><div class="qa__a">Da. eSIM skrbi le za podatke; tvoja domača kartica ostane aktivna za klice, SMS in aplikacije, vezane na tvojo številko.</div></details>
+<details class="qa"><summary>Kdaj aktiviram eSIM?</summary><div class="qa__a">Namesti ga doma prek WiFi-ja, aktiviraj pa šele ob prihodu na cilj (ali dan prej) — takrat začne teči veljavnost paketa.</div></details>
+`},
+ {slug:'marakes-prvic',cat:'Destinacije',img:'img/marrakesh.jpg',date:'8. sep. 2026',title:'Marakeš prvič: kaj videti, jesti in doživeti',excerpt:'Medina, vrtovi Majorelle in vonj začimb — praktičen vodnik za prvi obisk maroškega bisera.',body:`
+<div class="article__summary"><span class="article__summary-t">Na hitro</span><ul><li>Za prvi obisk zadostujejo <strong>3–4 dnevi</strong>.</li><li>Ne zamudi: medina, trg Jemaa el-Fna, vrtovi Majorelle.</li><li>Iz Benetk in Trsta pogosto ugodne povezave — <a href="#letalske-karte">poglej akcije</a>.</li></ul></div>
+<p>Marakeš je napad na vse čute — barve, vonji, zvoki. Za prvi obisk so dovolj trije do štirje dnevi, da se navadiš ritma in ga vzljubiš.</p>
+<figure class="article__fig"><img src="img/blog/jemaa.jpg" alt="Trg Jemaa el-Fna ob mraku" loading="lazy" decoding="async"><figcaption>Trg Jemaa el-Fna zvečer oživi s stojnicami in glasbo.</figcaption></figure>
+<h2>Srce mesta: medina</h2>
+<p>Stara <strong>medina</strong> je labirint uličic, tržnic (souk) in skritih dvorišč. Ne boj se izgubiti — tam se skrivajo najlepši prizori. Zvečer se vse steka na trg <strong>Jemaa el-Fna</strong>, kjer zadišijo stojnice s hrano in zaigrajo ulični glasbeniki.</p>
+<h2>Oaza miru: vrtovi Majorelle</h2>
+<p>Ko potrebuješ predah od vrveža, obišči <strong><a href="https://www.jardinmajorelle.com/en/" target="_blank" rel="noopener">vrtove Majorelle</a></strong> (nekoč last Yvesa Saint Laurenta) z znamenito kobaltno modro barvo, in palačo Bahia z osupljivimi mozaiki.</p>
+<figure class="article__fig"><img src="img/blog/majorelle.jpg" alt="Vrtovi Majorelle v Marakešu" loading="lazy" decoding="async"><figcaption>Vrtovi Majorelle so oaza miru sredi mesta.</figcaption></figure>
+<h2>Kaj jesti</h2>
+<ul><li><strong>Tažin</strong> in kuskus — počasi kuhana klasika.</li><li><strong>Mentin čaj</strong> — pije se ob vsaki priložnosti.</li><li>Sveže pecivo iz sladkih trgovinic ob souku.</li></ul>
+<div class="callout"><span class="callout__t">Namig</span> V souku se o ceni <strong>dogovori z nasmehom</strong> — barantanje je del izkušnje, ne spora. Prvo ceno mirno prepolovi in se dobita na sredini.</div>
+<h2>Praktično</h2>
+<p>Obleci se raje bolj pokrito (spoštovanje lokalne kulture), s seboj imej gotovino v dirhamih in uredi <a href="#blog/esim-za-popotnike">mobilne podatke</a> za navigacijo po labirintu medine. Za pot preveri <a href="#letalske-karte">aktualne akcije za Marakeš</a>.</p>
+<h2>Pogosta vprašanja</h2>
+<details class="qa"><summary>Je Marakeš varen za turiste?</summary><div class="qa__a">Da, je priljubljena turistična destinacija. Kot povsod bodi pozoren na žeparje v gneči in vljudno zavrni vsiljive »vodiče«.</div></details>
+<details class="qa"><summary>Kdaj je najboljši čas za obisk?</summary><div class="qa__a">Pomlad (marec–maj) in jesen (september–november) sta najprijetnejši; poleti je zelo vroče. Preveri tudi <a href="#pocitnice">počitniške termine</a>.</div></details>
+<details class="qa"><summary>Potrebujem vizum?</summary><div class="qa__a">Slovenski državljani za turistični obisk Maroka do 90 dni vizuma ne potrebujejo. Poskrbi, da je potni list veljaven vsaj 6 mesecev.</div></details>
+`}
 ];
 const bpost=s=>BLOG.find(b=>b.slug===s);
 function blogHTML(){
@@ -1701,14 +1787,17 @@ function blogHTML(){
 }
 function blogPostHTML(slug){
   var b=bpost(slug); if(!b) return blogHTML();
-  return '<div class="page"><div class="container">'
+  var rel=BLOG.filter(function(x){return x.slug!==slug;}).slice(0,3).map(function(x){return '<a class="rp" href="#blog/'+x.slug+'"><img src="'+x.img+'" alt="'+esc(x.title)+'" loading="lazy" decoding="async"><span>'+esc(x.title)+'</span></a>';}).join('');
+  return '<div class="page article-page"><div class="container">'
    +'<a class="detail__back" href="#blog"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> Nazaj na blog</a>'
    +'<article class="article"><span class="article__cat">'+b.cat+'</span><h1>'+esc(b.title)+'</h1>'
    +'<p class="article__meta">'+b.date+' · Bookiraj.si</p>'
    +'<div class="article__media"><img src="'+b.img+'" alt="'+esc(b.title)+'"></div>'
    +'<div class="article__body">'+b.body+'</div>'
    +'<div class="article__cta"><a class="btn btn--lg" href="#letalske-karte">Poišči akcije <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="detail__back" href="#blog" style="margin:0">Vsi članki</a></div>'
-   +'</article></div></div>';
+   +'</article>'
+   +'<div class="article__related"><h2>Preberi še</h2><div class="article__related-grid">'+rel+'</div></div>'
+   +'</div></div>';
 }
 function fmtDMY(iso){var p=iso.split('-');return (+p[2])+'. '+MON[(+p[1])-1]+' '+p[0];}
 
